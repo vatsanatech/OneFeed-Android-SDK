@@ -56,7 +56,7 @@ public class TinderCardActivity extends AppCompatActivity {
             RelativeLayout relativeLayout = new RelativeLayout(this);
             relativeLayout.setLayoutParams(layoutParams);
 
-            WittyFeedSDKSingleton.getInstance().witty_sdk.get_a_new_card((ViewGroup) relativeLayout, 0.8f);
+            WittyFeedSDKSingleton.getInstance().witty_sdk.get_a_new_card((ViewGroup) relativeLayout, 1.0f);
             mSwipeView.addView(new TinderCard(mContext, profile, mSwipeView, relativeLayout, i));
             i++;
         }

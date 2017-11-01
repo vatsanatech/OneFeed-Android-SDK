@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="wf-sdk-release-unspecified">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.android/build-cache/23bb68a8ad6a8bd74714ffa7a8414ab05d4d89a3/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/23bb68a8ad6a8bd74714ffa7a8414ab05d4d89a3/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

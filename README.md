@@ -1,7 +1,7 @@
 # Vatsana Technologies Pvt. Ltd. Android API & SDK (WittyfeedAndroidApi)
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[ ![Download](https://drive.google.com/file/d/0BzL7HCh86uWWVUw0N2NGbl9YcWNuRFJHR0pVcklIQ05YUnJF/view?usp=sharing) ](https://img.shields.io/badge/Download-1.1.0-blue.svg)
+[ ![Download](https://img.shields.io/badge/Download-1.1.0-blue.svg) ](https://drive.google.com/file/d/0BzL7HCh86uWWVUw0N2NGbl9YcWNuRFJHR0pVcklIQ05YUnJF/view?usp=sharing)
 
 ## Table Of Contents
 1. [Getting Started](#1-getting-started)

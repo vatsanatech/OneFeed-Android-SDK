@@ -1,11 +1,13 @@
-# Vatsana Technologies Pvt. Ltd. Android API & SDK (WittyfeedAndroidApi)
+# Vatsana Technologies Pvt. Ltd. Android SDK API (WittyfeedAndroidApi)
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
 [ ![Download](https://img.shields.io/badge/Download-1.1.0-blue.svg) ](https://drive.google.com/file/d/0BzL7HCh86uWWVUw0N2NGbl9YcWNuRFJHR0pVcklIQ05YUnJF/view?usp=sharing)
+[![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
 1. [Getting Started](#1-getting-started)
-2. [Example Apps](#2-example-apps)
+2. [Example Apps](#2-example-app)
+3. [License](#3-license)
 
 ## Basic concepts
 The WittyfeedAndroidApi allows you to get WittyFeed content to display in your app using WittyfeedAndroidSDK. 
@@ -125,4 +127,9 @@ In your class which extends FirebaseMessagingService, update with the code below
 
 ## 2. Example App
 This repository includes an example Android app which uses the `WittyfeedAndroidSDK`.
+
+
+## 3. License
+This program is licensed under the Vatsana Technologies Pvt. Ltd. SDK License Agreement (the “License Agreement”).  By copying, using or redistributing this program, you agree to the terms of the License Agreement.  The full text of the license agreement can be found at [https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE).
+Copyright 2017 Vatsana Technologies Pvt. Ltd.  All rights reserved.
 

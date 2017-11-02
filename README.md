@@ -12,7 +12,7 @@
 ## Basic concepts
 The WittyfeedAndroidApi allows you to get WittyFeed content to display in your app using WittyfeedAndroidSDK. 
 For each item WittyfeedAndroidSDK will provide pre-populated views, which you can style to match your app look and feel and place where needed within your app.
-The views will automatically handle everything else: click handling, reporting visibility back to Taboola's server and more.
+The views will automatically handle everything else: click handling, reporting visibility back to WittyFeed's server and more.
 
 Browse through the example app in this repository to see how the WittyfeedAndroidApi can be implemented in different types of apps.
 

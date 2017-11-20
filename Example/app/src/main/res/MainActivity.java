@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sdk.wittyfeed.wittynativesdk.Interfaces.WittyFeedSDKMainInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKApiClient;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("FCM_CUSTOM", "Refreshed token: " + FCM_TOKEN);
 
-        // below code is ***required*** for Initializing Wittyfeed Android SDK API
+        // below code is only ***required*** for Initializing Wittyfeed Android SDK API
         WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN);
         WittyFeedSDKSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient);
 
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             public void onOperationDidFinish() {
                 // witty sdk did loaded completely successfully
                 Log.d("Main App", "witty sdk did load successfully");
+                String[] availableCats = WittyFeedSDKSingleton.getInstance().witty_sdk.get_all_categoies_available();
                 progressBar.setVisibility(View.GONE);
                 btns_ll.setVisibility(View.VISIBLE);
             }
@@ -96,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        // TODO: 30/10/17 need to develop endless feed screens
+//        findViewById(R.id.goto_endless_feed_btn).setVisibility(View.GONE);
         findViewById(R.id.goto_endless_feed_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

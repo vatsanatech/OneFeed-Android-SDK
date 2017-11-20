@@ -43,11 +43,18 @@
             android:text="Goto Endless Feed Native SDK DEMO"/>
 
         <Button
-            android:id="@+id/goto_tinder_card_btn"
+            android:id="@+id/goto_carousel_demo_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Goto Tinder Card Native SDK DEMO"/>
+            android:text="Goto Carousel Feed SDK Demo"/>
+
+        <Button
+            android:id="@+id/goto_category_wise_feed_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Goto Category Wise Feeds SDK DEMO"/>
 
         <Button
             android:id="@+id/simulate_detail_notiff_btn"
@@ -63,7 +70,10 @@
             android:layout_gravity="center"
             android:text="Simulate WebView Card Notification"/>
 
+
+
     </LinearLayout>
+
 
 
 </RelativeLayout>

@@ -13,15 +13,61 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.sdk.wittyfeed.debug.MainActivity">
+        <activity android:name="com.sdk.wittyfeed.debug.MainActivity"
+            android:screenOrientation="portrait"
+            android:largeHeap="true"
+            android:windowSoftInputMode="stateHidden"
+            android:hardwareAccelerated="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name="com.sdk.wittyfeed.debug.FourCardActivity" android:screenOrientation="portrait"/>
-        <activity android:name="com.sdk.wittyfeed.debug.tindercard.TinderCardActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.sdk.wittyfeed.debug.WaterfallActivity"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:hardwareAccelerated="true"/>
+
+        <activity
+            android:name="com.sdk.wittyfeed.debug.FourCardActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+            android:largeHeap="true" />
+
+        <activity
+            android:name="com.sdk.wittyfeed.debug.CarouselDemoActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+            android:largeHeap="true" />
+
+        <activity
+            android:name="com.sdk.wittyfeed.debug.EndlessFeedActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+            android:largeHeap="true" />
+
+        <activity
+            android:name="com.sdk.wittyfeed.debug.CategoryWiseFeedActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+            android:largeHeap="true" />
+
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages. -->
+        <!-- See README(https://goo.gl/l4GJaQ) for more. -->
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+
+        <!--&lt;!&ndash; Set color used with incoming notification messages. This is used when no color is set for the incoming-->
+        <!--notification message. See README(https://goo.gl/6BKBk7) for more. &ndash;&gt;-->
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
 
         <service
             android:name="com.sdk.wittyfeed.debug.MyFirebaseInstanceIDService">

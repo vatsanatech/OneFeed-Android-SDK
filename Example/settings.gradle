@@ -1,1 +1,1 @@
-include ':app', ':wf-sdk-release'
+include ':app', ':wittynativesdk-release'

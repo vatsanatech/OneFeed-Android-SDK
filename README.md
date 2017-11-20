@@ -1,7 +1,7 @@
 # Vatsana Technologies Pvt. Ltd. Android SDK API (WittyfeedAndroidApi)
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[ ![Download](https://img.shields.io/badge/Download-1.1.0-blue.svg) ](https://drive.google.com/file/d/0BzL7HCh86uWWVUw0N2NGbl9YcWNuRFJHR0pVcklIQ05YUnJF/view?usp=sharing)
+[ ![Download](https://img.shields.io/badge/Download-1.2.0-blue.svg) ](https://drive.google.com/file/d/0BzL7HCh86uWWVUw0N2NGbl9YcWNuRFJHR0pVcklIQ05YUnJF/view?usp=sharing)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -31,102 +31,191 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 * Browse to the downloaded WittyFeed SDK in form of .AAR package
 * Sync Gradle 
 * In your app level build.gradle file, add the below line in the bottom of dependencies
-  ```groovy
-    compile project(':wf-sdk-release') 
-  ```
+```groovy
+    implementation project(':wittynativesdk-release') 
+```
 
 3. Add the library dependency to your project
   
   ```groovy
-   compile 'com.android.volley:volley:1.0.0'
-   compile 'com.android.support:percent:26.+'
-    compile 'com.koushikdutta.ion:ion:2.+' 
-   
-    compile 'com.android.support:support-v4:26.+' 
-   compile 'com.android.support:design:26.+' 
-   compile 'com.android.support:appcompat-v7:26.+' 
-   compile ‘com.android.support:recyclerview-v7:26+'
+    compile 'com.github.bumptech.glide:glide:4.3.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
+    compile 'com.android.support:percent:26.1.0'
+    compile 'com.android.volley:volley:1.0.0'
+
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
+    compile ‘com.android.support:recyclerview-v7:26+'
  ```
 
 > ## Notice
-> We encourage developers to always check for latest SDK version and and use it.
+> We encourage developers to always check for latest SDK version and refer to its updated documentation to use it.
 
 
-### 1.3. Opening Waterfall Feeds Layout of SDK
-
-In your `Application` class, use these lines of code to open waterfall layout anywhere in the app
+### 1.3. Initializing the SDK
 
 ```java
-   Intent go_to_wf_screen = new Intent(activity, WittyFeedOldSDKWaterfallActivity.class);
-   go_to_wf_screen.putExtra("FCM_TOKEN", "<FIREBASE_TOKEN_OF_THE_USER>");
-   go_to_wf_screen.putExtra("APP_ID", "<YOUR_APP_ID_AS_PROVIDED_FROM_ENGAGE9_DASHBOARD>");
-   go_to_wf_screen.putExtra("API_KEY", "<YOUR_API_KEY_AS_PROVIDED_FROM_ENGAGE9_DASHBOARD>");
-   go_to_wf_screen.putExtra("ACTION_BAR_BG_COLOR", "<BG_COLOR_YOU_PREFER>");
-   go_to_wf_screen.putExtra("ACTION_BAR_TEXT_COLOR", "<TEXT_COLOR_YOU_PREFER>");
-   startActivity(go_to_wf_screen);
+    // below code is ***required*** for Initializing Wittyfeed Android SDK API
+    WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN);
+    WittyFeedSDKSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient);
+
+    // use this interface callback to do operations when SDK finished loading
+    WittyFeedSDKMainInterface wittyFeedSDKMainInterface = new WittyFeedSDKMainInterface() {
+        @Override
+        public void onOperationDidFinish() {
+            // witty sdk did loaded completely successfully
+            Log.d("Main App", "witty sdk did load successfully");
+            progressBar.setVisibility(View.GONE);
+            btns_ll.setVisibility(View.VISIBLE);
+            }
+
+        @Override
+        public void onError(Exception e) {
+            // if unexpected error
+        }
+    };
+
+    //setting callback here
+    WittyFeedSDKSingleton.getInstance().witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
+
+    // initializing SDK here
+    WittyFeedSDKSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
 ```
 
-### 1.4. For Notifications Service of WittyFeedAndroidSDK
+### 1.4. For Waterfall Feeds Fragment
+
+```java
+    // initializing waterfall fragment. Note- Make sure you have initialized the SDK in previous steps
+    Fragment fragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_waterfall_fragment(this);
+
+    // using our WittyFeedSDKWaterfallFragment, replace <ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED> with your
+    // viewgroup's ID (i.e. LinearLayout, RelativeLayout etc)
+    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+    fragmentTransaction.add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED>, fragment, "WittyFeed_SDK_Waterfall").commit();
+```
+
+> ## Note
+> For fetching all the category names for your account, use the below method which return an string[] array with the names of the category
+>WittyFeedSDKSingleton.getInstance().witty_sdk.get_all_categoies_available();
+
+
+### 1.5. To Fetch a WittyFeed Story Card from (i) Any Category or, (ii) Specific Category
+
+```java
+    // Total Steps 3
+    // First Step: Create an interface of type WittyFeedSDKCardFetcherInterface in which four methods will be there as demonstrated below
+
+    // Second Step: Initialize an object of WittyFeedSDKCardFetcher to fetch cards, NOTE- use same object from WittyFeedSDKSingleton as demonstrated below
+        // if you don't want to see any repeated card anywhere in the app. Otherwise you can initialize different object of WittyFeedSDKCardFetcher
+
+    // Third Step: Use fetch_a_card() method of WittyFeedSDKCardFetcher to place a WittyFeed SDK Card in one your ViewGroups (i.e. views, layouts etc)
+        // fetch_a_card() has two overload methods,
+        // First overloaded fetch_a_card() method fetches a random card from any cateogry and,
+        // Second overloaded fetch_a_card() method fetches a card of specific category which will passed as the third argument of String type
+            // First argument: is of String TYPE and is used to define your own custom tag that you will later recieve in onCardReceived (its purpose is similar to itemType parameter in OnCreateViewHolder of RecyclerView)
+            // Second argument: is FLOAT TYPE for adjusting font_size_ratio of cards which should be between 0.0f to 1.0f (example: if your layout covers full screen then pass 1.0f)
+            // Third argument: is of STRING TYPE for the specific category, it may return null if category is sent wrong
+
+    // Other Available Methods by WittyFeedSDKCardFetcher:
+        // clearCardFetchedHistory(): Clears history that keep tracks what card have been used and what not,
+            // clearing this will fetch again the very first card, that was fetched.
+
+    // First Step is this
+    WittyFeedSDKCardFetcherInterface wittyFeedSDKCardFetcherInterface = new WittyFeedSDKCardFetcherInterface() {
+        @Override
+        public void onWillStartFetchingMoreData() {
+            // fetching more data, do necessary UI updates here. onMoreDataFetched will be called when the data will be fetched
+            Log.d(TAG, "onWillStartFetchingMoreData: ");
+            findViewById(R.id.change_ll).setVisibility(View.INVISIBLE);
+            findViewById(R.id.pb_ll).setVisibility(View.VISIBLE);
+        }
+
+
+        @Override
+        public void onMoreDataFetched() {
+            // after fetching more data. onMoreDataFetched will be called when the data will be fetched
+            Log.d(TAG, "onMoreDataFetched: ");
+            findViewById(R.id.pb_ll).setVisibility(View.GONE);
+            findViewById(R.id.change_ll).setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onCardReceived(String customTag, View cardViewFromWittyFeed) {
+            // when a cardView is made, onCardReceived will return WittyFeedCard of type (View)
+            switch (customTag){
+                case "content1_rl":
+                    content1_rl.removeAllViews();
+                    content1_rl.addView(cardViewFromWittyFeed);
+                    break;
+                case "content2_rl":
+                    content2_rl.removeAllViews();
+                    content2_rl.addView(cardViewFromWittyFeed);
+                    break;
+                case "content3_rl":
+                    content3_rl.removeAllViews();
+                    content3_rl.addView(cardViewFromWittyFeed);
+                    break;
+                case "content4_rl":
+                    content4_rl.removeAllViews();
+                    content4_rl.addView(cardViewFromWittyFeed);
+                    break;
+            }
+        }
+
+        @Override
+        public void onError(Exception e) {
+            // unexpected happens here
+            Log.d(TAG, "onError: "+ e.getMessage(), e);
+        }
+    };
+
+    // Second Step is this
+    // Tip: use the object of WittyFeedSDKCardFetcher from Singleton class if you want to use cards in difference activities
+        // and also don't want to repeat cards that have been loaded previously in previous screens
+        // otherwise just create an object local to current activity only and use that, see TinderCardActivity for such implementation
+
+    WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(activity, wittyFeedSDKCardFetcherInterface);
+
+
+    // Third and Last Step is this
+    WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKCardFetcher.fetch_a_card("content1_rl", 0.5f);
+```
+
+### 1.6. For creating WittyFeed cards Carousel
+
+```java
+    // below method will directly place a carousel of WittyFeed cards endlessly implemented
+    // Note- Make sure you have initialized the SDK in previous steps
+    // replace YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED with your viewgroup (i.e. LinearLayout, RelativeLayout etc)
+    WittyFeedSDKSingleton.getInstance().witty_sdk.get_carousel(this, <YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED>);
+```
+
+### 1.7. For Notifications Service of WittyFeedAndroidSDK
 
 In your class which extends FirebaseMessagingService, update with the code below
 
 ```java
-   // should be initialised at the class level
-   WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager;
+    // should be initialised at the class level
+    WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager;
 
-   public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(RemoteMessage remoteMessage) {
       // This line is required to be just after the onMessageReceived block starts
       wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(getApplicationContext());
 
       // this 2 lines below handle the notifications
       int your_preferred_icon_for_notifications =  <YOUR_PREFERRED_ICON_FOR_NOTIFICATION>  //example: R.mipmap.ic_launcher
       wittyFeedSDKNotificationManager.handleNotification(remoteMessage.getData(), your_preferred_icon_for_notifications);
-   }
+    }
 ```
 
 > ## Note
-> Notification service with WittyfeedAndroidSDK is optional to use but is highly recommended. You will get to handle this notifications on Engage9 Dashbaord
+> Notification service with WittyFeedNativeAndroidSDK is optional to use but is highly recommended. You will get to handle this notifications on Engage9 Dashbaord
 
-### 1.5. For WittyFeedAndroidSDK Native Cards
-
-1. Initialise the SDK first 
-
-```java
-   // below code is only required for Native SDK CARDS support
-
-   WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, YOUR_APP_ID, YOUR_API_KEY, YOUR_USERS_FIREBASE_TOKEN);
-
-   WittyFeedSDKSingleton.getInstance().witty_sdk = new
-   WittyFeedSDKMain(activity,
-
-   WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient);
-
-   // use this interface callback to do operations when SDK finished loading
-   WittyFeedSDKSingleton.getInstance().wittyFeedSDKMainInterface = new WittyFeedSDKMainInterface() {
-      @Override
-      public void onOperationDidFinish() {
-         // witty sdk did loaded completely successfully
-         Log.d("Main App", "witty sdk did load successfully");
-      }
-   };
-
-   WittyFeedSDKSingleton.getInstance().witty_sdk.set_operationDidFinish_callback( WittyFeedSDKSingleton.getInstance().wittyFeedSDKMainInterface );
-
-   WittyFeedSDKSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
-```
-
-2. Setting Native Card on custom empty ViewGroup (i.e. RelativeLayout, LinearLayout, FrameLayout etc)
-
-```java
-   // use get_a_new_card() method to place a WittyFeed SDK Card in one your ViewGroups (i.e. views, layouts etc)
-   // get_a_new_card() accepts two arguments
-   // first argument is of ViewGroup TYPE and is used the layout inside which you wish to place your card,
-   // and the second argument is FLOAT TYPE for adjusting font_size_ratio of cards which should be between 0 to 1
-   WittyFeedSDKSingleton.getInstance().witty_sdk.get_a_new_card(<your_custom_ViewGroup>, <your_float_type_font_size_ratio_for_card>);
-```
 
 ## 2. Example App
-This repository includes an example Android app which uses the `WittyfeedAndroidSDK`.
+This repository includes an example Android app which uses all the features of `WittyFeedNativeAndroidSDK` documented above.
 
 
 ## 3. License

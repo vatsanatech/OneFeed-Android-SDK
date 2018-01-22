@@ -1,7 +1,7 @@
 # Vatsana Technologies Pvt. Ltd. Android SDK API (WittyfeedAndroidApi)
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[ ![Download](https://img.shields.io/badge/Download-1.2.0-blue.svg) ](https://drive.google.com/file/d/1WDuP9a8sw6vHNXYvIUuir8sNLyPOjsu9/view?usp=sharing)
+[ ![Download](https://img.shields.io/badge/Download-1.3.0-blue.svg)](https://drive.google.com/file/d/1vw_4KoCO9PcRSoUUeAK8uU9x58WQG-CC/view?usp=sharing)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -24,7 +24,7 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 
 ### 1.2. Incorporating the SDK
 
-1. [Download the SDK](https://drive.google.com/file/d/1WDuP9a8sw6vHNXYvIUuir8sNLyPOjsu9/view?usp=sharing)
+1. [Download the SDK](https://drive.google.com/file/d/1vw_4KoCO9PcRSoUUeAK8uU9x58WQG-CC/view?usp=sharing)
 
 2. Import WittyFeedAndroidSDK in your project
 * In Android Studio goto File > New > New Module > Import .JAR/.AAR Package
@@ -32,7 +32,7 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 * Sync Gradle 
 * In your app level build.gradle file, add the below line in the bottom of dependencies
 ```groovy
-    implementation project(':wittynativesdk-release') 
+    implementation project(':wittynativesdk') 
 ```
 
 3. Add the library dependency to your project
@@ -40,14 +40,14 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
   ```groovy
     compile 'com.github.bumptech.glide:glide:4.3.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
-    compile 'com.android.support:percent:26.1.0'
+    compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.android.volley:volley:1.0.0'
 
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:support-v4:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.android.support:cardview-v7:26.1.0'
-    compile ‘com.android.support:recyclerview-v7:26+'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:support-v4:27.0.2'
+    compile 'com.android.support:design:27.0.2'
+    compile 'com.android.support:cardview-v7:27.0.2'
+    compile 'com.android.support:recyclerview-v7:27.0.2'
  ```
 
 > ## Notice
@@ -57,19 +57,45 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 ### 1.3. Initializing the SDK
 
 ```java
-    // below code is ***required*** for Initializing Wittyfeed Android SDK API
+
+    //
+    // OPTIONAL to provide basic user_meta.
+    // By providing basic user_meta your app can receive targeted content which has an higher CPM then regular content.
+    //
+    HashMap<String, String> user_meta = new HashMap<>();
+
+    //
+    // WittyFeedSDKGender has following options = MALE, FEMALE, OTHER, NONE
+    // SAMPLE CODE BELOW, DO ADD YOUR OWN CATEOGORIES OF INTERESTS
+    // OPTIONAL
+    //
+    user_meta.put("client_gender", WittyFeedSDKGender.MALE);
+
+    //
+    // user Interests. String with a max_length = 100
+    // SAMPLE CODE BELOW, DO ADD YOUR OWN CATEOGORIES OF INTERESTS
+    // OPTIONAL
+    //
+    user_meta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); // string max_length = 100
+
+    //
+    // below code is only ***required*** for Initializing Wittyfeed Android SDK API
+    // PROVIDING 'user_meta' ARGUMENT IS OPTIONAL
+    //
     WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN);
     WittyFeedSDKSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient);
 
+    //
     // use this interface callback to do operations when SDK finished loading
+    //
     WittyFeedSDKMainInterface wittyFeedSDKMainInterface = new WittyFeedSDKMainInterface() {
         @Override
         public void onOperationDidFinish() {
+            //
             // witty sdk did loaded completely successfully
+            //
             Log.d("Main App", "witty sdk did load successfully");
-            progressBar.setVisibility(View.GONE);
-            btns_ll.setVisibility(View.VISIBLE);
-            }
+        }	
 
         @Override
         public void onError(Exception e) {
@@ -77,21 +103,30 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
         }
     };
 
-    //setting callback here
+    //
+    // setting callback here
+    //
     WittyFeedSDKSingleton.getInstance().witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
 
+    //
     // initializing SDK here
+    //
     WittyFeedSDKSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
+    WittyFeedSDKSingleton.getInstance().witty_sdk.prepare_feed();
 ```
 
 ### 1.4. For Waterfall Feeds Fragment
 
 ```java
+    //
     // initializing waterfall fragment. Note- Make sure you have initialized the SDK in previous steps
+    //
     Fragment fragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_waterfall_fragment(this);
 
+    //
     // using our WittyFeedSDKWaterfallFragment, replace <ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED> with your
     // viewgroup's ID (i.e. LinearLayout, RelativeLayout etc)
+    //
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
     fragmentTransaction.add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED>, fragment, "WittyFeed_SDK_Waterfall").commit();
 ```
@@ -106,7 +141,7 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 ```java
     // Total Steps 3
     // First Step: Create an interface of type WittyFeedSDKCardFetcherInterface in which four methods will be there as demonstrated below
-
+    
     // Second Step: Initialize an object of WittyFeedSDKCardFetcher to fetch cards, NOTE- use same object from WittyFeedSDKSingleton as demonstrated below
         // if you don't want to see any repeated card anywhere in the app. Otherwise you can initialize different object of WittyFeedSDKCardFetcher
 
@@ -128,8 +163,6 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
         public void onWillStartFetchingMoreData() {
             // fetching more data, do necessary UI updates here. onMoreDataFetched will be called when the data will be fetched
             Log.d(TAG, "onWillStartFetchingMoreData: ");
-            findViewById(R.id.change_ll).setVisibility(View.INVISIBLE);
-            findViewById(R.id.pb_ll).setVisibility(View.VISIBLE);
         }
 
 
@@ -137,31 +170,12 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
         public void onMoreDataFetched() {
             // after fetching more data. onMoreDataFetched will be called when the data will be fetched
             Log.d(TAG, "onMoreDataFetched: ");
-            findViewById(R.id.pb_ll).setVisibility(View.GONE);
-            findViewById(R.id.change_ll).setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onCardReceived(String customTag, View cardViewFromWittyFeed) {
             // when a cardView is made, onCardReceived will return WittyFeedCard of type (View)
-            switch (customTag){
-                case "content1_rl":
-                    content1_rl.removeAllViews();
-                    content1_rl.addView(cardViewFromWittyFeed);
-                    break;
-                case "content2_rl":
-                    content2_rl.removeAllViews();
-                    content2_rl.addView(cardViewFromWittyFeed);
-                    break;
-                case "content3_rl":
-                    content3_rl.removeAllViews();
-                    content3_rl.addView(cardViewFromWittyFeed);
-                    break;
-                case "content4_rl":
-                    content4_rl.removeAllViews();
-                    content4_rl.addView(cardViewFromWittyFeed);
-                    break;
-            }
+           	// add generated view 'cardViewFromWittyFeed' as sub-view in your own ViewGroup
         }
 
         @Override
@@ -202,7 +216,7 @@ In your class which extends FirebaseMessagingService, update with the code below
 
     public void onMessageReceived(RemoteMessage remoteMessage) {
       // This line is required to be just after the onMessageReceived block starts
-      wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(getApplicationContext());
+      wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
 
       // this 2 lines below handle the notifications
       int your_preferred_icon_for_notifications =  <YOUR_PREFERRED_ICON_FOR_NOTIFICATION>  //example: R.mipmap.ic_launcher

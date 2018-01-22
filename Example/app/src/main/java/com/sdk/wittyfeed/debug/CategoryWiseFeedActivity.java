@@ -32,8 +32,6 @@ public class CategoryWiseFeedActivity extends AppCompatActivity {
     TabLayout categories_tabLayout;
     ViewPager feed_vp;
 
-    int temp_int = 0;
-
     private Activity activity;
 
     ArrayList<CustomViewPagerDataClass> customViewPagerDataClassArrayList = new ArrayList<>();
@@ -50,7 +48,7 @@ public class CategoryWiseFeedActivity extends AppCompatActivity {
 
         for (int i = 0; i < WittyFeedSDKSingleton.getInstance().categoryData_arr.size(); i++) {
             int cat_pos = i;
-            customViewPagerDataClassArrayList.add(new CustomViewPagerDataClass(new ArrayList<View>(), cat_pos, WittyFeedSDKSingleton.getInstance().categoryData_arr.get(i).getCat_name(), new WittyFeedSDKCardFetcher(activity) ));
+            customViewPagerDataClassArrayList.add(new CustomViewPagerDataClass(new ArrayList<View>(), cat_pos, WittyFeedSDKSingleton.getInstance().categoryData_arr.get(i).getCatName(), new WittyFeedSDKCardFetcher(activity) ));
         }
 
         categories_tabLayout.setupWithViewPager(feed_vp);
@@ -59,7 +57,7 @@ public class CategoryWiseFeedActivity extends AppCompatActivity {
     }
 
 
-    class CategoryPagerAdapter extends PagerAdapter {
+    class CategoryPagerAdapter extends PagerAdapter{
 
         @Override
         public int getCount() {
@@ -128,7 +126,7 @@ public class CategoryWiseFeedActivity extends AppCompatActivity {
 
                     if(firstVisibleItemPosition+visibleItemCount > totalItemCount- 1  && !customViewPagerDataClassArrayList.get(final_position).is_fetching_data){
                         for (int j = 0; j <= 0; j++) {
-                           customViewPagerDataClassArrayList.get(final_position).wittyFeedSDKCardFetcher.fetch_a_card("category_card", 0.8f, customViewPagerDataClassArrayList.get(final_position).cat_name);
+                            customViewPagerDataClassArrayList.get(final_position).wittyFeedSDKCardFetcher.fetch_a_card("category_card", 0.8f, customViewPagerDataClassArrayList.get(final_position).cat_name);
                         }
                     }
 
@@ -186,7 +184,7 @@ public class CategoryWiseFeedActivity extends AppCompatActivity {
                     ArrayList<View> witty_cards = customViewPagerDataClassArrayList.get(cat_pos).witty_cards;
                     holder.progressBar.setVisibility(View.GONE);
                     TextView tv = customViewPagerDataClassArrayList.get(cat_pos).witty_cards.get(position).findViewById(R.id.title_tv);
-                    Log.d(TAG, "onBindViewHolder: " + tv.getText());
+//                    Log.d(TAG, "onBindViewHolder: " + tv.getText());
                     holder.item_cv.setVisibility(View.VISIBLE);
 
                     ViewGroup vp = (ViewGroup) customViewPagerDataClassArrayList.get(cat_pos).witty_cards.get(position).getParent();
@@ -196,7 +194,7 @@ public class CategoryWiseFeedActivity extends AppCompatActivity {
 
                     holder.cardHolder_linearLayout.removeAllViews();
                     holder.cardHolder_linearLayout.addView(customViewPagerDataClassArrayList.get(cat_pos).witty_cards.get(position));
-                    Log.d(TAG, "onBindViewHolder: " + tv.getText());
+//                    Log.d(TAG, "onBindViewHolder: " + tv.getText());
                     break;
             }
         }

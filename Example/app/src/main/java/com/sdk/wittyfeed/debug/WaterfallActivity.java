@@ -26,8 +26,10 @@ public class WaterfallActivity extends Activity {
         Fragment fragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_waterfall_fragment(this);
 
         // using our WittyFeedSDKWaterfallFragment
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(findViewById(R.id.root_ll).getId(), fragment, "WittyFeed_SDK_Waterfall").commit();
+
+        android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(findViewById(R.
+                id.fragmentHolder_fl).getId(), fragment, "WittyFeed_SDK_Waterfall").commit();
     }
 
 }

@@ -14,6 +14,7 @@ import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKApiClient;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMain;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
 import com.sdk.wittyfeed.wittynativesdk.utils.fcm.WittyFeedSDKNotificationManager;
+import com.sdk.wittyfeed.wittynativesdk.utils.wittyenum.WittyFeedSDKGender;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,8 +52,21 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("FCM_CUSTOM", "Refreshed token: " + FCM_TOKEN);
 
-        // below code is ***required*** for Initializing Wittyfeed Android SDK API
-        WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN);
+
+        // OPTIONAL to provide basic user_meta.
+        // By providing basic user_meta your app can receive targeted content which has an higher CPM then regular content.
+        HashMap<String, String> user_meta = new HashMap<>();
+
+        // WittyFeedSDKGender has following options = MALE, FEMALE, OTHER, NONE
+        user_meta.put("client_gender", WittyFeedSDKGender.MALE);
+
+        // user Interests. String with a max_length = 100
+        user_meta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); // string max_length = 100
+
+
+
+        // below code is only ***required*** for Initializing Wittyfeed Android SDK API, -- providing 'user_meta' is optional --
+        WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN, user_meta);
         WittyFeedSDKSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient);
 
         // use this interface callback to do operations when SDK finished loading
@@ -77,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
         // initializing SDK here
         WittyFeedSDKSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
+        WittyFeedSDKSingleton.getInstance().witty_sdk.prepare_feed();
 
 
         findViewById(R.id.goto_waterfall_btn).setOnClickListener(new View.OnClickListener() {
@@ -85,14 +100,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent go_to_wf_screen = new Intent(MainActivity.this,
                         WaterfallActivity.class);
                 startActivity(go_to_wf_screen);
-            }
-        });
-
-        findViewById(R.id.goto_four_card_demo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, FourCardActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -126,18 +133,11 @@ public class MainActivity extends AppCompatActivity {
                 send_demo_fcm("WittyFeedSDKDetailCardActivity");
             }
         });
-
-        findViewById(R.id.simulate_web_notiff_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                send_demo_fcm("WittyFeedSDKContentViewActivity");
-            }
-        });
     }
 
 
     private void send_demo_fcm(String notiff_type) {
-        WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(activity);
+        WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(activity, FCM_TOKEN);
         int preferred_notiff_icon = R.mipmap.ic_launcher;
         Map<String, String> dummy_notiff_data = get_dummy_json_object();
 
@@ -161,14 +161,15 @@ public class MainActivity extends AppCompatActivity {
             object.put("cat_name", "Lifestyle");
             object.put("cat_id", "47");
             object.put("cat_image", "lifestyle.png");
-            object.put("card_type", "card_type_2");
+            object.put("card_type", "card_type_7");
             object.put("doodle", "https://cdn.wittyfeed.com/Mobile-App/doodles/doodle_1.png");
             object.put("audio", "https://cdn.wittyfeed.com//Mobile-App/stories_sound/1.mp3");
             object.put("animation_type", "slideInUp");
             object.put("cat_color", "#f37022");
             object.put("story_url", "https://www.wittyfeed.com/story/60496");
             object.put("detail_view", "");
-            object.put("image_url", "");
+            String[] empty_string_arr = {""};
+            object.put("image_url", empty_string_arr.toString());
 
             object.put("id", "400");
             object.put("body", "Hey, Here's a new amazing story for you!");
@@ -182,6 +183,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return object;
     }
-
 
 }

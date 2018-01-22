@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
 
 /**
- * Created by ritesh on 9/11/17.
+ * Created by aishwarydhare on 9/11/17.
  */
 
 public class CarouselDemoActivity extends AppCompatActivity {

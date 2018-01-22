@@ -2,6 +2,7 @@ package com.sdk.wittyfeed.debug;
 
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.sdk.wittyfeed.wittynativesdk.utils.*;
@@ -19,7 +20,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(getApplicationContext());
+        wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
 
         Log.d(FCM_TAG, "msg: " + remoteMessage.toString());
 

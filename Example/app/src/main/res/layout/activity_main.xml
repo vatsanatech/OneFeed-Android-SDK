@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/Theme.AppCompat.NoActionBar" >
+    style="@style/Theme.AppCompat.NoActionBar">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -27,13 +25,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Goto Waterfall SDK DEMO"/>
-
-        <Button
-            android:id="@+id/goto_four_card_demo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Goto 4-Card Native SDK Demo"/>
 
         <Button
             android:id="@+id/goto_endless_feed_btn"
@@ -62,15 +53,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Simulate Detailed Card Notification"/>
-
-        <Button
-            android:id="@+id/simulate_web_notiff_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Simulate WebView Card Notification"/>
-
-
 
     </LinearLayout>
 

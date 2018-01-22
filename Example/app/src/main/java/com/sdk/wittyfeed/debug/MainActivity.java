@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             object.put("story_id", "60496");
             object.put("story_title", "This Adorable Baby Copied His Model Uncle's Poses And The Result Is Amazing");
-            object.put("cover_image", "https://cdn.wittyfeed.com/60496/300x0/xqivpjxv76pt44q269cm.png");
+            object.put("cover_image", "https://cdn.wittyfeed.com/60496/xqivpjxv76pt44q269cm.png?impolicy=pqlow&imwidth=960");
             object.put("user_id", "143026");
             object.put("user_full_name", "Richa");
             object.put("doc", "2017-10-24 09:06:57");

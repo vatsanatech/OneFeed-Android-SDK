@@ -109,9 +109,14 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
     WittyFeedSDKSingleton.getInstance().witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
 
     //
-    // initializing SDK here
+    // initializing SDK here (mandatory)
     //
     WittyFeedSDKSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
+    
+    //
+    // Fetch fresh feeds from our servers with this method call. 
+    // It is not mandatory if only notification feature is desired from the SDK
+    //
     WittyFeedSDKSingleton.getInstance().witty_sdk.prepare_feed();
 ```
 

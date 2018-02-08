@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
     Activity activity;
 
-    private String ACTION_BAR_BG_COLOR = "";
-    private String ACTION_BAR_TEXT_COLOR = "";
     LinearLayout btns_ll;
     ProgressBar progressBar;
 
@@ -53,28 +51,42 @@ public class MainActivity extends AppCompatActivity {
         Log.d("FCM_CUSTOM", "Refreshed token: " + FCM_TOKEN);
 
 
+        // ====================
+        // SDK WORK STARTS HERE
+        // ====================
+
+        //
         // OPTIONAL to provide basic user_meta.
-        // By providing basic user_meta your app can receive targeted content which has an higher CPM then regular content.
+        // By providing user_meta your app can receive targeted content which has an higher CPM then regular content.
+        //
         HashMap<String, String> user_meta = new HashMap<>();
 
-        // WittyFeedSDKGender has following options = MALE, FEMALE, OTHER, NONE
+        //
+        // WittyFeedSDKGender has following options = "M" for Male, "F" for Female, "O" for Other, "N" for None
+        //
         user_meta.put("client_gender", WittyFeedSDKGender.MALE);
 
-        // user Interests. String with a max_length = 100
+        //
+        // User Interests.
+        // String with a max_length = 100
+        //
         user_meta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); // string max_length = 100
 
-
-
+        //
         // below code is only ***required*** for Initializing Wittyfeed Android SDK API, -- providing 'user_meta' is optional --
-        WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN, user_meta);
+        //
+        WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN/*, user_meta*/);
         WittyFeedSDKSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient);
 
-        // use this interface callback to do operations when SDK finished loading
+        //
+        // Use this interface callback to do operations when SDK finished loading
+        //
         WittyFeedSDKMainInterface wittyFeedSDKMainInterface = new WittyFeedSDKMainInterface() {
             @Override
             public void onOperationDidFinish() {
                 // witty sdk did loaded completely successfully
                 Log.d("Main App", "witty sdk did load successfully");
+                String[] availableCats = WittyFeedSDKSingleton.getInstance().witty_sdk.get_all_categoies_available();
                 progressBar.setVisibility(View.GONE);
                 btns_ll.setVisibility(View.VISIBLE);
             }
@@ -85,13 +97,25 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
+        //
         //setting callback here
+        //
         WittyFeedSDKSingleton.getInstance().witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
 
-        // initializing SDK here
+        //
+        // Initializing SDK here (mandatory)
+        //
         WittyFeedSDKSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
+
+        //
+        // Fetch fresh feeds from our servers with this method call.
+        // It is not mandatory if only notification feature is desired from the SDK
+        //
         WittyFeedSDKSingleton.getInstance().witty_sdk.prepare_feed();
+
+        // ====================
+        // SDK WORK ENDS HERE
+        // ====================
 
 
         findViewById(R.id.goto_waterfall_btn).setOnClickListener(new View.OnClickListener() {
@@ -130,7 +154,11 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.simulate_detail_notiff_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                send_demo_fcm("WittyFeedSDKDetailCardActivity");
+
+//                 send_demo_fcm("WittyFeedSDKContentViewActivity"); // For Directly going to the WebPage Story of WittyFeed
+
+                send_demo_fcm("WittyFeedSDKDetailCardActivity"); // For Opening card First, and then open Story
+
             }
         });
     }

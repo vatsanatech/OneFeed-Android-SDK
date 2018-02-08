@@ -1,7 +1,10 @@
 # Vatsana Technologies Pvt. Ltd. Android SDK API (WittyfeedAndroidApi)
 
+> # Note
+> New v1.4.0 made live on 8 Feb' 2018
+
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[ ![Download](https://img.shields.io/badge/Download-1.3.0-blue.svg)](https://drive.google.com/file/d/1vw_4KoCO9PcRSoUUeAK8uU9x58WQG-CC/view?usp=sharing)
+[ ![Download](https://img.shields.io/badge/Download-1.4.0-blue.svg)](https://drive.google.com/file/d/1byUv3HjaWZLpx1k9IPPK6AMy_fai9mpS/view?usp=sharing)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -24,7 +27,7 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 
 ### 1.2. Incorporating the SDK
 
-1. [Download the SDK](https://drive.google.com/file/d/1vw_4KoCO9PcRSoUUeAK8uU9x58WQG-CC/view?usp=sharing)
+1. [Download the SDK v1.4.0](https://drive.google.com/file/d/1byUv3HjaWZLpx1k9IPPK6AMy_fai9mpS/view?usp=sharing)
 
 2. Import WittyFeedAndroidSDK in your project
 * In Android Studio goto File > New > New Module > Import .JAR/.AAR Package
@@ -82,7 +85,7 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
     // below code is only ***required*** for Initializing Wittyfeed Android SDK API
     // PROVIDING 'user_meta' ARGUMENT IS OPTIONAL
     //
-    WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN);
+    WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN  /*, user_meta*/  ););
     WittyFeedSDKSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient);
 
     //

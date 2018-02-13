@@ -147,25 +147,31 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 ### 1.5. To Fetch a WittyFeed Story Card from (i) Any Category or, (ii) Specific Category
 
 ```java
+    //=================================
+    //======== NATIVE CARD DOC ========
+    //=================================
+
     // Total Steps 3
-    // First Step: Create an interface of type WittyFeedSDKCardFetcherInterface in which four methods will be there as demonstrated below
-    
+        // First Step: Create an interface of type WittyFeedSDKCardFetcherInterface in which four methods will be there as demonstrated below
+
     // Second Step: Initialize an object of WittyFeedSDKCardFetcher to fetch cards, NOTE- use same object from WittyFeedSDKSingleton as demonstrated below
         // if you don't want to see any repeated card anywhere in the app. Otherwise you can initialize different object of WittyFeedSDKCardFetcher
 
     // Third Step: Use fetch_a_card() method of WittyFeedSDKCardFetcher to place a WittyFeed SDK Card in one your ViewGroups (i.e. views, layouts etc)
         // fetch_a_card() has two overload methods,
-        // First overloaded fetch_a_card() method fetches a random card from any cateogry and,
-        // Second overloaded fetch_a_card() method fetches a card of specific category which will passed as the third argument of String type
-            // First argument: is of String TYPE and is used to define your own custom tag that you will later recieve in onCardReceived (its purpose is similar to itemType parameter in OnCreateViewHolder of RecyclerView)
-            // Second argument: is FLOAT TYPE for adjusting font_size_ratio of cards which should be between 0.0f to 1.0f (example: if your layout covers full screen then pass 1.0f)
-            // Third argument: is of STRING TYPE for the specific category, it may return null if category is sent wrong
+            // First overloaded fetch_a_card() method fetches a random card from any cateogry and,
+            // Second overloaded fetch_a_card() method fetches a card of specific category which will passed as the third argument of String type
+                // First argument: is of String TYPE and is used to define your own custom tag that you will later recieve in onCardReceived (its purpose is similar to itemType parameter in OnCreateViewHolder of RecyclerView)
+                // Second argument: is FLOAT TYPE for adjusting font_size_ratio of cards which should be between 0.0f to 1.0f (example: if your layout covers full screen then pass 1.0f)
+                // Third argument: is of STRING TYPE for the specific category, it may return null if category is sent wrong
 
     // Other Available Methods by WittyFeedSDKCardFetcher:
         // clearCardFetchedHistory(): Clears history that keep tracks what card have been used and what not,
-            // clearing this will fetch again the very first card, that was fetched.
+        // clearing this will fetch again the very first card, that was fetched.
 
+    //
     // First Step is this
+    //
     WittyFeedSDKCardFetcherInterface wittyFeedSDKCardFetcherInterface = new WittyFeedSDKCardFetcherInterface() {
         @Override
         public void onWillStartFetchingMoreData() {
@@ -193,16 +199,26 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
         }
     };
 
+    //
     // Second Step is this
-    // Tip: use the object of WittyFeedSDKCardFetcher from Singleton class if you want to use cards in difference activities
-        // and also don't want to repeat cards that have been loaded previously in previous screens
-        // otherwise just create an object local to current activity only and use that, see TinderCardActivity for such implementation
+    //
+    // NOTE: If you don't want cards to repeat anywhere in your app then always use a static singleton object (create it in the class that extends Application)
+    //
+    // NOTE: either pass the 'wittyFeedSDKCardFetcherInterface' object in the constructor of 'WittyFeedSDKCardFetcher'
+        // or else use the method 'setWittyFeedSDKCardFetcherInterface' to set it later
+    //
 
     WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(activity, wittyFeedSDKCardFetcherInterface);
 
 
+    //
     // Third and Last Step is this
+    //
     WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKCardFetcher.fetch_a_card("content1_rl", 0.5f);
+
+    //=====================================
+    //======== NATIVE CARD DOC END ========
+    //=====================================
 ```
 
 ### 1.6. For creating WittyFeed cards Carousel

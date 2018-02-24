@@ -243,15 +243,20 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 ### 1.6. For creating WittyFeed cards Carousel
 
 ```java
-    // below method will directly place a carousel of WittyFeed cards endlessly implemented
-    // Note- Make sure you have initialized the SDK in previous steps
+    //
+    // Below method will directly place a carousel of WittyFeed cards
+        // Note- Make sure you have initialized the SDK in previous steps
+        // Note- Carousel loads endlessly
     // replace YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED with your viewgroup (i.e. LinearLayout, RelativeLayout etc)
+    //
   
     WittyFeedSDKSingleton.getInstance().witty_sdk.get_carousel(this, <YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED>,
         <HEIGHT_OF_THE_VIEWGROUP>);
   
-    // Abovementioned code get us a Carousel of height equals to the specified ViewGroup and width of each card would be 65% of the screen width. 
-    //You can customise the cards width and height according to your requirements as follows:
+    //
+    // Above mentioned code get us a Carousel of height equals to the specified ViewGroup and width of each card would be 65% of the screen width. 
+    // You can customise the cards width and height according to your requirements as follows:
+    //
     
     WittyFeedSDKSingleton.getInstance.witty_sdk.get_carousel(this,<YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED>, <HEIGHT_OF_VIEWGROUP_IN_DP>, <WIDTH_OF_VIEWGROUP_IN_DP>);
 ```
@@ -261,14 +266,20 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 In your class which extends FirebaseMessagingService, update with the code below
 
 ```java
+    //
     // should be initialised at the class level
+    //
     WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager;
 
     public void onMessageReceived(RemoteMessage remoteMessage) {
+      //
       // This line is required to be just after the onMessageReceived block starts
+      //
       wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
 
+      //
       // this 2 lines below handle the notifications
+      //
       int your_preferred_icon_for_notifications =  <YOUR_PREFERRED_ICON_FOR_NOTIFICATION>  //example: R.mipmap.ic_launcher
       wittyFeedSDKNotificationManager.handleNotification(remoteMessage.getData(), your_preferred_icon_for_notifications);
     }

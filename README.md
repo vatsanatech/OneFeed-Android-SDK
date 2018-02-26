@@ -228,6 +228,11 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
     //
 
     WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(activity, wittyFeedSDKCardFetcherInterface);
+    
+    //
+    // set `true` to open story_content_view directly
+    //
+    WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKCardFetcher.set_to_open_content_view_directly(true);
 
 
     //
@@ -239,6 +244,10 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
     //======== NATIVE CARD DOC END ========
     //=====================================
 ```
+
+> ## Note -
+> To open Story view directly on tap of the card, use method of card_fetcher .set_to_open_content_view_directly(true)
+> passing `true` opens story_content_view directly, while `false` opens full_screen_card_view with scrollable story
 
 ### 1.6. For creating WittyFeed cards Carousel
 

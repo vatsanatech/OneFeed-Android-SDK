@@ -124,6 +124,11 @@ public class CategoryFeedViewPagerFragment extends Fragment {
         wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(getActivity());
         wittyFeedSDKCardFetcher.setWittyFeedSDKCardFetcherInterface(wittyFeedSDKCardFetcherInterface);
 
+        //
+        // set `true` to open story_content_view directly
+        //
+        wittyFeedSDKCardFetcher.set_to_open_content_view_directly(true);
+
         if(getArguments() != null){
             Bundle bundle = getArguments();
             try {

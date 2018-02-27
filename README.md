@@ -1,10 +1,10 @@
 # Vatsana Technologies Pvt. Ltd. Android SDK API (WittyfeedAndroidApi)
 
 > # Note
-> New v1.4.0 made live on 8 Feb' 2018
+> New v1.5.0 made live on 23 Feb' 2018
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[ ![Download](https://img.shields.io/badge/Download-1.4.0-blue.svg)](https://drive.google.com/file/d/1HpW4WjltzdqEjgKLeJGvRW072XVYINIg/view?usp=sharing)
+[ ![Download](https://img.shields.io/badge/Download-1.5.0-blue.svg)](https://drive.google.com/file/d/193o480SnKZn6On-4HHASch8g08cZZEAM)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -27,7 +27,7 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 
 ### 1.2. Incorporating the SDK
 
-1. [Download the SDK v1.4.0](https://drive.google.com/file/d/1HpW4WjltzdqEjgKLeJGvRW072XVYINIg/view?usp=sharing)
+1. [Download the SDK v1.5.0](https://drive.google.com/file/d/193o480SnKZn6On-4HHASch8g08cZZEAM)
 
 2. Import WittyFeedAndroidSDK in your project
 * In Android Studio goto File > New > New Module > Import .JAR/.AAR Package
@@ -125,6 +125,8 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 
 ### 1.4. For Waterfall Feeds Fragment
 
+### For Getting android.support.v4.app.Fragment
+
 ```java
     //
     // initializing waterfall fragment. Note- Make sure you have initialized the SDK in previous steps
@@ -136,6 +138,23 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
     // viewgroup's ID (i.e. LinearLayout, RelativeLayout etc)
     //
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+    fragmentTransaction.add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED>, fragment, "WittyFeed_SDK_Waterfall").commit();
+```
+
+### For Getting android.app.Fragment
+
+
+```java
+    //
+    // initializing support waterfall fragment. Note- Make sure you have initialized the SDK in previous steps
+    //
+    Fragment fragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_support_waterfall_fragment(this);
+
+    //
+    // using our WittyFeedSDKWaterfallFragment, replace <ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED> with your
+    // viewgroup's ID (i.e. LinearLayout, RelativeLayout etc)
+    //
+    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
     fragmentTransaction.add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED>, fragment, "WittyFeed_SDK_Waterfall").commit();
 ```
 
@@ -209,6 +228,11 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
     //
 
     WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(activity, wittyFeedSDKCardFetcherInterface);
+    
+    //
+    // set `true` to open story_content_view directly
+    //
+    WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKCardFetcher.set_to_open_content_view_directly(true);
 
 
     //
@@ -221,13 +245,29 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
     //=====================================
 ```
 
+> ## Note -
+> To open Story view directly on tap of the card, use method of card_fetcher .set_to_open_content_view_directly(true)
+> passing `true` opens story_content_view directly, while `false` opens full_screen_card_view with scrollable story
+
 ### 1.6. For creating WittyFeed cards Carousel
 
 ```java
-    // below method will directly place a carousel of WittyFeed cards endlessly implemented
-    // Note- Make sure you have initialized the SDK in previous steps
+    //
+    // Below method will directly place a carousel of WittyFeed cards
+        // Note- Make sure you have initialized the SDK in previous steps
+        // Note- Carousel loads endlessly
     // replace YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED with your viewgroup (i.e. LinearLayout, RelativeLayout etc)
-    WittyFeedSDKSingleton.getInstance().witty_sdk.get_carousel(this, <YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED>);
+    //
+  
+    WittyFeedSDKSingleton.getInstance().witty_sdk.get_carousel(this, <YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED>,
+        <HEIGHT_OF_THE_VIEWGROUP>);
+  
+    //
+    // Above mentioned code get us a Carousel of height equals to the specified ViewGroup and width of each card would be 65% of the screen width. 
+    // You can customise the cards width and height according to your requirements as follows:
+    //
+    
+    WittyFeedSDKSingleton.getInstance.witty_sdk.get_carousel(this,<YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED>, <HEIGHT_OF_VIEWGROUP_IN_DP>, <WIDTH_OF_VIEWGROUP_IN_DP>);
 ```
 
 ### 1.7. For Notifications Service of WittyFeedAndroidSDK
@@ -235,14 +275,20 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 In your class which extends FirebaseMessagingService, update with the code below
 
 ```java
+    //
     // should be initialised at the class level
+    //
     WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager;
 
     public void onMessageReceived(RemoteMessage remoteMessage) {
+      //
       // This line is required to be just after the onMessageReceived block starts
+      //
       wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
 
+      //
       // this 2 lines below handle the notifications
+      //
       int your_preferred_icon_for_notifications =  <YOUR_PREFERRED_ICON_FOR_NOTIFICATION>  //example: R.mipmap.ic_launcher
       wittyFeedSDKNotificationManager.handleNotification(remoteMessage.getData(), your_preferred_icon_for_notifications);
     }

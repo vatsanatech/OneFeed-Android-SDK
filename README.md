@@ -1,10 +1,10 @@
 # Vatsana Technologies Pvt. Ltd. Android SDK API (WittyfeedAndroidApi)
 
 > # Note
-> New v1.5.0 made live on 23 Feb' 2018
+> New v1.6.0 made live on 1 March' 2018
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[ ![Download](https://img.shields.io/badge/Download-1.5.0-blue.svg)](https://drive.google.com/file/d/193o480SnKZn6On-4HHASch8g08cZZEAM)
+[ ![Download](https://img.shields.io/badge/Download-1.6.0-blue.svg)](https://drive.google.com/file/d/1Hiv7H2frvnd89LwUBn0Byt4yyB-Iv2OW)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -27,7 +27,7 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 
 ### 1.2. Incorporating the SDK
 
-1. [Download the SDK v1.5.0](https://drive.google.com/file/d/193o480SnKZn6On-4HHASch8g08cZZEAM)
+1. [Download the SDK v1.6.0](https://drive.google.com/file/d/1Hiv7H2frvnd89LwUBn0Byt4yyB-Iv2OW)
 
 2. Import WittyFeedAndroidSDK in your project
 * In Android Studio goto File > New > New Module > Import .JAR/.AAR Package
@@ -285,7 +285,11 @@ In your class which extends FirebaseMessagingService, update with the code below
       // This line is required to be just after the onMessageReceived block starts
       //
       wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
-
+      
+      //If you want to open any of your app's activity on back press from Story Activity(That loads on clicking the notification)
+      // Set Intent of the activity you want to open as follows:
+      
+      wittyFeedSDKNotificationManager.setHomeScreenIntent(new Intent(getApplicationContext(), <ACTIVITY_NAME>.class));
       //
       // this 2 lines below handle the notifications
       //

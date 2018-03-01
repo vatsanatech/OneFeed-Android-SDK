@@ -3,6 +3,7 @@ package com.sdk.wittyfeed.debug.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -13,10 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import com.sdk.wittyfeed.debug.utils.CustomFixedRecyclerView;
 import com.sdk.wittyfeed.debug.R;
 import com.sdk.wittyfeed.debug.adapter.CategoryFeedRVAdapter;
-import com.sdk.wittyfeed.debug.utils.CustomFixedRecyclerView;
 import com.sdk.wittyfeed.wittynativesdk.Interfaces.WittyFeedSDKCardFetcherInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKCardFetcher;
 import com.sdk.wittyfeed.wittynativesdk.utils.WittyFeedSDKUtils;
@@ -38,10 +38,9 @@ public class CategoryFeedViewPagerFragment extends Fragment {
     boolean is_fetching_data = false;
     ArrayList<View> witty_cards;
     String cat_name;
-    String cat_pos;
+    int cat_pos;
     LinearLayoutManager linearLayoutManager;
     View root_view;
-    private View rv_view;
 
 
     @Override
@@ -56,32 +55,23 @@ public class CategoryFeedViewPagerFragment extends Fragment {
         root_view = inflater.inflate(R.layout.item_view_pager, container, false);
 
         witty_cards = new ArrayList<>();
+        wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(getActivity());
 
-        //=================================
-        //======== NATIVE CARD DOC ========
-        //=================================
+        if(getArguments() != null){
+            Bundle bundle = getArguments();
+            try {
+                cat_name = bundle.getString("cat_name");
+                cat_pos = bundle.getInt("cat_pos");
+            } catch (Exception e) {
+                Log.e(TAG, "INVALID CAT_NAME", e);
+            }
+        } else {
+            Log.e(TAG, "onCreateView: AT_NAME NOT FOUND");
+        }
 
-        // Total Steps 3
-            // First Step: Create an interface of type WittyFeedSDKCardFetcherInterface in which four methods will be there as demonstrated below
+        feed_rv = root_view.findViewById(R.id.feed_rv);
+        categoryFeedRVAdapter = new CategoryFeedRVAdapter(witty_cards , getActivity());
 
-        // Second Step: Initialize an object of WittyFeedSDKCardFetcher to fetch cards, NOTE- use same object from WittyFeedSDKSingleton as demonstrated below
-            // if you don't want to see any repeated card anywhere in the app. Otherwise you can initialize different object of WittyFeedSDKCardFetcher
-
-        // Third Step: Use fetch_a_card() method of WittyFeedSDKCardFetcher to place a WittyFeed SDK Card in one your ViewGroups (i.e. views, layouts etc)
-            // fetch_a_card() has two overload methods,
-                // First overloaded fetch_a_card() method fetches a random card from any cateogry and,
-                // Second overloaded fetch_a_card() method fetches a card of specific category which will passed as the third argument of String type
-                    // First argument: is of String TYPE and is used to define your own custom tag that you will later recieve in onCardReceived (its purpose is similar to itemType parameter in OnCreateViewHolder of RecyclerView)
-                    // Second argument: is FLOAT TYPE for adjusting font_size_ratio of cards which should be between 0.0f to 1.0f (example: if your layout covers full screen then pass 1.0f)
-                    // Third argument: is of STRING TYPE for the specific category, it may return null if category is sent wrong
-
-        // Other Available Methods by WittyFeedSDKCardFetcher:
-            // clearCardFetchedHistory(): Clears history that keep tracks what card have been used and what not,
-            // clearing this will fetch again the very first card, that was fetched.
-
-        //
-        // First Step is this
-        //
         wittyFeedSDKCardFetcherInterface = new WittyFeedSDKCardFetcherInterface() {
             @Override
             public void onWillStartFetchingMoreData() {
@@ -98,12 +88,14 @@ public class CategoryFeedViewPagerFragment extends Fragment {
             @Override
             public void onCardReceived(String customTag, View cardViewFromWittyFeed) {
                 witty_cards.add(cardViewFromWittyFeed);
-                new Thread(new Runnable() {
+                Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
                         categoryFeedRVAdapter.notifyDataSetChanged();
                     }
-                }).run();
+                };
+                handler.post(runnable);
             }
 
             @Override
@@ -112,48 +104,12 @@ public class CategoryFeedViewPagerFragment extends Fragment {
             }
         };
 
-
-        //
-        // Second Step is this
-        //
-        // NOTE: If you don't want cards to repeat anywhere in your app then always use a static singleton object (create it in the class that extends Application)
-        //
-        // NOTE: either pass the 'wittyFeedSDKCardFetcherInterface' object in the constructor of 'WittyFeedSDKCardFetcher'
-            // or else use the method 'setWittyFeedSDKCardFetcherInterface' to set it later
-        //
-        wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(getActivity());
+        wittyFeedSDKCardFetcher.set_to_open_content_view_directly(true);
         wittyFeedSDKCardFetcher.setWittyFeedSDKCardFetcherInterface(wittyFeedSDKCardFetcherInterface);
 
-        //
-        // set `true` to open story_content_view directly
-        //
-        wittyFeedSDKCardFetcher.set_to_open_content_view_directly(true);
-
-        if(getArguments() != null){
-            Bundle bundle = getArguments();
-            try {
-                cat_name = bundle.getString("cat_name");
-                cat_pos = bundle.getString("cat_pos");
-            } catch (Exception e) {
-                Log.e(TAG, "INVALID CAT_NAME", e);
-            }
-        } else {
-            Log.e(TAG, "onCreateView: AT_NAME NOT FOUND");
-        }
-
-        feed_rv = root_view.findViewById(R.id.feed_rv);
-        categoryFeedRVAdapter = new CategoryFeedRVAdapter(witty_cards , getActivity());
-
         for (int i = 0; i <= 2; i++) {
-            //
-            // Third and Last Step is this
-            //
             wittyFeedSDKCardFetcher.fetch_a_card("category_card", 0.8f, cat_name);
         }
-
-        //=====================================
-        //======== NATIVE CARD DOC END ========
-        //=====================================
 
         container.addView(root_view);
 

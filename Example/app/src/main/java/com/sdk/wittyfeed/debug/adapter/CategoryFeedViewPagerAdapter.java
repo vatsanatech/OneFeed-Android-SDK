@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.sdk.wittyfeed.debug.fragment.CategoryFeedViewPagerFragment;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
-
 import java.util.ArrayList;
 
 /**

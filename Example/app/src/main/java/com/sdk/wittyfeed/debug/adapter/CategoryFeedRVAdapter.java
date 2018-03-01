@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
 import com.sdk.wittyfeed.debug.R;
-
 import java.util.ArrayList;
 
 /**

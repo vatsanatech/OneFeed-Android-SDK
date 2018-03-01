@@ -19,7 +19,7 @@ import com.sdk.wittyfeed.wittynativesdk.utils.wittyenum.WittyFeedSDKGender;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private static String APP_ID = "61";
     private static String API_KEY = "f168529b71aedcbf628fae0bcedb84d4";
@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
         FCM_TOKEN = FirebaseInstanceId.getInstance().getToken();
 
-        btns_ll = (LinearLayout) findViewById(R.id.btns_ll);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        btns_ll = findViewById(R.id.btns_ll);
+        progressBar = findViewById(R.id.progressBar);
 
         btns_ll.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         // ====================
 
 
+
         findViewById(R.id.goto_waterfall_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +127,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(go_to_wf_screen);
             }
         });
+
+//        findViewById(R.id.goto_four_card_demo).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(activity, FourCardActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
 
         findViewById(R.id.goto_endless_feed_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
             object.put("detail_view", "");
             String[] empty_string_arr = {""};
             object.put("image_url", empty_string_arr.toString());
+            object.put("amp_url","https://www.wittyfeed.com/amp/60496");
 
             object.put("id", "400");
             object.put("body", "Hey, Here's a new amazing story for you!");

@@ -2,8 +2,9 @@ package com.sdk.wittyfeed.debug;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
 
@@ -11,7 +12,7 @@ import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
  * Created by aishwarydhare on 08/11/17.
  */
 
-public class WaterfallActivity extends Activity {
+public class WaterfallActivity extends AppCompatActivity {
 
     Activity activity;
 

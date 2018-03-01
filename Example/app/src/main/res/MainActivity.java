@@ -90,15 +90,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.goto_four_card_demo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, FourCardActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
         // TODO: 30/10/17 need to develop endless feed screens
 //        findViewById(R.id.goto_endless_feed_btn).setVisibility(View.GONE);
         findViewById(R.id.goto_endless_feed_btn).setOnClickListener(new View.OnClickListener() {

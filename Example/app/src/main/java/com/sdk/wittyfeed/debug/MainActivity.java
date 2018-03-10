@@ -14,7 +14,6 @@ import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKApiClient;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMain;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
 import com.sdk.wittyfeed.wittynativesdk.utils.fcm.WittyFeedSDKNotificationManager;
-import com.sdk.wittyfeed.wittynativesdk.utils.wittyenum.WittyFeedSDKGender;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity{
         //
         // WittyFeedSDKGender has following options = "M" for Male, "F" for Female, "O" for Other, "N" for None
         //
-        user_meta.put("client_gender", WittyFeedSDKGender.MALE);
+        user_meta.put("client_gender", "M");
 
         //
         // User Interests.

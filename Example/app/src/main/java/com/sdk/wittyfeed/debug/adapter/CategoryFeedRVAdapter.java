@@ -1,6 +1,7 @@
 package com.sdk.wittyfeed.debug.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,7 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+
+import com.bumptech.glide.RequestManager;
 import com.sdk.wittyfeed.debug.R;
+import com.sdk.wittyfeed.wittynativesdk.adapter.WaterfallFeedAdapter;
+
 import java.util.ArrayList;
 
 /**
@@ -19,13 +24,14 @@ import java.util.ArrayList;
 public class CategoryFeedRVAdapter extends RecyclerView.Adapter<CategoryFeedRVAdapter.ViewHolder>{
 
     private ArrayList<View> local_witty_cards = new ArrayList<>();
-    private Activity activity;
+    private Context activity;
     private final String TAG = "WF_SDK";
+    private RequestManager requestManager;
 
-
-    public CategoryFeedRVAdapter(ArrayList<View> para_witty_cards, Activity para_context){
+    public CategoryFeedRVAdapter(ArrayList<View> para_witty_cards, Context para_context, RequestManager requestManager){
         local_witty_cards = para_witty_cards;
         this.activity = para_context;
+        this.requestManager = requestManager;
     }
 
 
@@ -55,6 +61,7 @@ public class CategoryFeedRVAdapter extends RecyclerView.Adapter<CategoryFeedRVAd
                 }
                 holder.cardHolder_linearLayout.removeAllViews();
                 holder.cardHolder_linearLayout.addView(local_witty_cards.get(position));
+                holder.cardHolder_linearLayout.setTag(position);
                 break;
         }
     }
@@ -96,4 +103,14 @@ public class CategoryFeedRVAdapter extends RecyclerView.Adapter<CategoryFeedRVAd
         }
     }
 
+    @Override
+    public void onViewRecycled(ViewHolder holder) {
+        Log.i(TAG, "onViewRecycled: OVR "+holder.item_cv.getTag());
+        super.onViewRecycled(holder);
+
+//        if (holder instanceof ViewHolder && holder.cardHolder_linearLayout.getTag()!=null) {
+//            requestManager.clear(local_witty_cards.get((int)holder.cardHolder_linearLayout.getTag()).findViewById(R.id.cover_iv));
+//        }
+
+    }
 }

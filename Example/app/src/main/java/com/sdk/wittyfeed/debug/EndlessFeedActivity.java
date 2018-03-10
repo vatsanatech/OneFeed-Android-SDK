@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.RequestManager;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKCardFetcher;
 import com.sdk.wittyfeed.wittynativesdk.Interfaces.WittyFeedSDKCardFetcherInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
+import com.sdk.wittyfeed.wittynativesdk.utils.glide.WittyGlide;
 
 /**
  * Created by aishwarydhare on 11/11/17.
@@ -29,6 +31,7 @@ public class EndlessFeedActivity extends AppCompatActivity {
     WittyFeedSDKCardFetcher wittyFeedSDKCardFetcher;
     String dummyString;
     boolean is_fetching_data = false;
+    RequestManager requestManager;
 
     int total_sample_feeds_count = 25;
 
@@ -38,6 +41,7 @@ public class EndlessFeedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_endless_feed);
 
         activity = this;
+        this.requestManager = WittyGlide.with(activity);
 
         dummyString = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 
@@ -53,7 +57,7 @@ public class EndlessFeedActivity extends AppCompatActivity {
         // Tip: use the object of WittyFeedSDKCardFetcher from Singleton class if you want to use cards in difference activities
         // and also don't want to repeat cards that have been loaded previously in previous screens
         // otherwise just create an object local to current activity only and use that, see TinderCardActivity for such implementation
-        wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(activity);
+        wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(activity, requestManager);
 
 
         endless_feed_rv.addOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -14,12 +14,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.bumptech.glide.RequestManager;
 import com.sdk.wittyfeed.debug.utils.CustomFixedRecyclerView;
 import com.sdk.wittyfeed.debug.R;
 import com.sdk.wittyfeed.debug.adapter.CategoryFeedRVAdapter;
 import com.sdk.wittyfeed.wittynativesdk.Interfaces.WittyFeedSDKCardFetcherInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKCardFetcher;
 import com.sdk.wittyfeed.wittynativesdk.utils.WittyFeedSDKUtils;
+import com.sdk.wittyfeed.wittynativesdk.utils.glide.WittyGlide;
 
 import java.util.ArrayList;
 
@@ -29,7 +32,7 @@ import java.util.ArrayList;
 
 public class CategoryFeedViewPagerFragment extends Fragment {
 
-    Activity activity;
+    Context activity;
     CustomFixedRecyclerView feed_rv;
     WittyFeedSDKCardFetcher wittyFeedSDKCardFetcher;
     WittyFeedSDKCardFetcherInterface wittyFeedSDKCardFetcherInterface;
@@ -41,12 +44,14 @@ public class CategoryFeedViewPagerFragment extends Fragment {
     int cat_pos;
     LinearLayoutManager linearLayoutManager;
     View root_view;
+    RequestManager mRequestManager;
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (Activity) context;
+        mRequestManager = WittyGlide.with(activity);
     }
 
     @Override
@@ -55,7 +60,7 @@ public class CategoryFeedViewPagerFragment extends Fragment {
         root_view = inflater.inflate(R.layout.item_view_pager, container, false);
 
         witty_cards = new ArrayList<>();
-        wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(getActivity());
+        wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(activity, mRequestManager);
 
         if(getArguments() != null){
             Bundle bundle = getArguments();
@@ -66,11 +71,11 @@ public class CategoryFeedViewPagerFragment extends Fragment {
                 Log.e(TAG, "INVALID CAT_NAME", e);
             }
         } else {
-            Log.e(TAG, "onCreateView: AT_NAME NOT FOUND");
+            Log.e(TAG, "onCreateView: CAT_NAME NOT FOUND");
         }
 
         feed_rv = root_view.findViewById(R.id.feed_rv);
-        categoryFeedRVAdapter = new CategoryFeedRVAdapter(witty_cards , getActivity());
+        categoryFeedRVAdapter = new CategoryFeedRVAdapter(witty_cards , activity, mRequestManager);
 
         wittyFeedSDKCardFetcherInterface = new WittyFeedSDKCardFetcherInterface() {
             @Override
@@ -120,7 +125,7 @@ public class CategoryFeedViewPagerFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager = new LinearLayoutManager(activity);
         feed_rv.setLayoutManager(linearLayoutManager);
         feed_rv.setAdapter(categoryFeedRVAdapter);
 
@@ -157,4 +162,12 @@ public class CategoryFeedViewPagerFragment extends Fragment {
             }
         });
     }
+
+
+    @Override
+    public void onDestroyView() {
+        mRequestManager.pauseRequests();
+        super.onDestroyView();
+    }
+
 }

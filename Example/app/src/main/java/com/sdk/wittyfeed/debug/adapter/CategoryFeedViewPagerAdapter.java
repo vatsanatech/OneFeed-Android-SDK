@@ -49,4 +49,5 @@ public class CategoryFeedViewPagerAdapter extends FragmentStatePagerAdapter {
         super.destroyItem(container, position, object);
     }
 
+
 }

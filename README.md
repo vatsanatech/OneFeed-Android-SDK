@@ -1,10 +1,10 @@
 # Vatsana Technologies Pvt. Ltd. Android SDK API (WittyfeedAndroidApi)
 
 > # Note
-> New v1.6.0 made live on 1 March' 2018
+> New v1.7.0 made live on 10 March' 2018
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[ ![Download](https://img.shields.io/badge/Download-1.6.0-blue.svg)](https://drive.google.com/file/d/1Hiv7H2frvnd89LwUBn0Byt4yyB-Iv2OW)
+[ ![Download](https://img.shields.io/badge/Download-1.7.0-blue.svg)](https://drive.google.com/file/d/1aDs_DY9g0WAkYIcPVhKEVgdEwBhx6z1H)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -27,7 +27,7 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 
 ### 1.2. Incorporating the SDK
 
-1. [Download the SDK v1.6.0](https://drive.google.com/file/d/1Hiv7H2frvnd89LwUBn0Byt4yyB-Iv2OW)
+1. [Download the SDK v1.7.0](https://drive.google.com/file/d/1aDs_DY9g0WAkYIcPVhKEVgdEwBhx6z1H)
 
 2. Import WittyFeedAndroidSDK in your project
 * In Android Studio goto File > New > New Module > Import .JAR/.AAR Package

@@ -4,7 +4,7 @@
 > New v1.7.0 made live on 10 March' 2018
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[ ![Download](https://img.shields.io/badge/Download-1.7.0-blue.svg)](https://drive.google.com/open?id=1KIcvn6bzAhken3vyonvrvGPmVc-LfxWh)
+[ ![Download](https://img.shields.io/badge/Download-1.7.0-blue.svg)](https://drive.google.com/file/d/1ShQeRMYB9HDI997P5eKG67MuFKFz68ut)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -27,7 +27,7 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 
 ### 1.2. Incorporating the SDK
 
-1. [Download the SDK v1.7.0](https://drive.google.com/open?id=1KIcvn6bzAhken3vyonvrvGPmVc-LfxWh)
+1. [Download the SDK v1.7.0](https://drive.google.com/file/d/1ShQeRMYB9HDI997P5eKG67MuFKFz68ut)
 
 2. Import WittyFeedAndroidSDK in your project
 * In Android Studio goto File > New > New Module > Import .JAR/.AAR Package

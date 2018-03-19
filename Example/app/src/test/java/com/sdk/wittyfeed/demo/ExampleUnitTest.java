@@ -1,4 +1,4 @@
-package com.sdk.wittyfeed.debug;
+package com.sdk.wittyfeed.demo;
 
 import org.junit.Test;
 

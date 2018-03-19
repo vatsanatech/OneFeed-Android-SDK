@@ -1,4 +1,4 @@
-package com.sdk.wittyfeed.debug;
+package com.sdk.wittyfeed.demo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

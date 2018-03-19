@@ -1,4 +1,4 @@
-package com.sdk.wittyfeed.debug;
+package com.sdk.wittyfeed.demo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

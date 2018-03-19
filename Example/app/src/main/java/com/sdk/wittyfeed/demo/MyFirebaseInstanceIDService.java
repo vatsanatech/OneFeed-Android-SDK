@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
 
 /**
  * Created by aishwarydhare on 24/10/17.
@@ -17,9 +18,14 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d("FCM_CUSTOM", "Refreshed token:- " + refreshedToken);
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
+        //
+        // * Mandatory for Using Notification Service by OneFeed*
+        // To notify WittyFeedSDK about your updated fcm_token
+        //
+        if(WittyFeedSDKSingleton.getInstance().witty_sdk != null){
+            WittyFeedSDKSingleton.getInstance().witty_sdk.update_fcm_token(refreshedToken);
+        }
+
     }
 
 }

@@ -1,12 +1,12 @@
-package com.sdk.wittyfeed.debug;
+package com.sdk.wittyfeed.demo;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.sdk.wittyfeed.wittynativesdk.utils.*;
-import com.sdk.wittyfeed.wittynativesdk.utils.fcm.WittyFeedSDKNotificationManager;
+import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKNotificationManager;
 
 
 /**
@@ -22,15 +22,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
 
-        Log.d(FCM_TAG, "msg: " + remoteMessage.toString());
+        //Set Intent of the Activity you want to open on Back press from Story opens from Notification
+        wittyFeedSDKNotificationManager.setHomeScreenIntent(new Intent(getApplicationContext(), MainActivity.class));
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(FCM_TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(FCM_TAG, "Message data payload: " + remoteMessage.getData());
+        if (remoteMessage.getData() != null) {
+            if (remoteMessage.getData().size() > 0) {
+                Log.d(FCM_TAG, "Message data payload: " + remoteMessage.getData());
+            }
         }
 
         // Check if message contains a notification payload.
@@ -48,5 +51,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("FCM_CUSTOM", "messages deleted");
         super.onDeletedMessages();
     }
+
 
 }

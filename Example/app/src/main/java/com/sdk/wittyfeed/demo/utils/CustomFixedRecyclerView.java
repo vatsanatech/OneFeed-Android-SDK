@@ -1,4 +1,4 @@
-package com.sdk.wittyfeed.debug.utils;
+package com.sdk.wittyfeed.demo.utils;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

@@ -1,4 +1,4 @@
-package com.sdk.wittyfeed.debug;
+package com.sdk.wittyfeed.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,11 +11,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.RequestManager;
 import com.sdk.wittyfeed.wittynativesdk.Interfaces.WittyFeedSDKCardFetcherInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKCardFetcher;
-import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
-
-import java.util.ArrayList;
+import com.sdk.wittyfeed.wittynativesdk.WittyGlide;
 
 /**
  * Created by aishwarydhare on 11/11/17.
@@ -31,10 +30,9 @@ public class EndlessFeedActivity extends AppCompatActivity {
     WittyFeedSDKCardFetcher wittyFeedSDKCardFetcher;
     String dummyString;
     boolean is_fetching_data = false;
-    private ArrayList<View> witty_cards = new ArrayList<>();
-    private WittyFeedSDKCardFetcherInterface wittyFeedSDKCardFetcherInterface;
-    private int last_card_pos = -1;
+    RequestManager requestManager;
 
+    int total_sample_feeds_count = 25;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +40,7 @@ public class EndlessFeedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_endless_feed);
 
         activity = this;
+        this.requestManager = WittyGlide.with(activity);
 
         dummyString = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 
@@ -53,75 +52,12 @@ public class EndlessFeedActivity extends AppCompatActivity {
         endlessFeedAdapter = new EndlessFeedAdapter(this);
         endless_feed_rv.setAdapter(endlessFeedAdapter);
 
-        // Total Steps 3
-        // First Step: Create an interface of type WittyFeedSDKCardFetcherInterface in which four methods will be there as demonstrated below
-
-        // Second Step: Initialize an object of WittyFeedSDKCardFetcher to fetch cards, NOTE- use same object from WittyFeedSDKSingleton as demonstrated below
-        // if you don't want to see any repeated card anywhere in the app. Otherwise you can initialize different object of WittyFeedSDKCardFetcher
-
-        // Third Step: Use fetch_a_card() method of WittyFeedSDKCardFetcher to place a WittyFeed SDK Card in one your ViewGroups (i.e. views, layouts etc)
-        // fetch_a_card() has two overload methods,
-        // First overloaded fetch_a_card() method fetches a random card from any category and,
-        // Second overloaded fetch_a_card() method fetches a card of specific category which will passed as the third argument of String type
-        // First argument: is of String TYPE and is used to define your own custom tag that you will later recieve in onCardReceived (its purpose is similar to itemType parameter in OnCreateViewHolder of RecyclerView)
-        // Second argument: is FLOAT TYPE for adjusting font_size_ratio of cards which should be between 0.0f to 1.0f (example: if your layout covers full screen then pass 1.0f)
-        // Third argument: is of STRING TYPE for the specific category, it may return null if category is sent wrong
-
-        // Other Available Methods by WittyFeedSDKCardFetcher:
-        // clearCardFetchedHistory(): Clears history that keep tracks what card have been used and what not,
-        // clearing this will fetch again the very first card, that was fetched.
-
-
-        // First Step is this
-        wittyFeedSDKCardFetcherInterface = new WittyFeedSDKCardFetcherInterface() {
-            @Override
-            public void onWillStartFetchingMoreData() {
-                // fetching more data, do necessary UI updates here. onMoreDataFetched will be called when the data will be fetched
-                Log.d(TAG, "onWillStartFetchingMoreData: ");
-            }
-
-            @Override
-            public void onMoreDataFetched() {
-                // after fetching more data. onMoreDataFetched will be called when the data will be fetched
-                Log.d(TAG, "onMoreDataFetched: ");
-            }
-
-            @Override
-            public void onCardReceived(String customTag, View cardViewFromWittyFeed) {
-                // when a cardView is made, onCardReceived will return WittyFeedCard of type (View)
-                switch (customTag){
-                    case "witty_card":
-                        witty_cards.add(cardViewFromWittyFeed);
-                        if(endlessFeedAdapter!=null){
-                            new Runnable() {
-                                public void run() {
-                                    endlessFeedAdapter.notifyDataSetChanged();
-                                }
-                            }.run();
-                        }
-                        break;
-                }
-            }
-
-            @Override
-            public void onError(Exception e) {
-                // unexpected happens here
-                Log.d(TAG, "onError: "+ e.getMessage(), e);
-            }
-        };
-
-
         // Second Step is this
         // Tip: use the object of WittyFeedSDKCardFetcher from Singleton class if you want to use cards in difference activities
         // and also don't want to repeat cards that have been loaded previously in previous screens
         // otherwise just create an object local to current activity only and use that, see TinderCardActivity for such implementation
-        wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(activity);
+        wittyFeedSDKCardFetcher = new WittyFeedSDKCardFetcher(activity, requestManager);
 
-        wittyFeedSDKCardFetcher.setWittyFeedSDKCardFetcherInterface(wittyFeedSDKCardFetcherInterface);
-
-        for (int i = 0; i < 10; i++) {
-            wittyFeedSDKCardFetcher.fetch_a_card("witty_card",0.8f);
-        }
 
         endless_feed_rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -137,9 +73,13 @@ public class EndlessFeedActivity extends AppCompatActivity {
                 int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
 
                 if(firstVisibleItemPosition+visibleItemCount > totalItemCount- 1  && !is_fetching_data){
-                    for (int i = 0; i < 2; i++){
-                        wittyFeedSDKCardFetcher.fetch_a_card("witty_card",0.8f);
-                    }
+                    total_sample_feeds_count += 10;
+                    new Thread(new Runnable(){
+                        @Override
+                        public void run() {
+                            endlessFeedAdapter.notifyDataSetChanged();
+                        }
+                    }).run();
                 }
             }
         });
@@ -172,7 +112,7 @@ public class EndlessFeedActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, final int position) {
+        public void onBindViewHolder(ViewHolder holder, int position) {
             int itemType = getItemViewType(position);
             switch (itemType){
                 case 1:
@@ -185,22 +125,22 @@ public class EndlessFeedActivity extends AppCompatActivity {
                     final ViewHolder finalHolder = holder;
 
                     // Total Steps 3
-                    // First Step: Create an interface of type WittyFeedSDKCardFetcherInterface in which four methods will be there as demonstrated below
+                        // First Step: Create an interface of type WittyFeedSDKCardFetcherInterface in which four methods will be there as demonstrated below
 
                     // Second Step: Initialize an object of WittyFeedSDKCardFetcher to fetch cards, NOTE- use same object from WittyFeedSDKSingleton as demonstrated below
-                    // if you don't want to see any repeated card anywhere in the app. Otherwise you can initialize different object of WittyFeedSDKCardFetcher
+                        // if you don't want to see any repeated card anywhere in the app. Otherwise you can initialize different object of WittyFeedSDKCardFetcher
 
                     // Third Step: Use fetch_a_card() method of WittyFeedSDKCardFetcher to place a WittyFeed SDK Card in one your ViewGroups (i.e. views, layouts etc)
-                    // fetch_a_card() has two overload methods,
-                    // First overloaded fetch_a_card() method fetches a random card from any cateogry and,
-                    // Second overloaded fetch_a_card() method fetches a card of specific category which will passed as the third argument of String type
-                    // First argument: is of String TYPE and is used to define your own custom tag that you will later recieve in onCardReceived (its purpose is similar to itemType parameter in OnCreateViewHolder of RecyclerView)
-                    // Second argument: is FLOAT TYPE for adjusting font_size_ratio of cards which should be between 0.0f to 1.0f (example: if your layout covers full screen then pass 1.0f)
-                    // Third argument: is of STRING TYPE for the specific category, it may return null if category is sent wrong
+                        // fetch_a_card() has two overload methods,
+                            // First overloaded fetch_a_card() method fetches a random card from any cateogry and,
+                            // Second overloaded fetch_a_card() method fetches a card of specific category which will passed as the third argument of String type
+                                // First argument: is of String TYPE and is used to define your own custom tag that you will later recieve in onCardReceived (its purpose is similar to itemType parameter in OnCreateViewHolder of RecyclerView)
+                                // Second argument: is FLOAT TYPE for adjusting font_size_ratio of cards which should be between 0.0f to 1.0f (example: if your layout covers full screen then pass 1.0f)
+                                // Third argument: is of STRING TYPE for the specific category, it may return null if category is sent wrong
 
                     // Other Available Methods by WittyFeedSDKCardFetcher:
-                    // clearCardFetchedHistory(): Clears history that keep tracks what card have been used and what not,
-                    // clearing this will fetch again the very first card, that was fetched.
+                        // clearCardFetchedHistory(): Clears history that keep tracks what card have been used and what not,
+                        // clearing this will fetch again the very first card, that was fetched.
 
                     // First Step is this
                     WittyFeedSDKCardFetcherInterface wittyFeedSDKCardFetcherInterface = new WittyFeedSDKCardFetcherInterface() {
@@ -218,7 +158,7 @@ public class EndlessFeedActivity extends AppCompatActivity {
 
                         @Override
                         public void onCardReceived(String customTag, View cardViewFromWittyFeed) {
-                            // when a cardView is made, onCardReceived will return WittyFeedCard of type (View)
+                            //
                             switch (customTag){
                                 case "witty_card":
                                     finalHolder.item_ll.removeAllViews();
@@ -234,25 +174,19 @@ public class EndlessFeedActivity extends AppCompatActivity {
                         }
                     };
 
-
                     // Setting interface particular to this card here with setWittyFeedSDKCardFetcherInterface method of WittyFeedSDKCardFetcher,
-                    // which takes one parameter which is object of WittyFeedSDKCardFetcherInterface
+                        // which takes one parameter which is object of WittyFeedSDKCardFetcherInterface
                     wittyFeedSDKCardFetcher.setWittyFeedSDKCardFetcherInterface(wittyFeedSDKCardFetcherInterface);
 
                     // Third and Last Step is this
                     wittyFeedSDKCardFetcher.fetch_a_card("witty_card", 0.8f);
-                    break;
-
-                case 3:
-                    holder.carousel_ll = holder.itemView.findViewById(R.id.carousel_ll);
-                    WittyFeedSDKSingleton.getInstance().witty_sdk.get_carousel(activity, holder.carousel_ll);
                     break;
             }
         }
 
         @Override
         public int getItemCount() {
-            return (witty_cards.size()*4) + 1;
+            return total_sample_feeds_count + 1;
         }
 
         @Override
@@ -267,7 +201,6 @@ public class EndlessFeedActivity extends AppCompatActivity {
             View itemView;
             TextView feed_tv;
             LinearLayout item_ll;
-            LinearLayout carousel_ll;
             public ViewHolder(View itemView) {
                 super(itemView);
                 this.itemView = itemView;

@@ -1,4 +1,4 @@
-# Vatsana Technologies Pvt. Ltd. Android SDK API (WittyfeedAndroidApi)
+# Vatsana Technologies Pvt. Ltd. OneFeed SDK (WittyfeedAndroidApi)
 
 > # Note
 > WittyFeed SDK API is now `OneFeed SDK`
@@ -14,7 +14,7 @@
 3. [License](#3-license)
 
 ## Basic concepts
-OneFeed brings you new revolutionary way to monetize your App Business. OneFeed provides engaging content from top publishers in your app, and through the [Viral9 Dashboard](https://viral9.com) you can track your eats corning with the content consumption.
+OneFeed brings you new revolutionary way to monetize your App Business. OneFeed provides engaging content from top publishers in your app, and through the [Viral9 Dashboard](https://viral9.com) you can track your earning with the content consumption.
 
 [Viral9 is World's Top Paying Network](https://viral9.com)
 

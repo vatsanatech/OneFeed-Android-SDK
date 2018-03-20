@@ -161,7 +161,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
     //
     // initializing support OneFeed fragment. Note- Make sure you have initialized the SDK in previous steps
     //
-    Fragment fragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_support_feed_fragment();
+    Fragment fragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_feed_fragment();
 
     //
     // using our WittyFeedSDKWaterfallFragment, replace <ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED> with your

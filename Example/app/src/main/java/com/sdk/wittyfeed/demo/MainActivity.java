@@ -11,9 +11,9 @@ import android.widget.ProgressBar;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sdk.wittyfeed.demo.utils.CustomViewPager;
-import com.sdk.wittyfeed.wittynativesdk.Interfaces.WittyFeedSDKMainInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKApiClient;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMain;
+import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMainInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
 
 import java.util.HashMap;

@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
-import com.sdk.wittyfeed.wittynativesdk.Interfaces.WittyFeedSDKCardFetcherInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKCardFetcher;
+import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKCardFetcherInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyGlide;
 
 /**

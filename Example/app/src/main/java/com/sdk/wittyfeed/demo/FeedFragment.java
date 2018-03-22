@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKFeedSupportFragment;
+import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKOneFeedInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
 
 /**
@@ -50,13 +51,36 @@ public class FeedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //
-        // Initializing waterfall fragment. Note- Make sure you have initialized the SDK in previous steps
-        // NOTE- use method `get_support_feed_fragment()` in order to get support.fragment from support library
+        // Initializing OneFeed Fragment. Note- Make sure you have initialized the SDK in previous steps. It has two steps -
+        //    1-  Create an interface instanceof WittyFeedSDKOneFeedInterface
+        //           (i)- put in your code that you will be using to revert back from your app
+        //                Example:  finish the activity if onefeed is opened in a seperate activity,
+        //                          or impletement it as in example if onefeed is in a view_pager fragment
+        //    2-  Pass the interface to get feed method
         //
-        wittyFeedSDKFeedSupportFragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_support_feed_fragment();
+        WittyFeedSDKOneFeedInterface oneFeedInterface = new WittyFeedSDKOneFeedInterface() {
+            @Override
+            public void goBackToHostApp() {
+                //
+                // will be called when user performs 'backToHostApp' action from OneFeed
+                //
+                ((MainActivity)activity_context).set_vp_pos(0);
+            }
+        };
 
         //
-        // Using our WittyFeedSDKWaterfallFragment
+        // NOTE- To match your App's UI, please use the method `set_onefeed_fragment_background_color`, by default its white - #ffffff
+        //
+        WittyFeedSDKSingleton.getInstance().witty_sdk.set_onefeed_fragment_background_color("#ffffff");
+
+        //
+        // Initializing OneFeed Fragment. Note- Make sure you have initialized the SDK in previous steps
+        // NOTE- use method `get_support_feed_fragment()` in order to get support.fragment from support library
+        //
+        wittyFeedSDKFeedSupportFragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_support_feed_fragment(oneFeedInterface);
+
+        //
+        // Using our OneFeed Fragment
         //
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(view.findViewById(R.
@@ -65,18 +89,9 @@ public class FeedFragment extends Fragment {
         view.findViewById(R.id.goBack_iv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goBackNow();
-            }
-        });
-    }
-
-
-    void goBackNow(){
-        if (wittyFeedSDKFeedSupportFragment != null) {
-            if(!wittyFeedSDKFeedSupportFragment.is_doing_onefeed_back()){
                 ((MainActivity)activity_context).set_vp_pos(0);
             }
-        }
+        });
     }
 
 
@@ -93,6 +108,5 @@ public class FeedFragment extends Fragment {
         //
         return wittyFeedSDKFeedSupportFragment.is_doing_onefeed_back();
     }
-
 
 }

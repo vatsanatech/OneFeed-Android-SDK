@@ -33,13 +33,11 @@ public class HomeFragment extends Fragment {
         this.activity_context = context;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,7 +79,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-
     private void send_demo_fcm() {
         WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(activity_context, FCM_TOKEN);
         int preferred_notiff_icon = R.mipmap.ic_launcher;
@@ -90,28 +87,13 @@ public class HomeFragment extends Fragment {
             dummy_notiff_data.put("story_id", "60496");
             dummy_notiff_data.put("story_title", "10 Things Every Girl Should Put On Her List");
             dummy_notiff_data.put("cover_image", "https://cdn.wittyfeed.com/41441/ilik0kqmr2hpv1i4l8ya.jpeg?imwidth=960");
-            dummy_notiff_data.put("user_id", "143026");
-            dummy_notiff_data.put("user_full_name", "Richa");
-            dummy_notiff_data.put("doc", "2017-10-24 09:06:57");
-            dummy_notiff_data.put("cat_name", "Lifestyle");
-            dummy_notiff_data.put("cat_id", "47");
-            dummy_notiff_data.put("cat_image", "lifestyle.png");
-            dummy_notiff_data.put("card_type", "card_type_7_wfsdk");
-            dummy_notiff_data.put("doodle", "https://cdn.wittyfeed.com/Mobile-App/doodles/doodle_1.png");
-            dummy_notiff_data.put("audio", "https://cdn.wittyfeed.com//Mobile-App/stories_sound/1.mp3");
-            dummy_notiff_data.put("animation_type", "slideInUp");
-            dummy_notiff_data.put("cat_color", "#f37022");
-            dummy_notiff_data.put("story_url", "https://www.wittyfeed.com/story/60496");
-            dummy_notiff_data.put("detail_view", "");
-            String[] empty_string_arr = {""};
-            dummy_notiff_data.put("image_url", empty_string_arr.toString());
-            dummy_notiff_data.put("amp_url","https://www.wittyfeed.me/story/41441/things-every-girl-should-put-in-her-list?utm_hash=ArD51&nohead=1");
+            dummy_notiff_data.put("story_url","https://www.wittyfeed.me/story/41441/things-every-girl-should-put-in-her-list?utm_hash=ArD51&nohead=1");
 
             dummy_notiff_data.put("id", "400");
             dummy_notiff_data.put("body", "Hey, Here's a new amazing story for you!");
             dummy_notiff_data.put("title", "10 Things Every Girl Should Put On Her List");
-            dummy_notiff_data.put("app_id" , "108");
             dummy_notiff_data.put("notiff_agent", "wittyfeed_sdk");
+            dummy_notiff_data.put("app_id" , "108");
 
             dummy_notiff_data.put("action", "" + "WittyFeedSDKContentViewActivity");
 

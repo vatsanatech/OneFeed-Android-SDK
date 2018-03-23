@@ -127,7 +127,7 @@ public class EndlessFeedActivity extends AppCompatActivity {
                     // Total Steps 3
                         // First Step: Create an interface of type WittyFeedSDKCardFetcherInterface in which four methods will be there as demonstrated below
 
-                    // Second Step: Initialize an object of WittyFeedSDKCardFetcher to fetch cards, NOTE- use same object from WittyFeedSDKSingleton as demonstrated below
+                    // Second Step: Initialize an object of WittyFeedSDKCardFetcher to fetch cards, NOTE- create a singleton in your app and use same instance of WittyFeedSDKCardFetcher as demonstrated below
                         // if you don't want to see any repeated card anywhere in the app. Otherwise you can initialize different object of WittyFeedSDKCardFetcher
 
                     // Third Step: Use fetch_a_card() method of WittyFeedSDKCardFetcher to place a WittyFeed SDK Card in one your ViewGroups (i.e. views, layouts etc)

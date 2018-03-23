@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
 
 /**
  * Created by aishwarydhare on 24/10/17.
@@ -22,8 +21,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // * Mandatory for Using Notification Service by OneFeed*
         // To notify WittyFeedSDK about your updated fcm_token
         //
-        if(WittyFeedSDKSingleton.getInstance().witty_sdk != null){
-            WittyFeedSDKSingleton.getInstance().witty_sdk.update_fcm_token(refreshedToken);
+        if(mSingleton.getInstance().witty_sdk != null){
+            mSingleton.getInstance().witty_sdk.update_fcm_token(refreshedToken);
         }
 
     }

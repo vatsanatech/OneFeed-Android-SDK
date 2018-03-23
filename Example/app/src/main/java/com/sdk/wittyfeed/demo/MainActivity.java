@@ -14,7 +14,6 @@ import com.sdk.wittyfeed.demo.utils.CustomViewPager;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKApiClient;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMain;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMainInterface;
-import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
 
 import java.util.HashMap;
 
@@ -31,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public int selected_frag_id = 0;
     private VPAdapter vpAdapter;
     private boolean wantToExit = false;
+    private WittyFeedSDKApiClient wittyFeedSDKApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
         //
         // below code is only ***required*** for Initializing Wittyfeed Android SDK API, -- providing 'user_meta' is optional --
         //
-        WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN/*, user_meta*/);
-        WittyFeedSDKSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient);
+        wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN/*, user_meta*/);
+        mSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, wittyFeedSDKApiClient);
 
         //
         // Use this interface callback to do operations when SDK finished loading
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             public void onOperationDidFinish() {
                 // witty sdk did loaded completely successfully
                 Log.d("Main App", "witty sdk did load successfully");
-                String[] availableCats = WittyFeedSDKSingleton.getInstance().witty_sdk.get_all_categoies_available();
+                String[] availableCats = mSingleton.getInstance().witty_sdk.get_all_categoies_available();
 
                 progressBar.setVisibility(View.GONE);
                 viewPager.setVisibility(View.VISIBLE);
@@ -129,18 +129,18 @@ public class MainActivity extends AppCompatActivity {
         //
         //setting callback here
         //
-        WittyFeedSDKSingleton.getInstance().witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
+        mSingleton.getInstance().witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
 
         //
         // Initializing SDK here (mandatory)
         //
-        WittyFeedSDKSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
+        mSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
 
         //
         // Fetch fresh feeds from our servers with this method call.
         // It is not mandatory if only notification feature is desired from the SDK
         //
-        WittyFeedSDKSingleton.getInstance().witty_sdk.prepare_feed();
+        mSingleton.getInstance().witty_sdk.prepare_feed();
 
         // ====================
         // SDK WORK ENDS HERE

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKFeedSupportFragment;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKOneFeedInterface;
-import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
 
 /**
  * Created by aishwarydhare on 19/03/18.
@@ -71,13 +70,13 @@ public class FeedFragment extends Fragment {
         //
         // NOTE- To match your App's UI, please use the method `set_onefeed_fragment_background_color`, by default its white - #ffffff
         //
-        WittyFeedSDKSingleton.getInstance().witty_sdk.set_onefeed_fragment_background_color("#ffffff");
+        mSingleton.getInstance().witty_sdk.set_onefeed_fragment_background_color("#ffffff");
 
         //
         // Initializing OneFeed Fragment. Note- Make sure you have initialized the SDK in previous steps
         // NOTE- use method `get_support_feed_fragment()` in order to get support.fragment from support library
         //
-        wittyFeedSDKFeedSupportFragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_support_feed_fragment(oneFeedInterface);
+        wittyFeedSDKFeedSupportFragment = mSingleton.getInstance().witty_sdk.get_support_feed_fragment(oneFeedInterface);
 
         //
         // Using our OneFeed Fragment

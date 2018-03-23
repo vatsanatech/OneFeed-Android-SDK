@@ -11,13 +11,13 @@ import android.widget.ProgressBar;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sdk.wittyfeed.demo.utils.CustomViewPager;
+import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMainInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKApiClient;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMain;
-import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMainInterface;
 
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private static String APP_ID = "108";
     private static String API_KEY = "963a1cf4d081b0b0bdc6e9e13de66dd3";
@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                 viewPager.setAdapter(vpAdapter);
                 viewPager.setCurrentItem(0);
                 viewPager.setOffscreenPageLimit(3);
-
             }
 
             @Override

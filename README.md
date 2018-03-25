@@ -2,7 +2,7 @@
 
 > # Note
 > WittyFeed SDK API is now `OneFeed SDK`
-> New version 2.3.0 made live on 23 March' 2018
+> New version 2.3.1 made live on 24 March' 2018
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
 [ ![Download](https://img.shields.io/badge/Download-2.3.0-blue.svg)](https://drive.google.com/file/d/1rRn-B5p0I6WbYKIVzoLeRhYnV_gUf6Hg/view)

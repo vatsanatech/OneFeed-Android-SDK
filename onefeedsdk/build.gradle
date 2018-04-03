@@ -4,7 +4,7 @@ group = 'com.github.vatsanatech.onefeed-android-sdk'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
@@ -12,21 +12,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.custom_divider.runner.AndroidJUnitRunner"
-
     }
-
-    allprojects {
-        repositories {
-            jcenter()
-            maven {
-                url "https://maven.google.com"
-            }
-            mavenLocal()
-            mavenCentral()
-            google()
-        }
-    }
-
 
     buildTypes {
         release {

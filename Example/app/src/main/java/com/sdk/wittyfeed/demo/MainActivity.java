@@ -1,21 +1,22 @@
 package com.sdk.wittyfeed.demo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.sdk.wittyfeed.demo.utils.CustomViewPager;
-import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMainInterface;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKApiClient;
 import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMain;
+import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKMainInterface;
+import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKNotificationManager;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -24,13 +25,10 @@ public class MainActivity extends AppCompatActivity{
     private static String FCM_TOKEN = "";
 
     private Activity activity;
-    private CustomViewPager viewPager;
 
     private ProgressBar progressBar;
-    public int selected_frag_id = 0;
-    private VPAdapter vpAdapter;
-    private boolean wantToExit = false;
     private WittyFeedSDKApiClient wittyFeedSDKApiClient;
+    private LinearLayout btns_ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +38,11 @@ public class MainActivity extends AppCompatActivity{
         activity = this;
         FCM_TOKEN = FirebaseInstanceId.getInstance().getToken();
 
-        viewPager = findViewById(R.id.viewPager);
         progressBar = findViewById(R.id.progressBar);
+        btns_ll = findViewById(R.id.btns_ll);
 
-        viewPager.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+        btns_ll.setVisibility(View.GONE);
 
         if (FCM_TOKEN == null) {
             FCM_TOKEN = "";
@@ -88,35 +86,14 @@ public class MainActivity extends AppCompatActivity{
             public void onOperationDidFinish() {
                 // witty sdk did loaded completely successfully
                 Log.d("Main App", "witty sdk did load successfully");
+
+                //
+                // to fetch the number of categories stories are available in
+                //
                 String[] availableCats = mSingleton.getInstance().witty_sdk.get_all_categoies_available();
 
                 progressBar.setVisibility(View.GONE);
-                viewPager.setVisibility(View.VISIBLE);
-
-                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    }
-
-                    @Override
-                    public void onPageSelected(int position) {
-                        selected_frag_id = position;
-                        if(selected_frag_id == 1){
-                            viewPager.setIs_swipeable(false);
-                        } else {
-                            viewPager.setIs_swipeable(true);
-                        }
-                    }
-
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-                    }
-                });
-
-                vpAdapter = new VPAdapter(getSupportFragmentManager());
-                viewPager.setAdapter(vpAdapter);
-                viewPager.setCurrentItem(0);
-                viewPager.setOffscreenPageLimit(3);
+                btns_ll.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -141,68 +118,56 @@ public class MainActivity extends AppCompatActivity{
         //
         mSingleton.getInstance().witty_sdk.prepare_feed();
 
-        // ====================
+        // ==================
         // SDK WORK ENDS HERE
-        // ====================
-    }
+        // ==================
 
-    @Override
-    public void onBackPressed() {
-
-        // ============
-        // === NOTE ===
-        // ============
-        //
-        // The OneFeed SDK Section utilises overridden functionality of `onBackPressed` button,
-        // Hence to handle it well with the host activity.
-        //
-        // Please use the method WittyFeedSDKFeedSupportFragment.is_doing_onefeed_back()
-        // as we have done in this sample app
-        //
-
-        if (selected_frag_id == 1) {
-            try {
-                if (vpAdapter.get_active_fragment() instanceof FeedFragment) {
-                    //
-                    // below code is *mandatory*
-                    //
-                    if (vpAdapter.get_active_fragment() != null) {
-                        if(!((FeedFragment) vpAdapter.get_active_fragment()).performOnBack()){
-                            if (selected_frag_id == 1) {
-                                set_vp_pos(0);
-                            }
-                        }
-
-                        if (wantToExit) {
-                            try {
-                                set_vp_pos(0);
-                                return;
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            wantToExit = true;
-                        }
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                wantToExit = false;
-                            }
-                        }, 300);
-                    }
-                }
-            } catch (Exception e) {
-                super.onBackPressed();
-                e.printStackTrace();
+        findViewById(R.id.goto_waterfall_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSingleton.getInstance().witty_sdk.open_onefeed(activity);
             }
-        } else {
-            super.onBackPressed();
-        }
+        });
+
+        findViewById(R.id.goto_endless_feed_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, EndlessFeedActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.simulate_notiff_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                send_demo_fcm(); // For Directly going to the WebPage Story of WittyFeed
+            }
+        });
     }
 
+    private void send_demo_fcm() {
+        WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(activity, FCM_TOKEN);
+        int preferred_notiff_icon = R.mipmap.ic_launcher;
+        Map<String, String> dummy_notiff_data = new HashMap<>();
+        try {
+            dummy_notiff_data.put("story_id", "60496");
+            dummy_notiff_data.put("story_title", "10 Things Every Girl Should Put On Her List");
+            dummy_notiff_data.put("cover_image", "https://cdn.wittyfeed.com/41441/ilik0kqmr2hpv1i4l8ya.jpeg?imwidth=960");
+            dummy_notiff_data.put("story_url","https://www.wittyfeed.me/story/41441/things-every-girl-should-put-in-her-list?utm_hash=ArD51&nohead=1");
 
-    public void set_vp_pos(int i) {
-        viewPager.setCurrentItem(i);
+            dummy_notiff_data.put("id", "400");
+            dummy_notiff_data.put("body", "Hey, Here's a new amazing story for you!");
+            dummy_notiff_data.put("title", "10 Things Every Girl Should Put On Her List");
+            dummy_notiff_data.put("notiff_agent", "wittyfeed_sdk");
+            dummy_notiff_data.put("app_id" , "108");
+
+            dummy_notiff_data.put("action", "" + "WittyFeedSDKContentViewActivity");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        wittyFeedSDKNotificationManager.handleNotification(dummy_notiff_data, preferred_notiff_icon);
     }
 
 }

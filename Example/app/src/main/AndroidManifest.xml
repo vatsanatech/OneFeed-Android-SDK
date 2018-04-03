@@ -28,7 +28,6 @@
 
         <activity
             android:name="com.sdk.wittyfeed.demo.EndlessFeedActivity"
-            android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
             android:largeHeap="true" />
 

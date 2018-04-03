@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/Theme.AppCompat.NoActionBar" >
+    style="@style/Theme.AppCompat.NoActionBar">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -13,13 +11,38 @@
         android:layout_centerInParent="true"
         android:visibility="visible"/>
 
-    <com.sdk.wittyfeed.demo.utils.CustomViewPager
-        android:id="@+id/viewPager"
+    <LinearLayout
+        android:id="@+id/btns_ll"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="visible">
 
-    </com.sdk.wittyfeed.demo.utils.CustomViewPager>
+        <Button
+            android:id="@+id/goto_waterfall_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAllCaps="false"
+            android:text="Goto OneFeed Demo"/>
 
+        <Button
+            android:id="@+id/goto_endless_feed_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAllCaps="false"
+            android:text="Goto Native Cards Demo"/>
 
+        <Button
+            android:id="@+id/simulate_notiff_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAllCaps="false"
+            android:text="Simulate WittyFeed Notification"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

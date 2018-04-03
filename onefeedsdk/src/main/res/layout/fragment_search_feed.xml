@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/header_rl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/search_v"
+            android:layout_width="280dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/back_iv"
+            android:layout_toLeftOf="@id/plus_iv"
+            android:layout_toStartOf="@id/plus_iv"
+            android:layout_toEndOf="@id/back_iv"
+            android:layout_margin="4dp"
+            android:hint="Search"
+            android:background="@drawable/search_bg" />
+
+        <EditText
+            android:id="@+id/search_et"
+            android:layout_width="260dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/back_iv"
+            android:layout_toLeftOf="@id/plus_iv"
+            android:inputType="text"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:layout_toStartOf="@id/plus_iv"
+            android:textColor="#000000"
+            android:imeOptions="actionSearch"
+            android:layout_toEndOf="@id/back_iv"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:hint="Search"
+            android:focusableInTouchMode="true"
+            android:focusedByDefault="true"
+            android:defaultFocusHighlightEnabled="true"
+            android:background="@android:color/transparent" />
+
+        <ImageView
+            android:id="@+id/search_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_search_black_24dp"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/feed_rv"
+        android:layout_below="@id/header_rl"
+        android:splitMotionEvents="false"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ProgressBar
+        android:id="@+id/pb"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/feed_rv"
+        android:indeterminateOnly="true"
+        android:max="100"
+        android:layout_marginTop="-6dp"
+        android:visibility="gone" />
+
+</RelativeLayout>

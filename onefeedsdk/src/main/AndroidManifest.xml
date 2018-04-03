@@ -1,0 +1,28 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
+    package="com.wittyfeed.sdk.onefeed">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application android:allowBackup="true" android:label="@string/app_name" android:largeHeap="true"
+        android:supportsRtl="true">
+
+        <activity
+            android:name="com.wittyfeed.sdk.onefeed.WittyFeedSDKContentViewActivity"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:hardwareAccelerated="true">
+        </activity>
+
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+    </application>
+
+</manifest>

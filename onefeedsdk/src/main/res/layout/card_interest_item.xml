@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:id="@+id/container_view_rl"
+    android:background="@color/white_color"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_height="wrap_content">
+
+    <CheckedTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:id="@+id/checked_tv"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="#000000"
+        android:text="Category"
+        android:textSize="20sp"
+        android:paddingLeft="16dp"
+        android:textStyle="bold"
+        android:checked="false"
+        android:layout_height="60dp">
+
+    </CheckedTextView>
+
+</RelativeLayout>

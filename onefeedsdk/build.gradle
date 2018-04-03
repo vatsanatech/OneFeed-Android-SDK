@@ -1,0 +1,55 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.custom_divider.runner.AndroidJUnitRunner"
+
+    }
+
+    allprojects {
+        repositories {
+            jcenter()
+            maven {
+                url "https://maven.google.com"
+            }
+            mavenLocal()
+            mavenCentral()
+            google()
+        }
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+}
+
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    compile 'com.github.bumptech.glide:glide:4.3.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.android.support:appcompat-v7:27.1.0'
+    compile 'com.android.support:support-v4:27.1.0'
+    compile 'com.android.support:design:27.1.0'
+    compile 'com.android.support:customtabs:27.1.0'
+    compile 'com.google.code.gson:gson:2.8.2'
+
+    testCompile 'junit:junit:4.12'
+
+}

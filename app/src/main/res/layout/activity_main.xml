@@ -29,15 +29,6 @@
             android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/goto_endless_feed_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/cabin_bold"
-            android:text="Goto Native Cards Demo"
-            android:textAllCaps="false" />
-
-        <Button
             android:id="@+id/simulate_notiff_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

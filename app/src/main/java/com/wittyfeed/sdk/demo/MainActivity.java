@@ -139,13 +139,6 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        findViewById(R.id.goto_endless_feed_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // will implement later
-            }
-        });
-
         findViewById(R.id.simulate_notiff_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,29 +174,6 @@ public class MainActivity extends AppCompatActivity{
         }
 
         wittyFeedSDKNotificationManager.handleNotification(dummy_notiff_data, preferred_notiff_icon);
-    }
-
-
-    private Bitmap getBitmapFromDrawable(Context context, int drawableId) {
-        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        } else if (drawable instanceof VectorDrawable) {
-            return getBitmapFromVectorDrawable((VectorDrawable) drawable);
-        } else {
-            throw new IllegalArgumentException("Unable to convert to bitmap");
-        }
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private Bitmap getBitmapFromVectorDrawable(VectorDrawable vectorDrawable) {
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        vectorDrawable.draw(canvas);
-        return bitmap;
     }
 
 }

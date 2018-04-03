@@ -1,5 +1,7 @@
 # Vatsana Technologies Pvt. Ltd. OneFeed SDK (WittyfeedAndroidApi)
 
+## THIS DOC IS DEPRECATED, DO NOT REFER TO THIS VERSION AND DOC
+
 > # Note
 <<<<<<< HEAD
 > New v1.7.0 made live on 10 March' 2018

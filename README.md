@@ -1,10 +1,18 @@
-# Vatsana Technologies Pvt. Ltd. Android SDK API (WittyfeedAndroidApi)
+# Vatsana Technologies Pvt. Ltd. OneFeed SDK (WittyfeedAndroidApi)
 
 > # Note
+<<<<<<< HEAD
 > New v1.7.0 made live on 10 March' 2018
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
 [ ![Download](https://img.shields.io/badge/Download-1.7.0-blue.svg)](https://drive.google.com/file/d/1ShQeRMYB9HDI997P5eKG67MuFKFz68ut)
+=======
+> WittyFeed SDK API is now `OneFeed SDK`
+> New version 2.3.1 made live on 24 March' 2018
+
+![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
+[ ![Download](https://img.shields.io/badge/Download-2.3.0-blue.svg)](https://drive.google.com/file/d/1rRn-B5p0I6WbYKIVzoLeRhYnV_gUf6Hg/view)
+>>>>>>> version_2.0
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -13,11 +21,21 @@
 3. [License](#3-license)
 
 ## Basic concepts
-The WittyfeedAndroidApi allows you to get WittyFeed content to display in your app using WittyfeedAndroidSDK. 
-For each item WittyfeedAndroidSDK will provide pre-populated views, which you can style to match your app look and feel and place where needed within your app.
-The views will automatically handle everything else: click handling, reporting visibility back to WittyFeed's server and more.
+OneFeed brings you new revolutionary way to monetize your App Business. OneFeed provides engaging content from top publishers in your app, and through the [Viral9 Dashboard](https://viral9.com) you can track your earning with the content consumption.
 
-Browse through the example app in this repository to see how the WittyfeedAndroidApi can be implemented in different types of apps.
+[Viral9 is World's Top Paying Network](https://viral9.com)
+
+OneFeed SDK has its core competency at its lightweight architecture and over-the-air updation flexibility.
+Just integrate once and forget about it.
+Also, it provides prepared native content card-views, which you can style to match your app look and feel and place them where needed within your app. It will automatically handle everything.
+
+### Features
+
+* OneFeed ready-to-deploy feed layout
+* Native Cards
+* Notification service
+
+Browse through the example app in this repository to see how the OneFeed SDK can be implemented in different types of apps.
 
 ## 1. Getting Started
 
@@ -27,9 +45,17 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 
 ### 1.2. Incorporating the SDK
 
+<<<<<<< HEAD
 1. [Download the SDK v1.7.0](https://drive.google.com/file/d/1ShQeRMYB9HDI997P5eKG67MuFKFz68ut)
+=======
+1. [Download the OneFeed SDK v2.3.0](https://drive.google.com/file/d/1rRn-B5p0I6WbYKIVzoLeRhYnV_gUf6Hg/view)
 
-2. Import WittyFeedAndroidSDK in your project
+2. SignUp at [viral9.com](https://viral9.com) and create a new application to integrate with
+
+3. Gather the API_KEY and APP_ID from the Viral9 Dashboard
+>>>>>>> version_2.0
+
+4. Import OneFeed SDK in your project
 * In Android Studio goto File > New > New Module > Import .JAR/.AAR Package
 * Browse to the downloaded WittyFeed SDK in form of .AAR package
 * Sync Gradle 
@@ -38,19 +64,18 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
     implementation project(':wittynativesdk') 
 ```
 
-3. Add the library dependency to your project
+4. Add the following library dependency to your project
   
   ```groovy
     compile 'com.github.bumptech.glide:glide:4.3.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.android.volley:volley:1.0.0'
+    compile 'com.klinkerapps:simple_videoview:1.2.4'
 
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile 'com.android.support:support-v4:27.0.2'
-    compile 'com.android.support:design:27.0.2'
-    compile 'com.android.support:cardview-v7:27.0.2'
-    compile 'com.android.support:recyclerview-v7:27.0.2'
+    compile 'com.android.support:appcompat-v7:27.1.0'
+    compile 'com.android.support:support-v4:27.1.0'
+    compile 'com.android.support:design:27.1.0'
  ```
 
 > ## Notice
@@ -123,47 +148,47 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
     WittyFeedSDKSingleton.getInstance().witty_sdk.prepare_feed();
 ```
 
-### 1.4. For Waterfall Feeds Fragment
+### 1.4. For OneFeed ready-to-deploy feed layout
 
 ### For Getting android.support.v4.app.Fragment
 
 ```java
     //
-    // initializing waterfall fragment. Note- Make sure you have initialized the SDK in previous steps
+    // initializing OneFeed fragment. Note- Make sure you have initialized the SDK in previous steps
     //
-    Fragment fragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_waterfall_fragment(this);
+    Fragment fragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_support_feed_fragment();
 
     //
     // using our WittyFeedSDKWaterfallFragment, replace <ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED> with your
     // viewgroup's ID (i.e. LinearLayout, RelativeLayout etc)
     //
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-    fragmentTransaction.add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED>, fragment, "WittyFeed_SDK_Waterfall").commit();
+    fragmentTransaction.add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED>, fragment, "One_Feed").commit();
 ```
 
 ### For Getting android.app.Fragment
 
-
 ```java
     //
-    // initializing support waterfall fragment. Note- Make sure you have initialized the SDK in previous steps
+    // initializing support OneFeed fragment. Note- Make sure you have initialized the SDK in previous steps
     //
-    Fragment fragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_support_waterfall_fragment(this);
+    Fragment fragment = WittyFeedSDKSingleton.getInstance().witty_sdk.get_feed_fragment();
 
     //
     // using our WittyFeedSDKWaterfallFragment, replace <ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED> with your
     // viewgroup's ID (i.e. LinearLayout, RelativeLayout etc)
     //
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    fragmentTransaction.add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED>, fragment, "WittyFeed_SDK_Waterfall").commit();
+    fragmentTransaction.add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED>, fragment, "One_Feed").commit();
 ```
 
-> ## Note
-> For fetching all the category names for your account, use the below method which return an string[] array with the names of the category
->WittyFeedSDKSingleton.getInstance().witty_sdk.get_all_categoies_available();
+> ## Note -
+> 
+> The OneFeed SDK Section utilises overridden functionality of `onBackPressed` button, Hence to handle it well with the host activity.
+> Please use the method `WittyFeedSDKFeedSupportFragment.is_doing_onefeed_back()` as we have done in this sample app
+>
 
-
-### 1.5. To Fetch a WittyFeed Story Card from (i) Any Category or, (ii) Specific Category
+### 1.5. For Native Cards: to Fetch a OneFeed Content Card from (i) Any Category or, (ii) Specific Category
 
 ```java
     //=================================
@@ -255,28 +280,8 @@ Browse through the example app in this repository to see how the WittyfeedAndroi
 > To open Story view directly on tap of the card, use method of card_fetcher .set_to_open_content_view_directly(true)
 > passing `true` opens story_content_view directly, while `false` opens full_screen_card_view with scrollable story
 
-### 1.6. For creating WittyFeed cards Carousel
 
-```java
-    //
-    // Below method will directly place a carousel of WittyFeed cards
-        // Note- Make sure you have initialized the SDK in previous steps
-        // Note- Carousel loads endlessly
-    // replace YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED with your viewgroup (i.e. LinearLayout, RelativeLayout etc)
-    //
-  
-    WittyFeedSDKSingleton.getInstance().witty_sdk.get_carousel(this, <YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED>,
-        <HEIGHT_OF_THE_VIEWGROUP>);
-  
-    //
-    // Above mentioned code get us a Carousel of height equals to the specified ViewGroup and width of each card would be 65% of the screen width. 
-    // You can customise the cards width and height according to your requirements as follows:
-    //
-    
-    WittyFeedSDKSingleton.getInstance.witty_sdk.get_carousel(this,<YOUR_VIEWGROUP_WHERE_INSIDE_WHICH_CAROUSEL_WILL_BE_PLACED>, <HEIGHT_OF_VIEWGROUP_IN_DP>, <WIDTH_OF_VIEWGROUP_IN_DP>);
-```
-
-### 1.7. For Notifications Service of WittyFeedAndroidSDK
+### 1.6. For Notifications Service of WittyFeedAndroidSDK
 
 In your class which extends FirebaseMessagingService, update with the code below
 
@@ -306,6 +311,10 @@ In your class which extends FirebaseMessagingService, update with the code below
 
 > ## Note
 > Notification service with WittyFeedNativeAndroidSDK is optional to use but is highly recommended. You will get to handle this notifications on Engage9 Dashbaord
+
+> ## Note
+> To set the callback intent which should be started after user returns from the notification, please refer to the sample app
+> set the intent via method `WittyFeedSDKNotificationManager.setHomeScreenIntent(pass_your_intent_here)`
 
 
 ## 2. Example App

@@ -1,4 +1,4 @@
-package com.sdk.wittyfeed.debug;
+package com.sdk.wittyfeed.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,9 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
-import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKCardFetcher;
 import com.sdk.wittyfeed.wittynativesdk.Interfaces.WittyFeedSDKCardFetcherInterface;
-import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKSingleton;
+import com.sdk.wittyfeed.wittynativesdk.WittyFeedSDKCardFetcher;
 import com.sdk.wittyfeed.wittynativesdk.utils.glide.WittyGlide;
 
 /**
@@ -128,7 +127,8 @@ public class EndlessFeedActivity extends AppCompatActivity {
                     // Total Steps 3
                         // First Step: Create an interface of type WittyFeedSDKCardFetcherInterface in which four methods will be there as demonstrated below
 
-                    // Second Step: Initialize an object of WittyFeedSDKCardFetcher to fetch cards, NOTE- use same object from WittyFeedSDKSingleton as demonstrated below
+
+                    // Second Step: Initialize an object of WittyFeedSDKCardFetcher to fetch cards, NOTE- create a singleton in your app and use same instance of WittyFeedSDKCardFetcher as demonstrated below
                         // if you don't want to see any repeated card anywhere in the app. Otherwise you can initialize different object of WittyFeedSDKCardFetcher
 
                     // Third Step: Use fetch_a_card() method of WittyFeedSDKCardFetcher to place a WittyFeed SDK Card in one your ViewGroups (i.e. views, layouts etc)
@@ -182,11 +182,6 @@ public class EndlessFeedActivity extends AppCompatActivity {
                     // Third and Last Step is this
                     wittyFeedSDKCardFetcher.fetch_a_card("witty_card", 0.8f);
                     break;
-
-                case 3:
-                    holder.carousel_ll = holder.itemView.findViewById(R.id.carousel_ll);
-                    WittyFeedSDKSingleton.getInstance().witty_sdk.get_carousel(activity, holder.carousel_ll, 200);
-                    break;
             }
         }
 
@@ -203,12 +198,11 @@ public class EndlessFeedActivity extends AppCompatActivity {
             return 1;
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder{
+        class ViewHolder extends RecyclerView.ViewHolder{
             View itemView;
             TextView feed_tv;
             LinearLayout item_ll;
-            LinearLayout carousel_ll;
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 this.itemView = itemView;
             }

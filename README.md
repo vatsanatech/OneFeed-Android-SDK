@@ -3,18 +3,11 @@
 ## THIS DOC IS DEPRECATED, DO NOT REFER TO THIS VERSION AND DOC
 
 > # Note
-<<<<<<< HEAD
-> New v1.7.0 made live on 10 March' 2018
-
-![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[ ![Download](https://img.shields.io/badge/Download-1.7.0-blue.svg)](https://drive.google.com/file/d/1ShQeRMYB9HDI997P5eKG67MuFKFz68ut)
-=======
 > WittyFeed SDK API is now `OneFeed SDK`
 > New version 2.3.1 made live on 24 March' 2018
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
 [ ![Download](https://img.shields.io/badge/Download-2.3.0-blue.svg)](https://drive.google.com/file/d/1rRn-B5p0I6WbYKIVzoLeRhYnV_gUf6Hg/view)
->>>>>>> version_2.0
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -47,15 +40,11 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ### 1.2. Incorporating the SDK
 
-<<<<<<< HEAD
-1. [Download the SDK v1.7.0](https://drive.google.com/file/d/1ShQeRMYB9HDI997P5eKG67MuFKFz68ut)
-=======
 1. [Download the OneFeed SDK v2.3.0](https://drive.google.com/file/d/1rRn-B5p0I6WbYKIVzoLeRhYnV_gUf6Hg/view)
 
 2. SignUp at [viral9.com](https://viral9.com) and create a new application to integrate with
 
 3. Gather the API_KEY and APP_ID from the Viral9 Dashboard
->>>>>>> version_2.0
 
 4. Import OneFeed SDK in your project
 * In Android Studio goto File > New > New Module > Import .JAR/.AAR Package

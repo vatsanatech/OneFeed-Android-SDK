@@ -23,7 +23,7 @@ import org.json.JSONObject;
  * Created by aishwarydhare on 27/03/18.
  */
 
-class WittyFeedSDKContentViewActivity extends AppCompatActivity{
+public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
 
     // TODO: 30/03/18 clean up content view activity
 

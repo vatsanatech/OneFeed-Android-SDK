@@ -2,10 +2,10 @@
 
 > # Note
 > WittyFeed SDK API is now `OneFeed SDK`
-> New version 2.1.0 made live on 19 March' 2018
+> New version 2.3.1 made live on 24 March' 2018
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[ ![Download](https://img.shields.io/badge/Download-2.1.0-blue.svg)](https://drive.google.com/open?id=1OYzqd-y7SkkdHi94F-TmIkilbxU5PPPP)
+[ ![Download](https://img.shields.io/badge/Download-2.3.0-blue.svg)](https://drive.google.com/file/d/1rRn-B5p0I6WbYKIVzoLeRhYnV_gUf6Hg/view)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -38,7 +38,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ### 1.2. Incorporating the SDK
 
-1. [Download the OneFeed SDK v2.1.0](https://drive.google.com/open?id=1OYzqd-y7SkkdHi94F-TmIkilbxU5PPPP)
+1. [Download the OneFeed SDK v2.3.0](https://drive.google.com/file/d/1rRn-B5p0I6WbYKIVzoLeRhYnV_gUf6Hg/view)
 
 2. SignUp at [viral9.com](https://viral9.com) and create a new application to integrate with
 

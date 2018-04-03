@@ -18,15 +18,11 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="3dp"
-            android:layout_toEndOf="@id/back_iv"
-            android:layout_toLeftOf="@id/plus_iv"
-            android:layout_toRightOf="@id/back_iv"
-            android:layout_toStartOf="@id/plus_iv"
             android:defaultFocusHighlightEnabled="true"
             android:focusableInTouchMode="true"
             android:focusedByDefault="true"
             android:fontFamily="@font/cabin_medium"
-            android:text="Tell Your Interests.."
+            android:text="Tell Your Interests"
             android:textColor="#000000"
             android:textSize="16sp"/>
 
@@ -36,15 +32,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/static_tv1"
             android:layout_centerHorizontal="true"
-            android:layout_toEndOf="@id/back_iv"
-            android:layout_toLeftOf="@id/plus_iv"
-            android:layout_toRightOf="@id/back_iv"
-            android:layout_toStartOf="@id/plus_iv"
             android:defaultFocusHighlightEnabled="true"
             android:focusableInTouchMode="true"
             android:focusedByDefault="true"
             android:fontFamily="@font/cabin_medium"
-            android:text="Wow, you have 50 must read stories"
+            android:text="Read stories from around the world"
             android:textColor="#000000"
             android:textSize="12sp"/>
 

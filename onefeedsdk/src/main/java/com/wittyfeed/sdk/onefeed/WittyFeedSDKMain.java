@@ -11,12 +11,16 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class WittyFeedSDKMain {
 
@@ -26,7 +30,6 @@ public class WittyFeedSDKMain {
     //SDK vars
     private WittyFeedSDKNetworking wittyFeedSdkNetworking;
     private WittyFeedSDKMainInterface wittyFeedSDKMainInterface;
-    private WittyFeedSDKOneFeedBuilder wittyFeedSDKOneFeedBuilder;
 
     /*
     * Constructor
@@ -61,8 +64,18 @@ public class WittyFeedSDKMain {
     void fetch_more_data(final WittyFeedSDKMainInterface fetch_more_main_callback, int loadmore_offset){
         WittyFeedSDKNetworkInterface fetch_more_networking_callback = new WittyFeedSDKNetworkInterface() {
             @Override
-            public void onSuccess(String jObject, boolean isLoadedMore, boolean isBackgroundRefresh) {
-                handle_feeds_result(jObject, isLoadedMore, isBackgroundRefresh, false);
+            public void onSuccess(String jsonString, boolean isLoadedMore, boolean isBackgroundRefresh) {
+                String mainFeedString = "";
+
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    mainFeedString = jsonObject.optJSONObject("data").toString();
+                } catch (JSONException e) {
+                    Log.d(TAG, "onSuccess: error in getting fresh data");
+                    fetch_more_main_callback.onError(null);
+                }
+
+                handle_feeds_result(mainFeedString, "", isLoadedMore, isBackgroundRefresh, false);
                 fetch_more_main_callback.onOperationDidFinish();
             }
 
@@ -85,14 +98,26 @@ public class WittyFeedSDKMain {
         WittyFeedSDKNetworkInterface refresh_data_networking_callback = new WittyFeedSDKNetworkInterface() {
             @Override
             public void onSuccess(String jsonString, boolean isLoadedMore, boolean isBackgroundRefresh) {
-                handle_feeds_result(jsonString, isLoadedMore, isBackgroundRefresh, false);
+                String mainFeedString = "";
+                String searchBlockFeedString = "";
+
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    mainFeedString = jsonObject.optJSONObject("data").toString();
+                    searchBlockFeedString = jsonObject.optJSONObject("block_data").toString();
+                } catch (JSONException e) {
+                    Log.d(TAG, "onSuccess: error in getting fresh data");
+                    refresh_data_main_callback.onError(null);
+                }
+
+                handle_feeds_result(mainFeedString, searchBlockFeedString, isLoadedMore, isBackgroundRefresh, false);
                 refresh_data_main_callback.onOperationDidFinish();
             }
 
             @Override
             public void onError(Exception e) {
                 if (e != null) {
-                    Log.d(TAG, "error in refreshing data (isBackgroundCacheRefresh:" + isBackgroundCacheRefresh +") : "+ e.getMessage());
+                    Log.d(TAG, "error in getting fresh data (isBackgroundCacheRefresh:" + isBackgroundCacheRefresh +") : "+ e.getMessage());
                     e.printStackTrace();
                     refresh_data_main_callback.onError(e);
                 } else {
@@ -152,6 +177,33 @@ public class WittyFeedSDKMain {
         wittyFeedSdkNetworking.fetch_interests(interests_networking_callback);
     }
 
+    void set_interests_list(final WittyFeedSDKMainInterface get_interests_content_callback, String interest_id, boolean isSelected) {
+
+        WittyFeedSDKNetworkInterface set_interests_networking_callback = new WittyFeedSDKNetworkInterface() {
+            @Override
+            public void onSuccess(String responseString, boolean isLoadedMore, boolean isBackgroundRefresh) {
+                if (responseString.equalsIgnoreCase("true")) {
+                    get_interests_content_callback.onOperationDidFinish();
+                } else {
+                    get_interests_content_callback.onError(null);
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                if (e != null) {
+                    Log.d(TAG, "error in getting interests for -" + e.getMessage());
+                    e.printStackTrace();
+                    get_interests_content_callback.onError(e);
+                } else {
+                    get_interests_content_callback.onError(null);
+                }
+            }
+        };
+
+        wittyFeedSdkNetworking.set_interest(set_interests_networking_callback, interest_id, isSelected);
+    }
+
 
     /*
     * Private Methods
@@ -189,14 +241,29 @@ public class WittyFeedSDKMain {
     *
     * */
 
-    private void handle_feeds_result(String jsonString, boolean isLoadedMore, boolean isBackgroundRefresh, boolean is_cached) {
+    private void handle_feeds_result(String mainFeedString, String searchFeedString, boolean isLoadedMore, boolean isBackgroundRefresh, boolean is_cached) {
+
         MainDatum temp_mainDatum = null;
         try{
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-            temp_mainDatum = gson.fromJson(jsonString, MainDatum.class);
+            temp_mainDatum = gson.fromJson(mainFeedString, MainDatum.class);
             WittyFeedSDKSingleton.getInstance().oneFeedConfig = temp_mainDatum.getConfig();
         }catch (Exception e){
             e.printStackTrace();
+        }
+
+
+        MainDatum temp_searchBlockDatum = null;
+        if (!searchFeedString.equalsIgnoreCase("")) {
+            try{
+                Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+                temp_searchBlockDatum = gson.fromJson(searchFeedString, MainDatum.class);
+
+                WittyFeedSDKSingleton.getInstance().default_search_block_arr.clear();
+                WittyFeedSDKSingleton.getInstance().default_search_block_arr = (ArrayList<Block>) temp_searchBlockDatum.getBlocks();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
 
@@ -214,14 +281,14 @@ public class WittyFeedSDKMain {
             if(!isLoadedMore){
                 // create cached json
                 if (temp_mainDatum != null && !is_cached) {
-                    create_cached_JSON(jsonString);
+                    create_cached_JSON(mainFeedString);
                 }
             }
             // call function to sort data by order and do other operations
 
         } else {
             // cache the data in background without disturbing model array
-            create_cached_JSON(jsonString);
+            create_cached_JSON(mainFeedString);
         }
     }
 
@@ -299,7 +366,17 @@ public class WittyFeedSDKMain {
                     @Override
                     public void onSuccess(String jObject, boolean isLoadedMore, boolean isBackgroundRefresh) {
                         try {
-                            handle_feeds_result(jObject, isLoadedMore, isBackgroundRefresh, false);
+                            String mainFeedString = "";
+
+                            try {
+                                JSONObject jsonObject = new JSONObject(jObject);
+                                mainFeedString = jsonObject.optJSONObject("data").toString();
+                            } catch (JSONException e) {
+                                Log.d(TAG, "onSuccess: error in getting fresh data");
+                                wittyFeedSDKMainInterface.onError(null);
+                            }
+
+                            handle_feeds_result(mainFeedString, "", isLoadedMore, isBackgroundRefresh, false);
                             wittyFeedSDKMainInterface.onOperationDidFinish();
                         } catch (Exception e) {
                             if (e != null) {
@@ -361,7 +438,7 @@ public class WittyFeedSDKMain {
 
             try {
                 WittyFeedSDKSingleton.getInstance().isDataUpdated = false;
-                handle_feeds_result(buffer.toString(), false, false, true);
+                handle_feeds_result(buffer.toString(), "", false, false, true);
                 wittyFeedSDKMainInterface.onOperationDidFinish();
                 Log.d(TAG,"previous data read from cache successfully");
             } catch (Exception e) {
@@ -379,7 +456,7 @@ public class WittyFeedSDKMain {
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         float height = displayMetrics.heightPixels;
         float width = displayMetrics.widthPixels;
-        WittyFeedSDKSingleton.getInstance().ScreenHeight = (int)height;
+        WittyFeedSDKSingleton.getInstance().screenHeight = (int)height;
         WittyFeedSDKSingleton.getInstance().screenWidth = (int)width;
     }
 
@@ -425,8 +502,6 @@ public class WittyFeedSDKMain {
         }
 
         wittyFeedSdkNetworking = new WittyFeedSDKNetworking(this.context, wittyFeedSDKApiClient);
-
-        wittyFeedSDKOneFeedBuilder = new WittyFeedSDKOneFeedBuilder(context, 1);
 
         try {
             WittyFeedSDKSingleton.getInstance().loader_iv_url = WittyFeedSDKSingleton.getInstance().wittySharedPreferences.getString("loader_iv_url","");

@@ -28,11 +28,9 @@ class WittyFeedSDKWebView {
     @SuppressLint("JavascriptInterface")
     void setUpWebView(String url_to_open, WebView web_view, Context context) {
 
-/*
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            WebView.setWebContentsDebuggingEnabled(true);
-//        }
-*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             web_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);

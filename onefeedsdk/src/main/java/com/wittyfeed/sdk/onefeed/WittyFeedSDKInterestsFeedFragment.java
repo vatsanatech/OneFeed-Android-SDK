@@ -17,13 +17,13 @@ import android.view.WindowManager;
 import android.widget.CheckedTextView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 /**
  * Created by aishwarydhare on 02/04/18.
  */
 
-@SuppressLint("ValidFragment")
-class WittyFeedSDKInterestsFeedFragment extends Fragment{
+public class WittyFeedSDKInterestsFeedFragment extends Fragment{
 
     Context activityContext;
     RecyclerView feed_rv;
@@ -142,10 +142,48 @@ class WittyFeedSDKInterestsFeedFragment extends Fragment{
                         checkedTextView.setCheckMarkDrawable(R.drawable.ic_check_circle_grey_20dp);
                         checkedTextView.setChecked(false);
                         card.setBadgeText("");
+                        WittyFeedSDKSingleton.getInstance().witty_sdk.set_interests_list(new WittyFeedSDKMainInterface() {
+                            @Override
+                            public void onOperationDidFinish() {
+                                Log.d(TAG, "onOperationDidFinish: interest  un-selected successfully");
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                checkedTextView.setCheckMarkDrawable(R.drawable.ic_check_circle_green_20dp);
+                                checkedTextView.setChecked(false);
+                                card.setBadgeText("");
+                                if(e != null){
+                                    Log.d(TAG, "onError: error in selecting interest - " + e.getMessage());
+                                } else {
+                                    Log.d(TAG, "onError: error in selecting interest ");
+                                }
+                                Toast.makeText(activityContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                            }
+                        }, ""+card.getId(), false);
                     } else {
                         checkedTextView.setCheckMarkDrawable(R.drawable.ic_check_circle_green_20dp);
                         checkedTextView.setChecked(true);
                         card.setBadgeText("selected");
+                        WittyFeedSDKSingleton.getInstance().witty_sdk.set_interests_list(new WittyFeedSDKMainInterface() {
+                            @Override
+                            public void onOperationDidFinish() {
+                                Log.d(TAG, "onOperationDidFinish: interest selected successfully");
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                checkedTextView.setCheckMarkDrawable(R.drawable.ic_check_circle_grey_20dp);
+                                checkedTextView.setChecked(false);
+                                card.setBadgeText("");
+                                if(e != null){
+                                    Log.d(TAG, "onError: error in selecting interest - " + e.getMessage());
+                                } else {
+                                    Log.d(TAG, "onError: error in selecting interest ");
+                                }
+                                Toast.makeText(activityContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                            }
+                        }, ""+card.getId(), true);
                     }
                 }
             });

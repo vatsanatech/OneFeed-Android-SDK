@@ -2,6 +2,7 @@ package com.wittyfeed.sdk.onefeed;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,7 +40,6 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
     private TextView loader_tv;
     private boolean is_loaded_once = false;
     private boolean is_from_notification = false;
-    private WittyFeedSDKOneFeedBuilder wittyFeedSDKOneFeedBuilder;
     private WittyFeedSDKOneFeedInterface wittyFeedSDKOneFeedInterface;
     private boolean has_fallbacked = false;
 
@@ -63,10 +63,6 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
 
         Bundle bundle = getIntent().getExtras();
 
-        if (bundle != null && bundle.containsKey("fallback")) {
-            has_fallbacked = true;
-        }
-
         if (bundle != null && bundle.containsKey("is_loaded_notification")) {
             is_from_notification = true;
         }
@@ -74,7 +70,6 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
         try {
             this.getActionBar().hide();
         } catch (Exception e) {
-            // do nothing
         }
         try {
             this.getSupportActionBar().hide();
@@ -96,10 +91,7 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
         }
 
         init_loader_view();
-        if(has_fallbacked)
-            initWebViewContent("-1");
-        else
-            initWebViewContent(story_id); // when normal
+        initWebViewContent();
     }
 
     private void init_loader_view() {
@@ -123,10 +115,7 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    void initWebViewContent(@Nullable String story_id){
-
-        String base_url = "https://www.wittyfeed.com/amp/";
-        story_url = base_url + story_id;
+    void initWebViewContent(){
 
         try {
             if(!url_to_open.equalsIgnoreCase("")){
@@ -160,11 +149,8 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
             }
         });
 
-
         Bundle bundle = getIntent().getExtras();
-
         String url_to_open = bundle.getString("","");
-
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.putOpt("app_id",""+ bundle.getString("app_id",""));
@@ -177,6 +163,9 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        WittyFeedSDKWebView wittyFeedSDKWebView = new WittyFeedSDKWebView();
+        wittyFeedSDKWebView.setUpWebView(url_to_open,web_view,activity);
+        build_native_story_GA(jsonObject);
 
         wittyFeedSDKOneFeedInterface = new WittyFeedSDKOneFeedInterface() {
             @Override
@@ -184,17 +173,6 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
                 custom_finish_app();
             }
         };
-
-        web_view.loadUrl(url_to_open);
-
-//
-//        if(story_id != null && story_id.equalsIgnoreCase("-1") && !is_from_notification){
-//            wittyFeedSDKOneFeedBuilder = new WittyFeedSDKOneFeedBuilder( this, 2, jsonObject, wittyFeedSDKOneFeedInterface);
-//        }else {
-//            wittyFeedSDKOneFeedBuilder = new WittyFeedSDKOneFeedBuilder( this, 3, jsonObject, wittyFeedSDKOneFeedInterface);
-//
-//        }
-//        wittyFeedSDKOneFeedBuilder.launch(url_to_open, web_view);
     }
 
     private void custom_finish_app(){
@@ -203,6 +181,42 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
             this.activity.startActivity(WittyFeedSDKSingleton.getInstance().homeActivityIntent);
         }else {
             finish();
+        }
+    }
+
+    private void build_native_story_GA(JSONObject jsonObject) {
+        String eventCat = "WF Story";
+        String eventAction = "";
+        String eventLabel = "";
+        String fcm_token = "";
+        try {
+            eventAction = "" + jsonObject.getString("app_id");
+            fcm_token = WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKApiClient.getFCM_TOKEN();
+            eventLabel = ""
+                    + jsonObject.getString("story_id")
+                    + " : "
+                    + jsonObject.getString("story_title");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        send_GA(fcm_token, eventCat, eventLabel, eventAction, activity);
+    }
+
+    private void send_GA(String fcm_token, String eventCat, String eventAction, String eventLabel, Context context) {
+
+        String eventVal = "1";
+
+        try{
+            if (WittyFeedSDKSingleton.getInstance().wittyFeedSDKGoogleAnalytics == null) {
+                WittyFeedSDKSingleton.getInstance().wittyFeedSDKGoogleAnalytics = new WittyFeedSDKGoogleAnalytics(context, WittyFeedSDKSingleton.getInstance().getGA_TRACKING_ID(), fcm_token);
+            }
+
+            WittyFeedSDKSingleton.getInstance().wittyFeedSDKGoogleAnalytics.send_event_tracking_GA_request(eventCat, eventAction, eventVal, eventLabel);
+            Log.d(TAG, "For " + eventCat + " " + eventLabel);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

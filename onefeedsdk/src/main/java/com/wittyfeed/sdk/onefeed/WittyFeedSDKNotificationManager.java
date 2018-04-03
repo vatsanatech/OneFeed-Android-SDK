@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -105,18 +106,21 @@ public class WittyFeedSDKNotificationManager {
                             e.printStackTrace();
                         }
                         String url_to_open = data_jsonObj.optString("story_url","");
-                        WittyFeedSDKOneFeedBuilder wittyFeedSDKOneFeedBuilder = new WittyFeedSDKOneFeedBuilder(application, 2, jsonObject);
+                        WittyFeedSDKOneFeedBuilder wittyFeedSDKOneFeedBuilder = new WittyFeedSDKOneFeedBuilder(application, 3, jsonObject);
 
-                        PackageManager pm = application.getPackageManager();
-                        boolean isInstalled = wittyFeedSDKOneFeedBuilder.isPackageInstalled("com.android.chrome", pm);
+//                        PackageManager pm = application.getPackageManager();
+                        ApplicationInfo ai =
+                                application.getPackageManager().getApplicationInfo("com.android.chrome",0);
 
-                        if(isInstalled){
+                        boolean appStatus = ai.enabled;
+                        boolean isInstalled = wittyFeedSDKOneFeedBuilder.isPackageInstalled("com.android.chrome", application.getPackageManager());
+
+                        if(appStatus){
                             wittyFeedSDKOneFeedBuilder.getCustomTabsIntent().intent.setData(Uri.parse(url_to_open));
                             showNotification(data.get("title"), data.get("body"), preferred_notiff_icon, wittyFeedSDKOneFeedBuilder.getCustomTabsIntent().intent);
                         }else {
                             showNotification(data.get("title"), data.get("body"), preferred_notiff_icon, contentViewIntent);
                         }
-
 
                     }
                 }

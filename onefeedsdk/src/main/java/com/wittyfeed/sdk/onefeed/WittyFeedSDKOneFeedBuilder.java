@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +18,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsCallback;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
@@ -47,36 +47,10 @@ class WittyFeedSDKOneFeedBuilder {
 
     private boolean is_customTab_init_successful = false;
 
-
-    WittyFeedSDKOneFeedBuilder(@NonNull Context para_context, @NonNull int type, JSONObject jsonObject, @Nullable WittyFeedSDKOneFeedInterface para_wittyFeedSDKOneFeedInterface){
-        context = para_context;
-        this.type = type;
-        wittyFeedSDKWebView = new WittyFeedSDKWebView();
-        wittyFeedSDKWebView.setWittyFeedSDKOneFeedInterface(para_wittyFeedSDKOneFeedInterface);
-        init();
-        switch (type){
-            case 1:
-                build_onefeed_GA();
-                break;
-            case 2:
-                build_native_story_GA(jsonObject);
-                break;
-            case 3:
-                build_notification_GA(jsonObject);
-                break;
-        }
-    }
-
-
     WittyFeedSDKOneFeedBuilder(@NonNull Context para_context, @NonNull int type){
         context = para_context;
         this.type = type;
         init();
-//        switch (type){
-//            case 1:
-//                build_onefeed_GA();
-//                break;
-//        }
     }
 
 
@@ -84,16 +58,7 @@ class WittyFeedSDKOneFeedBuilder {
         context = para_context;
         this.type = type;
         init();
-        switch (type){
-            case 1:
-                break;
-            case 2:
-                build_native_story_GA(jsonObject);
-                break;
-            case 3:
-                build_notification_GA(jsonObject);
-                break;
-        }
+        build_notification_GA(jsonObject);
     }
 
 
@@ -187,18 +152,25 @@ class WittyFeedSDKOneFeedBuilder {
 
     void launch(@NonNull String url_to_open) {
         Log.d(TAG, "url_to_open: "+ url_to_open);
-        PackageManager pm = context.getPackageManager();
-        boolean isInstalled = isPackageInstalled("com.android.chrome", pm);
-        if(isInstalled && is_customTab_init_successful){
-            customTabsIntent.intent.setPackage("com.android.chrome");
-            try {
-                customTabsIntent.launchUrl(context, Uri.parse(url_to_open));
-            }catch (Exception e){
+        try {
+            ApplicationInfo ai =
+                    context.getPackageManager().getApplicationInfo("com.android.chrome",0);
+            boolean appStatus = ai.enabled;
+
+
+            if(appStatus && is_customTab_init_successful){
+                customTabsIntent.intent.setPackage("com.android.chrome");
+                try {
+                    customTabsIntent.launchUrl(context, Uri.parse(url_to_open));
+                }catch (Exception e){
+                    launchContentviewActivity(url_to_open);
+                }
+
+            } else {
                 launchContentviewActivity(url_to_open);
             }
-
-        } else {
-            launchContentviewActivity(url_to_open);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -245,7 +217,7 @@ class WittyFeedSDKOneFeedBuilder {
     }
 
 
-    private void build_notification_GA(JSONObject jsonObject) {
+    void build_notification_GA(JSONObject jsonObject) {
         String eventCat = "WF NOTIFICATION";
         String eventAction = "";
         String eventLabel = "";
@@ -266,33 +238,22 @@ class WittyFeedSDKOneFeedBuilder {
     }
 
 
-    private void build_native_story_GA(JSONObject jsonObject) {
+    void build_native_story_GA(Card card) {
         String eventCat = "WF Story";
         String eventAction = "";
         String eventLabel = "";
         String fcm_token = "";
         try {
-            eventAction = "" + jsonObject.getString("app_id");
+            eventAction = "" + WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKApiClient.getAPP_ID();
             fcm_token = WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKApiClient.getFCM_TOKEN();
             eventLabel = ""
-                    + "Detail Card - "
-                    + jsonObject.getString("story_id")
+                    + card.getStoryTitle()
                     + " : "
-                    + jsonObject.getString("story_title");
-        } catch (JSONException e) {
+                    + card.getId();
+        } catch (Exception e) {
             e.printStackTrace();
             return;
         }
-
-        send_GA(fcm_token, eventCat, eventLabel, eventAction, context);
-    }
-
-
-    private void build_onefeed_GA() {
-        String eventCat = "WF OneFeed";
-        String eventLabel = "OneFeed Opened";
-        String eventAction = "" + WittyFeedSDKSingleton.getInstance().witty_sdk.wittyFeedSDKApiClient.getAPP_ID();
-        String fcm_token = "";
 
         send_GA(fcm_token, eventCat, eventLabel, eventAction, context);
     }

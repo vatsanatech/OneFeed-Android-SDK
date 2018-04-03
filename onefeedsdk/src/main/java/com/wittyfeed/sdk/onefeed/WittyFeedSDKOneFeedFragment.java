@@ -20,7 +20,6 @@ import android.widget.TextView;
  * Created by aishwarydhare on 30/03/18.
  */
 
-@SuppressLint("ValidFragment")
 public class WittyFeedSDKOneFeedFragment extends Fragment {
 
     Context activityContext;
@@ -112,6 +111,10 @@ public class WittyFeedSDKOneFeedFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 WittyFeedSDKSearchFeedFragment wittyFeedSDKSearchFeedFragment = new WittyFeedSDKSearchFeedFragment();
+
+                WittyFeedSDKSingleton.getInstance().search_blocks_arr.clear();
+                WittyFeedSDKSingleton.getInstance().search_blocks_arr.addAll(WittyFeedSDKSingleton.getInstance().default_search_block_arr);
+                WittyFeedSDKSingleton.getInstance().last_search_for_str = "";
 
                 childFragmentManager.executePendingTransactions();
                 if(childFragmentManager.findFragmentByTag("SearchFeed") != null){

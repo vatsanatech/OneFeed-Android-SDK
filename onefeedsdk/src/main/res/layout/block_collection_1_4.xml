@@ -7,7 +7,8 @@
         android:id="@+id/card_1_v"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
+        android:layout_margin="5dp"
         android:layout_weight="1" />
 
     <LinearLayout
@@ -25,14 +26,16 @@
             <RelativeLayout
                 android:id="@+id/card_2_v"
                 android:layout_width="0dp"
-                android:visibility="gone"
+                android:visibility="visible"
+                android:layout_margin="5dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <RelativeLayout
                 android:id="@+id/card_3_v"
                 android:layout_width="0dp"
-                android:visibility="gone"
+                android:visibility="visible"
+                android:layout_margin="5dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
@@ -47,14 +50,16 @@
             <RelativeLayout
                 android:id="@+id/card_4_v"
                 android:layout_width="0dp"
-                android:visibility="gone"
+                android:visibility="visible"
+                android:layout_margin="5dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <RelativeLayout
                 android:id="@+id/card_5_v"
                 android:layout_width="0dp"
-                android:visibility="gone"
+                android:visibility="visible"
+                android:layout_margin="5dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 

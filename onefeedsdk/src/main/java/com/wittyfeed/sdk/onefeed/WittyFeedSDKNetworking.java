@@ -29,7 +29,6 @@ class WittyFeedSDKNetworking {
     private RequestQueue search_requestQueue;
     private RequestQueue interest_requestQueue;
     private final String base_prefix = "https://api.wittyfeed.com";
-//    private final String base_prefix = "https://api.myjson.com/bins/oyv93";
 
 
     WittyFeedSDKNetworking(Context activity, WittyFeedSDKApiClient para_wittyFeedSDKApiClient){
@@ -101,7 +100,7 @@ class WittyFeedSDKNetworking {
                                 }
 
                                 Log.d(TAG, "credentials verified successfully");
-                                callback.onSuccess(result.optJSONObject("data").toString(), isLoadedMore, isBackgroundCacheRefresh);
+                                callback.onSuccess(response, isLoadedMore, isBackgroundCacheRefresh);
                             } else {
                                 Log.d(TAG, "onResponse: invalid response - " + response);
                                 callback.onError(null);
@@ -200,7 +199,7 @@ class WittyFeedSDKNetworking {
 
     void update_fcm_token(final WittyFeedSDKNetworkInterface callback) {
 
-        String url_api = base_prefix + "/Sdk/update_fcm_token";
+        String url_api = base_prefix + "/Sdk/updateToken";
         final WittyFeedSDKApiClient final_wittyFeedSDKApiClient = this.wittyFeedSDKApiClient;
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url_api,
@@ -209,19 +208,17 @@ class WittyFeedSDKNetworking {
                     public void onResponse(String response) {
                         try {
                             JSONObject result = new JSONObject(response);
-
                             if(result.optBoolean("status")) {
+                                Log.d(TAG, "onResponse: git response - " + response);
                                 if (!final_wittyFeedSDKApiClient.getFCM_TOKEN().equalsIgnoreCase("")) {
                                     WittyFeedSDKSingleton.getInstance().editor_sharedPref.putString("wf_saved_fcm_token", final_wittyFeedSDKApiClient.getFCM_TOKEN()).commit();
                                 }
                             } else {
                                 Log.d(TAG, "onResponse: invalid response - " + response);
-                                callback.onError(null);
                             }
                         } catch (JSONException e) {
                             // if error received
                             Log.d(TAG, "onResponse: invalid response - " + response, e);
-                            callback.onError(e);
                         }
                     }
                 },
@@ -262,6 +259,7 @@ class WittyFeedSDKNetworking {
                 }
                 payload.put("firebase_token", "" + fcm_token_to_send);
                 payload.put("old_firebase_token", "" + old_fcm_token);
+                payload.put("client_meta", "" + final_wittyFeedSDKApiClient.getUser_meta());
                 return payload;
             }
         };
@@ -325,12 +323,13 @@ class WittyFeedSDKNetworking {
 
     void fetch_interests(final WittyFeedSDKNetworkInterface callback) {
 
-        String url_api = base_prefix + "/Sdk/Sdk_feed_V4/getCategories";
+        String url_api = base_prefix + "/Sdk/getCategories";
 
         final WittyFeedSDKApiClient final_wittyFeedSDKApiClient = this.wittyFeedSDKApiClient;
 
         url_api += "?";
         url_api += "app_id=" + final_wittyFeedSDKApiClient.getAPP_ID();
+        url_api += "&device_id=" + final_wittyFeedSDKApiClient.getDevice_id();
 
         StringRequest search_stringRequest = new StringRequest(Request.Method.GET, url_api,
                 new Response.Listener<String>() {
@@ -364,6 +363,62 @@ class WittyFeedSDKNetworking {
             @Override
             protected Map<String, String> getParams() {
                 return new HashMap<>();
+            }
+        };
+        interest_requestQueue.cancelAll("get_interest");
+        interest_requestQueue.add(search_stringRequest).setTag("get_interest");
+    }
+
+
+    void set_interest(final WittyFeedSDKNetworkInterface callback, final String interest_id, final boolean isSelected) {
+
+        String url_api = base_prefix + "/Sdk/saveUserInterest";
+
+        final WittyFeedSDKApiClient final_wittyFeedSDKApiClient = this.wittyFeedSDKApiClient;
+
+        StringRequest search_stringRequest = new StringRequest(Request.Method.POST, url_api,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject resultJson = new JSONObject(response);
+                            Log.d(TAG, "onResponse: search result received: " + response);
+                            if(resultJson.optBoolean("status")) {
+                                callback.onSuccess("true", false, false);
+                            } else {
+                                Log.d(TAG, "onResponse: invalid response - " + response);
+                                callback.onError(null);
+                            }
+                        } catch (JSONException e) {
+                            // if error received
+                            Log.d(TAG, "onResponse: invalid response - " + response, e);
+                            callback.onError(e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError e) {
+                        // if error received
+                        Log.d(TAG, "onResponse: request failure", e);
+                        callback.onError(e);
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> payload = new HashMap<>();
+                payload.put("app_id", final_wittyFeedSDKApiClient.getAPP_ID());
+                payload.put("selected_cat_id", ""+interest_id);
+
+                int is_cat_active = 0;
+                if(isSelected) {
+                    is_cat_active = 1;
+                }
+                payload.put("is_selected", ""+is_cat_active);
+                payload.put("client_meta", "" + final_wittyFeedSDKApiClient.getUser_meta());
+                payload.put("device_id", "" + final_wittyFeedSDKApiClient.getDevice_id());
+                return payload;
             }
         };
         interest_requestQueue.cancelAll("get_interest");

@@ -60,7 +60,7 @@ class WittyFeedSDKCardFactory {
                 view = create_story_list_item_card(card, text_size_ratio);
                 break;
 
-            case "collection_item":
+            case "collection_1_4":
                 view = create_collection_item_card(card, text_size_ratio);
                 break;
 
@@ -105,6 +105,7 @@ class WittyFeedSDKCardFactory {
             @Override
             public void onClick(View v) {
                 wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl());
+                wittyFeedSDKOneFeedBuilder.build_native_story_GA(card);
             }
         });
 
@@ -206,6 +207,7 @@ class WittyFeedSDKCardFactory {
             @Override
             public void onClick(View v) {
                 wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl());
+                wittyFeedSDKOneFeedBuilder.build_native_story_GA(card);
             }
         });
 
@@ -285,6 +287,7 @@ class WittyFeedSDKCardFactory {
             @Override
             public void onClick(View v) {
                 wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl());
+                wittyFeedSDKOneFeedBuilder.build_native_story_GA(card);
             }
         });
 
@@ -346,6 +349,7 @@ class WittyFeedSDKCardFactory {
             @Override
             public void onClick(View v) {
                 wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl());
+                wittyFeedSDKOneFeedBuilder.build_native_story_GA(card);
             }
         });
 
@@ -419,7 +423,7 @@ class WittyFeedSDKCardFactory {
 
         TextView shield_tv = view.findViewById(R.id.shield_tv);
         if(card.getSheildText().equalsIgnoreCase("")){
-            shield_tv.setVisibility(View.INVISIBLE);
+            shield_tv.setVisibility(View.GONE);
         } else {
             shield_tv.setText(card.getSheildText());
             shield_tv.setTextSize((float) text_size_ratio * 10);
@@ -429,6 +433,7 @@ class WittyFeedSDKCardFactory {
             @Override
             public void onClick(View v) {
                 wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl());
+                wittyFeedSDKOneFeedBuilder.build_native_story_GA(card);
             }
         });
 
@@ -482,7 +487,7 @@ class WittyFeedSDKCardFactory {
 
 
     private View create_collection_1_4(ArrayList<Card> cardArrayList) {
-        CardCollection1_4 cardCollection1_4 = new CardCollection1_4(context, "collection_item", cardArrayList, requestManager);
+        CardCollection1_4 cardCollection1_4 = new CardCollection1_4(context, "collection_1_4", cardArrayList, requestManager);
         return cardCollection1_4.get_constructed_view();
     }
 

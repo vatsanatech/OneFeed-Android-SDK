@@ -23,15 +23,16 @@ class WittyFeedSDKSingleton {
     String onefeed_bg_color_string = "";
     boolean is_load_cache_else_network = true;
     Bitmap onefeed_back_icon_bitmap;
-    ArrayList<Block> search_blocks_arr = new ArrayList<>();
     String last_search_for_str = "";
+    ArrayList<Block> search_blocks_arr = new ArrayList<>();
     ArrayList<Block> interests_block_arr = new ArrayList<>();
+    ArrayList<Block> default_search_block_arr = new ArrayList<>();
     //
     // utils
     //
     SharedPreferences wittySharedPreferences;
     SharedPreferences.Editor editor_sharedPref;
-    float ScreenHeight;
+    int screenHeight;
     int screenWidth;
     double SMALL_TSR = 0.5;
     double MEDIUM_TSR = 0.7;

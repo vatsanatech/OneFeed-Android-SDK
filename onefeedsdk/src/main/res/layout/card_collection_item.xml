@@ -9,17 +9,17 @@
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
-        <View
-            android:id="@+id/overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#2f000000" />
-
         <ImageView
             android:id="@+id/cover_image_iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
+
+        <View
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#2f000000" />
     </RelativeLayout>
 
 
@@ -37,8 +37,8 @@
             android:fontFamily="@font/cabin_bold"
             android:paddingBottom="4dp"
             android:maxLines="1"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:paddingTop="8dp"
             android:text="Unusual Parathas to give A treat to your tastebuds"
             android:textColor="#ffffff"
@@ -48,8 +48,8 @@
             android:id="@+id/shield_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginStart="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:fontFamily="@font/cabin"
             android:paddingBottom="8dp"
             android:text="Lifestyle"

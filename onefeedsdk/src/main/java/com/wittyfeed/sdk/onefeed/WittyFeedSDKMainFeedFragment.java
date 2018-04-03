@@ -23,8 +23,7 @@ import android.widget.Toast;
  * Created by aishwarydhare on 02/04/18.
  */
 
-@SuppressLint("ValidFragment")
-class WittyFeedSDKMainFeedFragment extends Fragment {
+public class WittyFeedSDKMainFeedFragment extends Fragment {
 
     Context activityContext;
 

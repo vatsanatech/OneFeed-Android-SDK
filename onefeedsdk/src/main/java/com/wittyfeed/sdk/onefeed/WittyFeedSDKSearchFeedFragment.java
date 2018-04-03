@@ -25,8 +25,7 @@ import android.widget.ProgressBar;
  * Created by aishwarydhare on 02/04/18.
  */
 
-@SuppressLint("ValidFragment")
-class WittyFeedSDKSearchFeedFragment extends Fragment {
+public class WittyFeedSDKSearchFeedFragment extends Fragment {
 
     Context activityContext;
 

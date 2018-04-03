@@ -21,6 +21,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // * Mandatory for Using Notification Service by OneFeed*
         // To notify WittyFeedSDK about your updated fcm_token
         //
+
         if(mSingleton.getInstance().witty_sdk != null){
             mSingleton.getInstance().witty_sdk.update_fcm_token(refreshedToken);
         }

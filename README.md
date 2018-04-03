@@ -4,8 +4,8 @@
 > WittyFeed SDK API is now `OneFeed Android SDK`
 > New v1.0.2 made live on 3 April' 2018
 
-![Platform](https://img.shields.io/badge/Platform-Android-green.svg)
-[![Release](https://jitpack.io/v/User/Repo.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/1.0.2)
+[![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](#)
+[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/1.0.2)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/wittyfeed_android_api/blob/master/LICENSE)
 
 ## Table Of Contents

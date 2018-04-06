@@ -65,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/cabin_bold"
                     android:maxLines="2"
+                    android:ellipsize="end"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:paddingTop="8dp"

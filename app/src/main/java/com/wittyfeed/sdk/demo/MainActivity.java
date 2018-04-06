@@ -1,24 +1,17 @@
 package com.wittyfeed.sdk.demo;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.wittyfeed.sdk.onefeed.WittyFeedSDKApiClient;
@@ -31,9 +24,9 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
 
-    private static String APP_ID = "108";
-    private static String API_KEY = "963a1cf4d081b0b0bdc6e9e13de66dd3";
-    private static String FCM_TOKEN = "";
+    private String APP_ID = "108";
+    private String API_KEY = "963a1cf4d081b0b0bdc6e9e13de66dd3";
+    private String FCM_TOKEN = "";
 
     private Activity activity;
 
@@ -106,6 +99,12 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onError(Exception e) {
                 // if unexpected error
+                Toast.makeText(activity, "OneFeed data couldn't be loaded", Toast.LENGTH_SHORT).show();
+                if(e != null){
+                    Log.e("mAPP", "onError: OneFeed data couldn't be loaded", e);
+                } else {
+                    Log.e("mAPP", "onError: OneFeed data couldn't be loaded");
+                }
             }
         };
 

@@ -108,12 +108,17 @@ public class WittyFeedSDKNotificationManager {
                         String url_to_open = data_jsonObj.optString("story_url","");
                         WittyFeedSDKOneFeedBuilder wittyFeedSDKOneFeedBuilder = new WittyFeedSDKOneFeedBuilder(application, 3, jsonObject);
 
-//                        PackageManager pm = application.getPackageManager();
-                        ApplicationInfo ai =
-                                application.getPackageManager().getApplicationInfo("com.android.chrome",0);
 
-                        boolean appStatus = ai.enabled;
+//                        PackageManager pm = application.getPackageManager();
+                        boolean appStatus = false;
+
                         boolean isInstalled = wittyFeedSDKOneFeedBuilder.isPackageInstalled("com.android.chrome", application.getPackageManager());
+
+                        if(isInstalled){
+                            ApplicationInfo ai =
+                                    application.getPackageManager().getApplicationInfo("com.android.chrome",0);
+                            appStatus = ai.enabled;
+                        }
 
                         if(appStatus){
                             wittyFeedSDKOneFeedBuilder.getCustomTabsIntent().intent.setData(Uri.parse(url_to_open));

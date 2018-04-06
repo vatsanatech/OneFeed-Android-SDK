@@ -37,6 +37,7 @@
             android:fontFamily="@font/cabin_bold"
             android:paddingBottom="4dp"
             android:maxLines="1"
+            android:ellipsize="end"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="8dp"

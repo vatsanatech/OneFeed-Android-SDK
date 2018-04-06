@@ -3,10 +3,12 @@ package com.wittyfeed.sdk.onefeed;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import android.widget.TextView;
  * Created by aishwarydhare on 30/03/18.
  */
 
+@SuppressLint("ValidFragment")
 public class WittyFeedSDKOneFeedFragment extends Fragment {
 
     Context activityContext;
@@ -89,11 +92,47 @@ public class WittyFeedSDKOneFeedFragment extends Fragment {
         };
         back_iv.setOnClickListener(back_onClickListener);
 
-        WittyFeedSDKSingleton.getInstance().root_activity_view = ((Activity)activityContext).findViewById(android.R.id.content);
-
         init_main_feed();
 
         init_header();
+
+        if(WittyFeedSDKSingleton.getInstance().hasInterestFragmentOrientationChanged) {
+                back_iv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        childFragmentManager.executePendingTransactions();
+                        if(childFragmentManager.findFragmentByTag("InterestsFeed") != null){
+                            childFragmentManager.beginTransaction().remove(childFragmentManager.findFragmentByTag("InterestsFeed")).commitNow();
+                        }
+                        back_iv.setOnClickListener(back_onClickListener);
+                        plus_iv.setVisibility(View.VISIBLE);
+                        search_v.setVisibility(View.VISIBLE);
+                        search_tv.setVisibility(View.VISIBLE);
+                    }
+                });
+                search_v.setVisibility(View.GONE);
+                plus_iv.setVisibility(View.GONE);
+                search_tv.setVisibility(View.GONE);
+                WittyFeedSDKSingleton.getInstance().hasInterestFragmentOrientationChanged = false;
+        }
+
+        if(WittyFeedSDKSingleton.getInstance().hasSearchFragmentOrientationChanged) {
+            back_iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    childFragmentManager.executePendingTransactions();
+                    if(childFragmentManager.findFragmentByTag("SearchFeed") != null){
+                        childFragmentManager.beginTransaction().remove(childFragmentManager.findFragmentByTag("SearchFeed")).commitNow();
+                    }
+                    back_iv.setOnClickListener(back_onClickListener);
+                    plus_iv.setVisibility(View.VISIBLE);
+                    search_v.setVisibility(View.VISIBLE);
+                    search_tv.setVisibility(View.VISIBLE);
+                }
+            });
+            plus_iv.setVisibility(View.GONE);
+            WittyFeedSDKSingleton.getInstance().hasSearchFragmentOrientationChanged = false;
+        }
     }
 
 
@@ -183,8 +222,10 @@ public class WittyFeedSDKOneFeedFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        WittyFeedSDKSingleton.getInstance().root_activity_view = null;
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 }

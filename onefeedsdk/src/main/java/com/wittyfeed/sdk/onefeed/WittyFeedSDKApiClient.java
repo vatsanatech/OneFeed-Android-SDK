@@ -26,18 +26,28 @@ public class WittyFeedSDKApiClient {
     private String PACKAGE_NAME = "";
     private String TAG = "WF_SDK";
     private String FCM_TOKEN = "";
-    private Activity activity;
+    private Context context;
     private String user_meta;
     private static String uniqueID = null;
     private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
+    private static final String SDK_Version = "1.0.3";
     private String device_id = "";
 
-    public WittyFeedSDKApiClient(Activity activity, String app_id , String api_key, String fcm_token){
-        this.activity = activity;
+    public WittyFeedSDKApiClient(Activity para_activity, String app_id , String api_key, String fcm_token){
+        this.context = para_activity;
         this.APP_ID = app_id;
         this.API_KEY = api_key;
-        this.activity = activity;
-        this.PACKAGE_NAME = activity.getPackageName().toLowerCase();
+        this.PACKAGE_NAME = para_activity.getPackageName().toLowerCase();
+        this.user_meta = get_user_meta(new HashMap<String, String>());
+
+        this.FCM_TOKEN = fcm_token;
+    }
+
+    public WittyFeedSDKApiClient(Context para_context, String app_id , String api_key, String fcm_token){
+        this.context = para_context;
+        this.APP_ID = app_id;
+        this.API_KEY = api_key;
+        this.PACKAGE_NAME = this.context.getPackageName().toLowerCase();
         this.user_meta = get_user_meta(new HashMap<String, String>());
 
         this.FCM_TOKEN = fcm_token;
@@ -48,12 +58,14 @@ public class WittyFeedSDKApiClient {
 
         user_meta.put("device_type", "android");
 
+        user_meta.put("onefeed_sdk_version", SDK_Version);
+
         // default country / locale of user's device in ISO3 format
-        String locale_country_iso3 = activity.getResources().getConfiguration().locale.getISO3Country();
+        String locale_country_iso3 = context.getResources().getConfiguration().locale.getISO3Country();
         user_meta.put("client_locale", locale_country_iso3);
 
         //It’s a 64-bit number that should remain constant for the lifetime of a device
-        @SuppressLint("HardwareIds") String android_id = Settings.Secure.getString(activity.getContentResolver(),
+        @SuppressLint("HardwareIds") String android_id = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         user_meta.put("android_id", android_id);
         user_meta.put("device_id", android_id);
@@ -63,7 +75,7 @@ public class WittyFeedSDKApiClient {
 
 
         //UUID.randomUUID() method generates an unique identifier for a specific installation.
-        String uuid = id(activity);
+        String uuid = id(context);
         user_meta.put("uuid", uuid);
         Log.i(TAG, "UU ID: "+uuid);
 
@@ -84,7 +96,7 @@ public class WittyFeedSDKApiClient {
         // user's device Android_ID
         try {
             @SuppressLint("HardwareIds")
-            String client_uuid = Settings.Secure.getString(activity.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+            String client_uuid = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
             user_meta.put("client_uuid", client_uuid);
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +120,7 @@ public class WittyFeedSDKApiClient {
 
         try {
             DisplayMetrics displayMetrics = new DisplayMetrics();
-            activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             float height = displayMetrics.heightPixels;
             float width = displayMetrics.widthPixels;
             user_meta.put("screen_height", para_user_mata.get("" + height));

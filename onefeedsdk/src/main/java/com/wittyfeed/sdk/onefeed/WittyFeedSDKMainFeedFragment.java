@@ -31,7 +31,6 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
     LinearLayoutManager main_feed_linearLayoutManager;
     OneFeedAdapter main_oneFeedAdapter;
 
-    ProgressBar pb;
     SwipeRefreshLayout main_feed_srl;
 
     WittyFeedSDKMainInterface fetch_more_main_callback;
@@ -70,37 +69,34 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         onefeed_rv = view.findViewById(R.id.onefeed_rv);
-        pb = view.findViewById(R.id.pb);
         main_feed_srl = view.findViewById(R.id.main_feed_srl);
 
-        main_oneFeedAdapter = new OneFeedAdapter(activityContext, WittyFeedSDKSingleton.getInstance().blockArrayList);
+        main_oneFeedAdapter = new OneFeedAdapter(activityContext, WittyFeedSDKSingleton.getInstance().blockArrayList, 1);
         main_feed_linearLayoutManager = new LinearLayoutManager(activityContext);
         onefeed_rv.setLayoutManager(main_feed_linearLayoutManager);
         onefeed_rv.setAdapter(main_oneFeedAdapter);
-
         init_main_feed();
     }
 
 
     private void init_main_feed(){
 
-        pb.setVisibility(View.GONE);
-
         fetch_more_main_callback = new WittyFeedSDKMainInterface() {
             @Override
             public void onOperationDidFinish() {
-                pb.setVisibility(View.GONE);
                 if(main_oneFeedAdapter !=null)
                     main_oneFeedAdapter.notifyDataSetChanged();
                 feed_loadmore_offset++;
                 Log.d(TAG, "fetch more data :: END");
                 is_fetching_data = false;
+                int siz  = dpToPx(activityContext, 50);
+                int negate = -siz;
+                onefeed_rv.smoothScrollBy(0,negate);
             }
 
             @Override
             public void onError(Exception e) {
                 // if unexpected error
-                pb.setVisibility(View.GONE);
                 is_fetching_data = false;
                 if (e != null) {
                     Log.e(TAG, "onError: fetch more data error", e);
@@ -131,17 +127,13 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
 //                Log.d(TAG,"FirstVisibleItemposition " +firstVisibleItemPosition );
 
                 if (!is_fetching_data) {
-                    boolean msc = firstVisibleItemPosition+visibleItemCount > totalItemCount-4;
-//                    Log.d(TAG,"MAIN SCROLL CONDITION " +msc );
                     if(firstVisibleItemPosition+visibleItemCount > totalItemCount-4){
                         if(WittyFeedSDKUtils.isConnected(activityContext)){
-                            pb.setVisibility(View.VISIBLE);
                             is_fetching_data = true;
                             WittyFeedSDKSingleton.getInstance().witty_sdk.fetch_more_data(fetch_more_main_callback, feed_loadmore_offset);
                             Log.d(TAG,"fetch more data :: START");
                         } else {
                             is_fetching_data = false;
-                            pb.setVisibility(View.GONE);
                         }
                     }
                 }
@@ -154,6 +146,9 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
                 if(main_oneFeedAdapter !=null)
                     main_oneFeedAdapter.notifyDataSetChanged();
                 main_feed_srl.setRefreshing(false);
+                int siz  = dpToPx(activityContext, 50);
+                int negate = -siz;
+                onefeed_rv.smoothScrollBy(0,negate);
                 Log.d(TAG, "Feed Data refreshed");
             }
 
@@ -180,6 +175,10 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
                 WittyFeedSDKSingleton.getInstance().witty_sdk.load_initial_data(refresh_main_callback, false);
             }
         });
+    }
+    public static int dpToPx(Context context, int dp) {
+        float density = context.getResources().getDisplayMetrics().density;
+        return Math.round((float)dp * density);
     }
 
     @Override

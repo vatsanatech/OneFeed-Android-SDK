@@ -66,12 +66,14 @@
 
             <TextView
                 android:id="@+id/title_tv"
+                android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:paddingLeft="15dp"
                 android:maxLines="2"
+                android:ellipsize="end"
                 android:paddingRight="15dp"
                 android:text="Unusual Parathas to give A treat to your tastebuds"
                 android:textColor="#ffffff"
@@ -100,6 +102,7 @@
                     android:layout_toRightOf="@id/publisher_iv"
                     android:text="FoodMate"
                     android:textColor="#ffffff"
+                    android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_toEndOf="@id/publisher_iv"
                     android:layout_marginStart="15dp" />

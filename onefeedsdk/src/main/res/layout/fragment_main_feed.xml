@@ -27,15 +27,5 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <ProgressBar
-        android:id="@+id/pb"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/main_feed_srl"
-        android:indeterminateOnly="true"
-        android:max="100"
-        android:layout_marginTop="-6dp"
-        android:visibility="gone" />
 
 </RelativeLayout>

@@ -1,8 +1,8 @@
 package com.wittyfeed.sdk.onefeed;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 public class WittyFeedSDKSearchFeedFragment extends Fragment {
 
     Context activityContext;
+    int currentOrientation;
 
     RecyclerView search_feed_rv;
     LinearLayoutManager search_linearLayoutManager;
@@ -65,6 +66,7 @@ public class WittyFeedSDKSearchFeedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         root_view = inflater.inflate(R.layout.fragment_search_feed, null, false);
+        currentOrientation = getResources().getConfiguration().orientation;
         return root_view;
     }
 
@@ -79,7 +81,7 @@ public class WittyFeedSDKSearchFeedFragment extends Fragment {
         last_string_searched = WittyFeedSDKSingleton.getInstance().last_search_for_str;
         search_et.setText(""+last_string_searched);
 
-        search_oneFeedAdapter = new OneFeedAdapter(activityContext, WittyFeedSDKSingleton.getInstance().search_blocks_arr);
+        search_oneFeedAdapter = new OneFeedAdapter(activityContext, WittyFeedSDKSingleton.getInstance().search_blocks_arr, 2);
         search_linearLayoutManager = new LinearLayoutManager(activityContext);
         search_feed_rv.setLayoutManager(search_linearLayoutManager);
         search_feed_rv.setAdapter(search_oneFeedAdapter);
@@ -235,6 +237,11 @@ public class WittyFeedSDKSearchFeedFragment extends Fragment {
         if (imm != null) {
             imm.hideSoftInputFromWindow(search_et.getWindowToken(), 0);
         }
+        int config = getResources().getConfiguration().orientation;
+        int prev_config  = currentOrientation;
+        if(prev_config!=config)
+            WittyFeedSDKSingleton.getInstance().hasSearchFragmentOrientationChanged = true;
         super.onDestroyView();
     }
+
 }

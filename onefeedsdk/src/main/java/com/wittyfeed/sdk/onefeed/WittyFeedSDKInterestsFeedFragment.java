@@ -3,6 +3,7 @@ package com.wittyfeed.sdk.onefeed;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckedTextView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 
 public class WittyFeedSDKInterestsFeedFragment extends Fragment{
 
+    int currentOrientation;
     Context activityContext;
     RecyclerView feed_rv;
     ProgressBar pb;
@@ -55,6 +58,7 @@ public class WittyFeedSDKInterestsFeedFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        currentOrientation = getResources().getConfiguration().orientation;
         return inflater.inflate(R.layout.fragment_interests_feed, null, false);
     }
 
@@ -204,6 +208,16 @@ public class WittyFeedSDKInterestsFeedFragment extends Fragment{
                 checkedTextView = container_view_rl.findViewById(R.id.checked_tv);
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        InputMethodManager imm = (InputMethodManager) (activityContext).getSystemService(Context.INPUT_METHOD_SERVICE);
+        int config = getResources().getConfiguration().orientation;
+        int prev_config  = currentOrientation;
+        if(config!=prev_config)
+            WittyFeedSDKSingleton.getInstance().hasInterestFragmentOrientationChanged = true;
+        super.onDestroyView();
     }
 
 

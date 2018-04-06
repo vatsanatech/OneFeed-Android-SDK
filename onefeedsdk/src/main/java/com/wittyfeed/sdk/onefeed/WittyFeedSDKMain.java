@@ -43,7 +43,6 @@ public class WittyFeedSDKMain {
     public WittyFeedSDKMain(Context applicationContext, WittyFeedSDKApiClient para_wittyFeedSDKApiClient){
         this.context = applicationContext;
         this.wittyFeedSDKApiClient = para_wittyFeedSDKApiClient;
-        get_screen_dimensions();
         WittyFeedSDKSingleton.getInstance().witty_sdk = this;
     }
 
@@ -350,7 +349,6 @@ public class WittyFeedSDKMain {
                 @Override
                 public void onError(Exception e) {
                     // if unexpected error
-                    Toast.makeText(context, "data couldn't be loaded, check logs for more info", Toast.LENGTH_LONG).show();
                     if (e != null) {
                         Log.e(TAG, "onError: refresh data error", e);
                     } else {
@@ -379,12 +377,12 @@ public class WittyFeedSDKMain {
                             handle_feeds_result(mainFeedString, "", isLoadedMore, isBackgroundRefresh, false);
                             wittyFeedSDKMainInterface.onOperationDidFinish();
                         } catch (Exception e) {
+                            wittyFeedSDKMainInterface.onError(e);
                             if (e != null) {
                                 e.printStackTrace();
                                 Log.e("witty", "data error", e);
-                                wittyFeedSDKMainInterface.onError(e);
                             } else {
-                                wittyFeedSDKMainInterface.onError(null);
+                                Log.e("witty", "data error");
                             }
                         }
                     }
@@ -442,6 +440,7 @@ public class WittyFeedSDKMain {
                 wittyFeedSDKMainInterface.onOperationDidFinish();
                 Log.d(TAG,"previous data read from cache successfully");
             } catch (Exception e) {
+                wittyFeedSDKMainInterface.onError(e);
                 Log.d(TAG,"previous data couldn't be read from cache");
                 e.printStackTrace();
             }
@@ -502,6 +501,8 @@ public class WittyFeedSDKMain {
         }
 
         wittyFeedSdkNetworking = new WittyFeedSDKNetworking(this.context, wittyFeedSDKApiClient);
+
+        get_screen_dimensions();
 
         try {
             WittyFeedSDKSingleton.getInstance().loader_iv_url = WittyFeedSDKSingleton.getInstance().wittySharedPreferences.getString("loader_iv_url","");

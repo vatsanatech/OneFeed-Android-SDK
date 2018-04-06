@@ -23,6 +23,7 @@ import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.webkit.WebView;
@@ -91,6 +92,7 @@ class WittyFeedSDKOneFeedBuilder {
         CustomTabsClient.bindCustomTabsService(context.getApplicationContext(), CUSTOM_TAB_PACKAGE_NAME, mCustomTabsServiceConnection);
 
         int color = ContextCompat.getColor(context, R.color.witty_color);
+
         try {
             if(!WittyFeedSDKSingleton.getInstance().onefeed_bg_color_string.equalsIgnoreCase("")){
                 color = Color.parseColor(""+WittyFeedSDKSingleton.getInstance().onefeed_bg_color_string);
@@ -99,7 +101,13 @@ class WittyFeedSDKOneFeedBuilder {
             e.printStackTrace();
         }
 
-        Bitmap back_icon_bitmap = getBitmapFromDrawable(context,R.drawable.ic_back);
+        Bitmap back_icon_bitmap = null;
+        try {
+            back_icon_bitmap = getBitmapFromDrawable(context, R.drawable.ic_back);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         try {
             if(WittyFeedSDKSingleton.getInstance().onefeed_back_icon_bitmap != null){
                 back_icon_bitmap = WittyFeedSDKSingleton.getInstance().onefeed_back_icon_bitmap;
@@ -151,12 +159,14 @@ class WittyFeedSDKOneFeedBuilder {
 
 
     void launch(@NonNull String url_to_open) {
+        boolean appStatus = false;
         Log.d(TAG, "url_to_open: "+ url_to_open);
         try {
-            ApplicationInfo ai =
-                    context.getPackageManager().getApplicationInfo("com.android.chrome",0);
-            boolean appStatus = ai.enabled;
-
+            if(isPackageInstalled("com.android.chrome", context.getPackageManager())){
+                ApplicationInfo ai =
+                        context.getPackageManager().getApplicationInfo("com.android.chrome",0);
+                appStatus = ai.enabled;
+            }
 
             if(appStatus && is_customTab_init_successful){
                 customTabsIntent.intent.setPackage("com.android.chrome");
@@ -173,6 +183,7 @@ class WittyFeedSDKOneFeedBuilder {
             e.printStackTrace();
         }
     }
+
 
     void launchContentviewActivity(String url_to_open){
         Intent i = new Intent(context,WittyFeedSDKContentViewActivity.class);
@@ -200,13 +211,19 @@ class WittyFeedSDKOneFeedBuilder {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
         } else if (drawable instanceof VectorDrawable) {
-            return getBitmapFromVectorDrawable((VectorDrawable) drawable);
+            try {
+                return getBitmapFromVectorDrawable((VectorDrawable) drawable);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
-            throw new IllegalArgumentException("Unable to convert to bitmap");
+            Log.i(TAG, "Unable to convert to bitmap");
+            return null;
         }
+        return null;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+
     private Bitmap getBitmapFromVectorDrawable(VectorDrawable vectorDrawable) {
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
                 vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -255,7 +272,7 @@ class WittyFeedSDKOneFeedBuilder {
             return;
         }
 
-        send_GA(fcm_token, eventCat, eventLabel, eventAction, context);
+        send_GA(fcm_token, eventCat, eventAction, eventLabel, context);
     }
 
 

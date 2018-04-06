@@ -211,7 +211,7 @@ class WittyFeedSDKNetworking {
                             if(result.optBoolean("status")) {
                                 Log.d(TAG, "onResponse: git response - " + response);
                                 if (!final_wittyFeedSDKApiClient.getFCM_TOKEN().equalsIgnoreCase("")) {
-                                    WittyFeedSDKSingleton.getInstance().editor_sharedPref.putString("wf_saved_fcm_token", final_wittyFeedSDKApiClient.getFCM_TOKEN()).commit();
+                                    PreferenceManager.getDefaultSharedPreferences(activity).edit().putString("wf_saved_fcm_token", final_wittyFeedSDKApiClient.getFCM_TOKEN()).apply();
                                 }
                             } else {
                                 Log.d(TAG, "onResponse: invalid response - " + response);
@@ -242,21 +242,14 @@ class WittyFeedSDKNetworking {
                 String old_fcm_token = "";
                 try {
                     if (!PreferenceManager.getDefaultSharedPreferences(activity).getString("wf_saved_fcm_token", "").equalsIgnoreCase("")) {
-                        if(PreferenceManager.getDefaultSharedPreferences(activity).getString("wf_saved_fcm_token", "").equalsIgnoreCase(final_wittyFeedSDKApiClient.getFCM_TOKEN())){
-                            Log.d(TAG, "old token: " + PreferenceManager.getDefaultSharedPreferences(activity).getString("wf_saved_fcm_token", ""));
-                            Log.d(TAG, "current token: " + "" + final_wittyFeedSDKApiClient.getFCM_TOKEN());
-                            Log.d(TAG, "TOKEN NOT SENDING NOW");
-                            fcm_token_to_send = "";
-                        } else {
-                            old_fcm_token = PreferenceManager.getDefaultSharedPreferences(activity).getString("wf_saved_fcm_token", "");
-                            Log.d(TAG, "old token: " + old_fcm_token);
-                            Log.d(TAG, "new token: " + final_wittyFeedSDKApiClient.getFCM_TOKEN());
-                            Log.d(TAG, "New Token Sending Now");
-                        }
+                        old_fcm_token = PreferenceManager.getDefaultSharedPreferences(activity).getString("wf_saved_fcm_token", "");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                Log.d(TAG, "old token: " + old_fcm_token);
+                Log.d(TAG, "new token: " + final_wittyFeedSDKApiClient.getFCM_TOKEN());
+                Log.d(TAG, "Force Update New FCM Token");
                 payload.put("firebase_token", "" + fcm_token_to_send);
                 payload.put("old_firebase_token", "" + old_fcm_token);
                 payload.put("client_meta", "" + final_wittyFeedSDKApiClient.getUser_meta());

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.RequestManager;
@@ -29,10 +31,14 @@ class OneFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final int VIDEO_RV = 4;
     private final int STORY_LIST = 5;
     private final int COLLECTION_1_4 = 6;
+    private final int PROGRESS_BAR = -1;
+    private int fragment_type;
 
-    OneFeedAdapter(Context para_activity, ArrayList<Block> block_arr) {
+
+    OneFeedAdapter(Context para_activity, ArrayList<Block> block_arr, int fragment_type) {
         this.activity = para_activity;
         this.block_arr = block_arr;
+        this.fragment_type = fragment_type;
         RequestManager requestManager = WittyGlide.with(activity);
         wittyFeedSDKBlockFactory = new WittyFeedSDKBlockFactory(requestManager, activity);
     }
@@ -66,6 +72,10 @@ class OneFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             case COLLECTION_1_4:
                 view = wittyFeedSDKBlockFactory.inflate_block(viewType);
                 return new Collection1_4VH(view);
+
+            case PROGRESS_BAR:
+                view = LayoutInflater.from(activity).inflate(R.layout.generic_progressbar, viewGroup, false);
+                return new ProgressBarVH(view);
 
             default:
                 // TODO: 08/11/17 default view to return
@@ -111,18 +121,27 @@ class OneFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 collection1_4VH.child_view.setLayoutParams(layoutParams);
                 Log.d(TAG, "onBindViewHolder: width:" + layoutParams.width + " height:" + layoutParams.height);
                 break;
+            case PROGRESS_BAR:
+                ProgressBarVH progressBarVH = (ProgressBarVH) holder;
+                ((ProgressBarVH) holder).pb.setVisibility(View.VISIBLE);
+
         }
     }
 
 
     @Override
     public int getItemCount() {
+        if(fragment_type == 1)
+            return block_arr.size()+1;
         return block_arr.size();
     }
 
 
     @Override
     public int getItemViewType(int position) {
+        if(fragment_type == 1 && position == block_arr.size())
+            return -1;
+
         switch (block_arr.get(position).getMeta().getType()){
             case "poster_solo": return SOLO_POSTER;
             case "poster_rv": return POSTER_RV;
@@ -155,6 +174,21 @@ class OneFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         void clean_card_Layouts(){
             // remove all subviews from each card if it's not equal to null
             if(root_rl != null) root_rl.removeAllViews();
+        }
+    }
+
+    class ProgressBarVH extends Base_ViewHolder{
+
+        public ProgressBar pb;
+
+        private ProgressBarVH(View itemView){
+            super(itemView);
+            pb = itemView.findViewById(R.id.pb);
+        }
+
+        @Override
+        void setUpCard(Block block) {
+            super.setUpCard(block);
         }
     }
 

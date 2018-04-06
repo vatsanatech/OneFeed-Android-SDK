@@ -32,12 +32,14 @@ class WittyFeedSDKSingleton {
     //
     SharedPreferences wittySharedPreferences;
     SharedPreferences.Editor editor_sharedPref;
+    boolean hasInterestFragmentOrientationChanged = false;
+    boolean hasSearchFragmentOrientationChanged = false;
+
     int screenHeight;
     int screenWidth;
     double SMALL_TSR = 0.5;
     double MEDIUM_TSR = 0.7;
     double LARGE_TSR = 1;
-    View root_activity_view;
     //
     // main
     //

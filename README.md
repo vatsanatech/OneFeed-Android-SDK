@@ -43,7 +43,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 4. Import OneFeed SDK in your project
 
 * add JitPack repo in project level build.gradle
-```groovy
+```gradle
     allprojects {
 		repositories {
 			...
@@ -52,7 +52,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 	}
 ```
 * add OneFeed-Android-SDK:1.0.2 in your app level build.gradle
-```groovy
+```gradle
     dependencies {
 	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:1.0.4'
 	}
@@ -60,7 +60,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 4. Add the following library dependency to your project
   
-  ```groovy
+  ```gradle
     compile 'com.android.support:appcompat-v7:27.1.0'
     compile 'com.android.support:support-v4:27.1.0'
     compile 'com.android.support:design:27.1.0'
@@ -72,7 +72,6 @@ Browse through the example app in this repository to see how the OneFeed SDK can
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.android.support:customtabs:27.1.0'
-    compile 'com.google.android.gms:play-services-analytics:12.0.1'
  ```
 
 > ## Notice
@@ -150,8 +149,25 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ### 1.6. For Notifications Service of WittyFeedAndroidSDK
 
-In your class which extends FirebaseMessagingService, update with the code below
+In your class which extends FirebaseInstanceIDService, update with the code below
+```java
+    @Override
+    public void onTokenRefresh() {
+        // Get updated InstanceID token.
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d("FCM_CUSTOM", "Refreshed token:- " + refreshedToken);
 
+        //
+        // * Mandatory for Using Notification Service by OneFeed*
+        // To notify WittyFeedSDK about your updated fcm_token
+        //
+        WittyFeedSDKMain witty_sdk_main = new WittyFeedSDKMain(getApplicationContext(), new WittyFeedSDKApiClient(getApplicationContext(), APP_ID,  API_KEY, refreshedToken));
+        witty_sdk_main.update_fcm_token(refreshedToken);
+    }
+```
+
+
+In your class which extends FirebaseMessagingService, update with the code below
 ```java
     //
     // should be initialised at the class level

@@ -96,9 +96,9 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
     // below code is only ***required*** for Initializing Wittyfeed Android SDK API
     // PROVIDING 'user_meta' ARGUMENT IS OPTIONAL
-    WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN  /*, user_meta*/  ););
+    WittyFeedSDKApiClient wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN  /*, user_meta*/  ););
 
-    WittyFeedSDKSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient);
+    WittyFeedSDKMain witty_sdk = new WittyFeedSDKMain(activity, wittyFeedSDKApiClient);
 
     // use this interface callback to do operations when SDK finished loading
     WittyFeedSDKMainInterface wittyFeedSDKMainInterface = new WittyFeedSDKMainInterface() {
@@ -115,10 +115,10 @@ Browse through the example app in this repository to see how the OneFeed SDK can
     };
 
     // setting callback here
-    WittyFeedSDKSingleton.getInstance().witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
+    witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
 
     // initializing SDK here (mandatory)
-    WittyFeedSDKSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
+    witty_sdk.init_wittyfeed_sdk();
 ```
 
 ### 1.4. For OneFeed ready-to-deploy feed layout

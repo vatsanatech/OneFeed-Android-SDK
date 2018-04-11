@@ -127,9 +127,9 @@ Browse through the example app in this repository to see how the OneFeed SDK can
     // initializing OneFeed Support Fragment. Note- Make sure you have initialized the SDK in previous steps
     WittyFeedSDKOneFeedFragment wittyFeedSDKOneFeedFragment = new WittyFeedSDKOneFeedFragment();
 
-    // using our WittyFeedSDKWaterfallFragment, replace <ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED> with your
+    // using our WittyFeedSDKWaterfallFragment, replace <ID_OF_YOUR_VIEWGROUP_IN_WHICH_OneFeed_FRAGMENT_WILL_BE_PLACED> with your
     // viewgroup's ID (i.e. LinearLayout, RelativeLayout etc)
-    getSupportFragmentManager().beginTransaction().add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED>, fragment, "OneFeed").commit();
+    getSupportFragmentManager().beginTransaction().add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_OneFeed_FRAGMENT_WILL_BE_PLACED>, fragment, "OneFeed").commit();
 ```
 
 ### 1.5. Handle back-button of onefeed for custom callback

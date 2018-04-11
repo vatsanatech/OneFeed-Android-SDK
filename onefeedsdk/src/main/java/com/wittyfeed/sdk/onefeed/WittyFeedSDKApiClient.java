@@ -39,7 +39,6 @@ public class WittyFeedSDKApiClient {
         this.API_KEY = api_key;
         this.PACKAGE_NAME = para_activity.getPackageName().toLowerCase();
         this.user_meta = get_user_meta(new HashMap<String, String>());
-
         this.FCM_TOKEN = fcm_token;
     }
 

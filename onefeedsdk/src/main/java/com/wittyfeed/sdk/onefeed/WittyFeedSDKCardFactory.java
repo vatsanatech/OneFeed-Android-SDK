@@ -104,7 +104,7 @@ class WittyFeedSDKCardFactory {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl());
+                wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl(), false);
                 wittyFeedSDKOneFeedBuilder.build_native_story_GA(card);
             }
         });
@@ -206,7 +206,7 @@ class WittyFeedSDKCardFactory {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl());
+                wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl(), false);
                 wittyFeedSDKOneFeedBuilder.build_native_story_GA(card);
             }
         });
@@ -286,7 +286,7 @@ class WittyFeedSDKCardFactory {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl());
+                wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl(), false);
                 wittyFeedSDKOneFeedBuilder.build_native_story_GA(card);
             }
         });
@@ -348,7 +348,7 @@ class WittyFeedSDKCardFactory {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl());
+                wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl(), false);
                 wittyFeedSDKOneFeedBuilder.build_native_story_GA(card);
             }
         });
@@ -432,7 +432,7 @@ class WittyFeedSDKCardFactory {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl());
+                wittyFeedSDKOneFeedBuilder.launch(card.getStoryUrl(), false);
                 wittyFeedSDKOneFeedBuilder.build_native_story_GA(card);
             }
         });

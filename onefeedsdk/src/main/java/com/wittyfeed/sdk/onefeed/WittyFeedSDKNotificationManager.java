@@ -94,39 +94,7 @@ public class WittyFeedSDKNotificationManager {
                             cover_img_url = data.get("cover_image");
                         Log.i(TAG, "Cover Image URL: "+cover_img_url);
 
-
-                        JSONObject jsonObject = new JSONObject();
-                        try {
-                            jsonObject.putOpt("app_id", ""+ data_jsonObj.optString("app_id",""));
-                            jsonObject.putOpt("story_id", ""+ data_jsonObj.optString("story_id",""));
-                            jsonObject.putOpt("story_title", ""+ data_jsonObj.optString("story_title",""));
-                            jsonObject.putOpt("fcm_token", FCM_TOKEN);
-                            jsonObject.putOpt("url_to_open", ""+ data_jsonObj.optString("story_url",""));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        String url_to_open = data_jsonObj.optString("story_url","");
-                        WittyFeedSDKOneFeedBuilder wittyFeedSDKOneFeedBuilder = new WittyFeedSDKOneFeedBuilder(application, 3, jsonObject);
-
-
-//                        PackageManager pm = application.getPackageManager();
-                        boolean appStatus = false;
-
-                        boolean isInstalled = wittyFeedSDKOneFeedBuilder.isPackageInstalled("com.android.chrome", application.getPackageManager());
-
-                        if(isInstalled){
-                            ApplicationInfo ai =
-                                    application.getPackageManager().getApplicationInfo("com.android.chrome",0);
-                            appStatus = ai.enabled;
-                        }
-
-                        if(appStatus){
-                            wittyFeedSDKOneFeedBuilder.getCustomTabsIntent().intent.setData(Uri.parse(url_to_open));
-                            showNotification(data.get("title"), data.get("body"), preferred_notiff_icon, wittyFeedSDKOneFeedBuilder.getCustomTabsIntent().intent);
-                        }else {
-                            showNotification(data.get("title"), data.get("body"), preferred_notiff_icon, contentViewIntent);
-                        }
-
+                        showNotification(data.get("title"), data.get("body"), preferred_notiff_icon, contentViewIntent);
                     }
                 }
             }

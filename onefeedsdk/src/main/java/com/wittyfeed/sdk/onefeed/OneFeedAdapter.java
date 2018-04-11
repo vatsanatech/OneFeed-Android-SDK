@@ -123,7 +123,8 @@ class OneFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 break;
             case PROGRESS_BAR:
                 ProgressBarVH progressBarVH = (ProgressBarVH) holder;
-                ((ProgressBarVH) holder).pb.setVisibility(View.VISIBLE);
+                if(!WittyFeedSDKUtils.isConnected(activity))
+                    ((ProgressBarVH) holder).pb.setVisibility(View.INVISIBLE);
 
         }
     }

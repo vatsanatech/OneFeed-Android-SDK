@@ -86,7 +86,7 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
             public void onOperationDidFinish() {
                 if(main_oneFeedAdapter !=null)
                     main_oneFeedAdapter.notifyDataSetChanged();
-                feed_loadmore_offset++;
+                WittyFeedSDKSingleton.getInstance().load_more_offset++;
                 Log.d(TAG, "fetch more data :: END");
                 is_fetching_data = false;
                 int siz  = dpToPx(activityContext, 50);
@@ -130,8 +130,10 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
                     if(firstVisibleItemPosition+visibleItemCount > totalItemCount-4){
                         if(WittyFeedSDKUtils.isConnected(activityContext)){
                             is_fetching_data = true;
-                            WittyFeedSDKSingleton.getInstance().witty_sdk.fetch_more_data(fetch_more_main_callback, feed_loadmore_offset);
-                            Log.d(TAG,"fetch more data :: START");
+                            if(WittyFeedSDKSingleton.getInstance().witty_sdk!=null){
+                                WittyFeedSDKSingleton.getInstance().witty_sdk.fetch_more_data(fetch_more_main_callback, WittyFeedSDKSingleton.getInstance().load_more_offset);
+                                Log.d(TAG,"fetch more data :: START");
+                            }
                         } else {
                             is_fetching_data = false;
                         }
@@ -146,6 +148,7 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
                 if(main_oneFeedAdapter !=null)
                     main_oneFeedAdapter.notifyDataSetChanged();
                 main_feed_srl.setRefreshing(false);
+                WittyFeedSDKSingleton.getInstance().load_more_offset = 1;
                 int siz  = dpToPx(activityContext, 50);
                 int negate = -siz;
                 onefeed_rv.smoothScrollBy(0,negate);
@@ -170,6 +173,7 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
                 main_feed_srl.setRefreshing(true);
                 if(!WittyFeedSDKUtils.isConnected(activityContext)){
                     main_feed_srl.setRefreshing(false);
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), "No Internet, Please connect to a Network", Snackbar.LENGTH_LONG).show();
                     Log.d(TAG, "onRefresh: internet is not active");
                 }
                 WittyFeedSDKSingleton.getInstance().witty_sdk.load_initial_data(refresh_main_callback, false);

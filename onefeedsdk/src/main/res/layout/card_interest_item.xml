@@ -20,7 +20,7 @@
         android:text="Category"
         android:textSize="20sp"
         android:paddingLeft="16dp"
-        android:textStyle="bold"
+        android:fontFamily="@font/cabin_medium"
         android:checked="false"
         android:layout_height="60dp">
 

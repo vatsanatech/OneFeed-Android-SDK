@@ -24,6 +24,8 @@ class WittyFeedSDKSingleton {
     boolean is_load_cache_else_network = true;
     Bitmap onefeed_back_icon_bitmap;
     String last_search_for_str = "";
+    Boolean has_cct_loaded = false;
+    int load_more_offset = 1;
     ArrayList<Block> search_blocks_arr = new ArrayList<>();
     ArrayList<Block> interests_block_arr = new ArrayList<>();
     ArrayList<Block> default_search_block_arr = new ArrayList<>();

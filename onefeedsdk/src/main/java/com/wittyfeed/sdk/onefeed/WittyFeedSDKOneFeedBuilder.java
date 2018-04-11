@@ -158,7 +158,7 @@ class WittyFeedSDKOneFeedBuilder {
     }
 
 
-    void launch(@NonNull String url_to_open) {
+    void launch(@NonNull String url_to_open, Boolean is_from_notification) {
         boolean appStatus = false;
         Log.d(TAG, "url_to_open: "+ url_to_open);
         try {
@@ -173,11 +173,14 @@ class WittyFeedSDKOneFeedBuilder {
                 try {
                     customTabsIntent.launchUrl(context, Uri.parse(url_to_open));
                 }catch (Exception e){
-                    launchContentviewActivity(url_to_open);
+                    if(is_from_notification){
+                        launchContentviewActivity(url_to_open, is_from_notification);
+                        WittyFeedSDKSingleton.getInstance().has_cct_loaded = false;
+                    }
                 }
 
             } else {
-                launchContentviewActivity(url_to_open);
+                launchContentviewActivity(url_to_open, is_from_notification);
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -185,7 +188,7 @@ class WittyFeedSDKOneFeedBuilder {
     }
 
 
-    void launchContentviewActivity(String url_to_open){
+    void launchContentviewActivity(String url_to_open, Boolean is_from_notification){
         Intent i = new Intent(context,WittyFeedSDKContentViewActivity.class);
         i.putExtra("url_to_open",url_to_open);
         i.putExtra("fallback",true);

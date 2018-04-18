@@ -57,7 +57,7 @@ class WittyFeedSDKGoogleAnalytics {
         main_payload.put("cid", "" + CLIENT_UUID);
         main_payload.put("uid", "" + CLIENT_FCM_TOKEN);
         // TODO: 19/11/17 SDK VERSION UPDATES HERE
-        main_payload.put("av", "1.0.3");
+        main_payload.put("av", "1.0.5");
         main_payload.put("an", ""+context.getPackageName());
         main_payload.put("aid", ""+context.getPackageName());
     }

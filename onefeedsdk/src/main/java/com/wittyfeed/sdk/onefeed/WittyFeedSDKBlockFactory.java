@@ -52,9 +52,6 @@ class WittyFeedSDKBlockFactory {
                 view = ((Activity)context).getLayoutInflater().inflate(R.layout.block_generic_container, null);
                 break;
 
-//            case 7:
-//                view = ((Activity)context).getLayoutInflater().inflate(R.layout.block_generic_container, null);
-
             default:
                 break;
         }
@@ -100,10 +97,6 @@ class WittyFeedSDKBlockFactory {
             case "collection_1_4":
                 view_to_return = wittyFeedSDKCardFactory.create_cards_rv((ArrayList<Card>) block.getCards(), card_type);
                 break;
-
-//            case "interest_block":
-//                view_to_return = wittyFeedSDKCardFactory.create_interests_block((ArrayList<Card>) block.getCards());
-//                break;
 
             default:
                 break;

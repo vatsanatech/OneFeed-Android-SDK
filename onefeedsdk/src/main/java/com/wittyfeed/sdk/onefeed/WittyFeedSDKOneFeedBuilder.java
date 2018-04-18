@@ -44,6 +44,7 @@ class WittyFeedSDKOneFeedBuilder {
     private CustomTabsClient mCustomTabsClient;
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsIntent customTabsIntent;
+    private CustomTabsCallback customTabsCallback;
     private int type = 0;
 
     private boolean is_customTab_init_successful = false;
@@ -53,15 +54,6 @@ class WittyFeedSDKOneFeedBuilder {
         this.type = type;
         init();
     }
-
-
-    WittyFeedSDKOneFeedBuilder(@NonNull Context para_context, @NonNull int type, JSONObject jsonObject){
-        context = para_context;
-        this.type = type;
-        init();
-        build_notification_GA(jsonObject);
-    }
-
 
     @SuppressLint("ResourceAsColor")
     private void init(){
@@ -144,12 +136,13 @@ class WittyFeedSDKOneFeedBuilder {
 
 
     private CustomTabsSession getSession() {
-        return mCustomTabsClient.newSession(new CustomTabsCallback() {
+        customTabsCallback = new CustomTabsCallback() {
             @Override
             public void onNavigationEvent(int navigationEvent, Bundle extras) {
                 super.onNavigationEvent(navigationEvent, extras);
             }
-        });
+        };
+        return mCustomTabsClient.newSession(customTabsCallback);
     }
 
 
@@ -294,7 +287,6 @@ class WittyFeedSDKOneFeedBuilder {
             e.printStackTrace();
         }
     }
-
 
     CustomTabsIntent getCustomTabsIntent() {
         return customTabsIntent;

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WittyFeed Android SDK API Git Public Repo.iml" filepath="$PROJECT_DIR$/WittyFeed Android SDK API Git Public Repo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OneFeed-Android-SDK.iml" filepath="$PROJECT_DIR$/OneFeed-Android-SDK.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/onefeedsdk/onefeedsdk.iml" filepath="$PROJECT_DIR$/onefeedsdk/onefeedsdk.iml" />
     </modules>

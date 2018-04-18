@@ -21,10 +21,6 @@ import java.util.ArrayList;
 class OneFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private static final String TAG = "WF_SDK";
-    Context activity;
-    private ArrayList<Block> block_arr = new ArrayList<>();
-    private WittyFeedSDKBlockFactory wittyFeedSDKBlockFactory;
-
     private final int SOLO_POSTER = 1;
     private final int POSTER_RV = 2;
     private final int SOLO_VIDEO = 3;
@@ -32,21 +28,25 @@ class OneFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final int STORY_LIST = 5;
     private final int COLLECTION_1_4 = 6;
     private final int PROGRESS_BAR = -1;
+    Context activity;
+    private ArrayList<Block> block_arr = new ArrayList<>();
+    private WittyFeedSDKBlockFactory wittyFeedSDKBlockFactory;
     private int fragment_type;
 
 
-    OneFeedAdapter(Context para_activity, ArrayList<Block> block_arr, int fragment_type) {
+    OneFeedAdapter(Context para_activity, ArrayList<Block> block_arr, int fragment_type, WittyFeedSDKBlockFactory wittyFeedSDKBlockFactory) {
         this.activity = para_activity;
         this.block_arr = block_arr;
         this.fragment_type = fragment_type;
-        RequestManager requestManager = WittyGlide.with(activity);
-        wittyFeedSDKBlockFactory = new WittyFeedSDKBlockFactory(requestManager, activity);
+        this.wittyFeedSDKBlockFactory = wittyFeedSDKBlockFactory;
+
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = null;
+        Log.d(TAG, "onCreateViewHolder: did run");
 
         switch (viewType){
             case SOLO_POSTER:
@@ -86,6 +86,7 @@ class OneFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Log.d(TAG, "onBindViewHolder: did run");
         int viewType = getItemViewType(holder.getAdapterPosition());
         switch (viewType){
             case SOLO_POSTER:
@@ -153,7 +154,6 @@ class OneFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             default:    return 0;
         }
     }
-
 
     class Base_ViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout root_rl;
@@ -272,36 +272,6 @@ class OneFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
     }
 
-
-    @Override
-    public void onViewRecycled(RecyclerView.ViewHolder holder) {
-        super.onViewRecycled(holder);
-
-//        if (holder instanceof M2F_ViewHolder) {
-//            requestManager.clear(((M2F_ViewHolder) holder).left_card_rl.findViewById(R.id.cover_iv));
-//            requestManager.clear(((M2F_ViewHolder) holder).right_card_rl.findViewById(R.id.cover_iv));
-//        }
-//        if (holder instanceof LS2_ViewHolder) {
-//            requestManager.clear(((LS2_ViewHolder) holder).left_card_rl.findViewById(R.id.cover_iv));
-//            requestManager.clear(((LS2_ViewHolder) holder).right_card1_rl.findViewById(R.id.cover_iv));
-//            requestManager.clear(((LS2_ViewHolder) holder).right_card2_rl.findViewById(R.id.cover_iv));
-//        }
-//        if (holder instanceof S2L_ViewHolder) {
-//            requestManager.clear(((S2L_ViewHolder) holder).right_card_rl.findViewById(R.id.cover_iv));
-//            requestManager.clear(((S2L_ViewHolder) holder).left_card1_rl.findViewById(R.id.cover_iv));
-//            requestManager.clear(((S2L_ViewHolder) holder).left_card2_rl.findViewById(R.id.cover_iv));
-//        }
-//        if (holder instanceof S3_ViewHolder) {
-//            requestManager.clear(((S3_ViewHolder) holder).left_card_rl.findViewById(R.id.cover_iv));
-//            requestManager.clear(((S3_ViewHolder) holder).right_card_rl.findViewById(R.id.cover_iv));
-//            requestManager.clear(((S3_ViewHolder) holder).middle_card_rl.findViewById(R.id.cover_iv));
-//        }
-//        if (holder instanceof M2_ViewHolder) {
-//            requestManager.clear(((M2_ViewHolder) holder).left_card_rl.findViewById(R.id.cover_iv));
-//            requestManager.clear(((M2_ViewHolder) holder).right_card_rl.findViewById(R.id.cover_iv));
-//        }
-
-    }
 
 }
 

@@ -39,6 +39,7 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
     private ImageView loader_iv;
     private boolean is_loaded_once = false;
     private boolean is_from_notification = false;
+    private boolean is_being_loaded_in_webview = false;
     private WittyFeedSDKOneFeedInterface wittyFeedSDKOneFeedInterface;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -118,6 +119,7 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
                 initWebViewContent();
             }
         }else {
+            is_being_loaded_in_webview = true;
             init_loader_view();
             initWebViewContent();
         }
@@ -208,6 +210,7 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
     private void custom_finish_app(){
         if(WittyFeedSDKSingleton.getInstance().homeActivityIntent != null) {
             this.finish();
+            is_from_notification = false;
             this.activity.startActivity(WittyFeedSDKSingleton.getInstance().homeActivityIntent);
         }else {
             finish();
@@ -286,5 +289,16 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
         }
         did_load = WittyFeedSDKSingleton.getInstance().has_cct_loaded;
         super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(is_from_notification && is_being_loaded_in_webview){
+            wittyFeedSDKOneFeedInterface.goBackToHostApp();
+        }
+        else{
+            super.onBackPressed();
+        }
+
     }
 }

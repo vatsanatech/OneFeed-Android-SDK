@@ -1,5 +1,6 @@
 package com.wittyfeed.sdk.onefeed;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,6 +15,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.ImageView;
@@ -151,73 +153,136 @@ public class WittyFeedSDKNotificationManager {
             }
 
             /*build our notification*/
-            final NotificationCompat.Builder builder = new NotificationCompat.Builder(application, NOTIFICATION_CHANNEL_ID);
-
-
-//            String img_url = "https://cdn.wittyfeed.com/60496/xqivpjxv76pt44q269cm.png?impolicy=pqlow&imwidth=320";
-
-
-            ImageRequest imageRequest = new ImageRequest(cover_img_url, new Response.Listener<Bitmap>() {
-                @Override
-                public void onResponse(Bitmap response) {
-
-                    /*create notification*/
-                    final Notification mNotification = builder.setSmallIcon(notiff_icon)
-                            .setAutoCancel(true)
-                            .setContentIntent(pendingIntent)
-                            .setContentTitle(notification_title+"")
-                            .setContentText(notification_body)
-                            .setChannelId(NOTIFICATION_CHANNEL_ID)
-                            .setLargeIcon(BitmapFactory.decodeResource(application.getResources(), notiff_icon))
-                            .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(response))
-                            .build();
-
-                    /*notification flag for cancel notification automatically*/
-                    mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-                    /*notify the user*/
-                    notificationManager.notify(NOTIFICATION_ID, mNotification);
-
-
-                    Log.d(TAG, "done showing notificaiton");
-                    if(!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
-                        playNotificationSound();
-                    }
-
-                }
-            },0, 0, ImageView.ScaleType.CENTER, Bitmap.Config.ARGB_4444, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                    Log.d(TAG, "onErrorResponse: notification image loading error", error);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                ImageRequest imageRequest = null;
+                final Notification.Builder builder = new Notification.Builder(application, NOTIFICATION_CHANNEL_ID);
+                imageRequest = new ImageRequest(cover_img_url, new Response.Listener<Bitmap>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onResponse(Bitmap response) {
 
                         /*create notification*/
-                    final Notification mNotification = builder.setSmallIcon(notiff_icon)
-                            .setAutoCancel(true)
-                            .setContentIntent(pendingIntent)
-                            .setContentTitle(notification_title+"")
-                            .setContentText(notification_body)
-                            .setChannelId(NOTIFICATION_CHANNEL_ID)
-                            .setLargeIcon(BitmapFactory.decodeResource(application.getResources(), notiff_icon))
-                            .build();
+                        final Notification mNotification = builder.setSmallIcon(notiff_icon)
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent)
+                                .setContentTitle(notification_title+"")
+                                .setContentText(notification_body)
+                                .setChannelId(NOTIFICATION_CHANNEL_ID)
+                                .setLargeIcon(BitmapFactory.decodeResource(application.getResources(), notiff_icon))
+                                .setStyle(new Notification.BigPictureStyle().bigPicture(response))
+                                .build();
 
                         /*notification flag for cancel notification automatically*/
-                    mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+                        mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
                         /*notify the user*/
-                    notificationManager.notify(NOTIFICATION_ID, mNotification);
+                        notificationManager.notify(NOTIFICATION_ID, mNotification);
 
 
-                    Log.d(TAG, "done showing notificaiton");
-                    if(!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
-                        playNotificationSound();
+                        Log.d(TAG, "done showing notificaiton");
+                        if(!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
+                            playNotificationSound();
+                        }
+
                     }
-                }
+                },0, 0, ImageView.ScaleType.CENTER, Bitmap.Config.ARGB_4444, new Response.ErrorListener() {
+                    @TargetApi(Build.VERSION_CODES.O)
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
-            });
+                        Log.d(TAG, "onErrorResponse: notification image loading error", error);
 
-            Volley.newRequestQueue(application).add(imageRequest);
-            // call this method for build the notification in WittyFeedMyFirebaseMessagingService class
+                        /*create notification*/
+                        final Notification mNotification = builder.setSmallIcon(notiff_icon)
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent)
+                                .setContentTitle(notification_title+"")
+                                .setContentText(notification_body)
+                                .setChannelId(NOTIFICATION_CHANNEL_ID)
+                                .setLargeIcon(BitmapFactory.decodeResource(application.getResources(), notiff_icon))
+                                .build();
+
+                        /*notification flag for cancel notification automatically*/
+                        mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+                        /*notify the user*/
+                        notificationManager.notify(NOTIFICATION_ID, mNotification);
+
+
+                        Log.d(TAG, "done showing notificaiton");
+                        if(!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
+                            playNotificationSound();
+                        }
+                    }
+
+                });
+                Volley.newRequestQueue(application).add(imageRequest);
+
+            } else {
+                ImageRequest imageRequest = null;
+                final Notification.Builder builder = new Notification.Builder(application);
+                imageRequest = new ImageRequest(cover_img_url, new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+
+                        /*create notification*/
+                        final Notification mNotification = builder.setSmallIcon(notiff_icon)
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent)
+                                .setContentTitle(notification_title+"")
+                                .setContentText(notification_body)
+                                .setLargeIcon(BitmapFactory.decodeResource(application.getResources(), notiff_icon))
+                                .setStyle(new Notification.BigPictureStyle().bigPicture(response))
+                                .build();
+
+                        /*notification flag for cancel notification automatically*/
+                        mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+                        /*notify the user*/
+                        notificationManager.notify(NOTIFICATION_ID, mNotification);
+
+
+                        Log.d(TAG, "done showing notificaiton");
+                        if(!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
+                            playNotificationSound();
+                        }
+
+                    }
+                },0, 0, ImageView.ScaleType.CENTER, Bitmap.Config.ARGB_4444, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Log.d(TAG, "onErrorResponse: notification image loading error", error);
+
+                        /*create notification*/
+                        final Notification mNotification = builder.setSmallIcon(notiff_icon)
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent)
+                                .setContentTitle(notification_title+"")
+                                .setContentText(notification_body)
+                                .setLargeIcon(BitmapFactory.decodeResource(application.getResources(), notiff_icon))
+                                .build();
+
+                        /*notification flag for cancel notification automatically*/
+                        mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+                        /*notify the user*/
+                        notificationManager.notify(NOTIFICATION_ID, mNotification);
+
+
+                        Log.d(TAG, "done showing notificaiton");
+                        if(!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
+                            playNotificationSound();
+                        }
+                    }
+
+                });
+                Volley.newRequestQueue(application).add(imageRequest);
+
+            }
+
+
+
 
         } catch (Exception e) {
             e.printStackTrace();

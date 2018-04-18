@@ -19,6 +19,8 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.RequestManager;
+
 /**
  * Created by aishwarydhare on 02/04/18.
  */
@@ -30,6 +32,8 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
     RecyclerView onefeed_rv;
     LinearLayoutManager main_feed_linearLayoutManager;
     OneFeedAdapter main_oneFeedAdapter;
+    RequestManager requestManager;
+    WittyFeedSDKBlockFactory wittyFeedSDKBlockFactory;
 
     SwipeRefreshLayout main_feed_srl;
 
@@ -71,7 +75,10 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
         onefeed_rv = view.findViewById(R.id.onefeed_rv);
         main_feed_srl = view.findViewById(R.id.main_feed_srl);
 
-        main_oneFeedAdapter = new OneFeedAdapter(activityContext, WittyFeedSDKSingleton.getInstance().blockArrayList, 1);
+        requestManager = WittyGlide.with(activityContext);
+        wittyFeedSDKBlockFactory = new WittyFeedSDKBlockFactory(requestManager, activityContext);
+
+        main_oneFeedAdapter = new OneFeedAdapter(activityContext, WittyFeedSDKSingleton.getInstance().blockArrayList, 1, wittyFeedSDKBlockFactory);
         main_feed_linearLayoutManager = new LinearLayoutManager(activityContext);
         onefeed_rv.setLayoutManager(main_feed_linearLayoutManager);
         onefeed_rv.setAdapter(main_oneFeedAdapter);
@@ -176,13 +183,24 @@ public class WittyFeedSDKMainFeedFragment extends Fragment {
                     Snackbar.make(getActivity().findViewById(android.R.id.content), "No Internet, Please connect to a Network", Snackbar.LENGTH_LONG).show();
                     Log.d(TAG, "onRefresh: internet is not active");
                 }
-                WittyFeedSDKSingleton.getInstance().witty_sdk.load_initial_data(refresh_main_callback, false);
+                if(WittyFeedSDKSingleton.getInstance().witty_sdk!=null)
+                    WittyFeedSDKSingleton.getInstance().witty_sdk.load_initial_data(refresh_main_callback, false);
             }
         });
     }
     public static int dpToPx(Context context, int dp) {
         float density = context.getResources().getDisplayMetrics().density;
         return Math.round((float)dp * density);
+    }
+
+    @Override
+    public void onDestroyView() {
+        wittyFeedSDKBlockFactory = null;
+        fetch_more_main_callback = null;
+        refresh_main_callback = null;
+        onefeed_rv.setAdapter(null);
+        main_oneFeedAdapter = null;
+        super.onDestroyView();
     }
 
     @Override

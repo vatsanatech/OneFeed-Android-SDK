@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.bumptech.glide.RequestManager;
+
 /**
  * Created by aishwarydhare on 02/04/18.
  */
@@ -33,10 +35,12 @@ public class WittyFeedSDKSearchFeedFragment extends Fragment {
     RecyclerView search_feed_rv;
     LinearLayoutManager search_linearLayoutManager;
     OneFeedAdapter search_oneFeedAdapter;
+    WittyFeedSDKBlockFactory wittyFeedSDKBlockFactory;
 
     ProgressBar pb;
     EditText search_et;
     ImageView search_iv;
+    RequestManager requestManager;
 
     private static final String TAG = "WF_SDK";
     private String last_string_searched = "";
@@ -81,7 +85,10 @@ public class WittyFeedSDKSearchFeedFragment extends Fragment {
         last_string_searched = WittyFeedSDKSingleton.getInstance().last_search_for_str;
         search_et.setText(""+last_string_searched);
 
-        search_oneFeedAdapter = new OneFeedAdapter(activityContext, WittyFeedSDKSingleton.getInstance().search_blocks_arr, 2);
+        requestManager = WittyGlide.with(activityContext);
+        wittyFeedSDKBlockFactory = new WittyFeedSDKBlockFactory(requestManager, activityContext);
+
+        search_oneFeedAdapter = new OneFeedAdapter(activityContext, WittyFeedSDKSingleton.getInstance().search_blocks_arr, 2, wittyFeedSDKBlockFactory);
         search_linearLayoutManager = new LinearLayoutManager(activityContext);
         search_feed_rv.setLayoutManager(search_linearLayoutManager);
         search_feed_rv.setAdapter(search_oneFeedAdapter);
@@ -233,6 +240,8 @@ public class WittyFeedSDKSearchFeedFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        wittyFeedSDKBlockFactory = null;
+
         InputMethodManager imm = (InputMethodManager) (activityContext).getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.hideSoftInputFromWindow(search_et.getWindowToken(), 0);

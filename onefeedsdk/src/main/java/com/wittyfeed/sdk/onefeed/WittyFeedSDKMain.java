@@ -31,7 +31,7 @@ public class WittyFeedSDKMain {
     private WittyFeedSDKNetworking wittyFeedSdkNetworking;
     private WittyFeedSDKMainInterface wittyFeedSDKMainInterface;
 
-    /*
+    /**
     * Constructor
     *   - Context: Context of the Host Application, will be only used in whole app for Glide-RequestManager
     *              and Volley-RequestManager and SharedResources
@@ -47,7 +47,7 @@ public class WittyFeedSDKMain {
     }
 
 
-    /*
+    /**
     * Package Private Methods
     *
     *   1. fetch_more_data: this method fetches more data from server for endless feed implementation
@@ -68,7 +68,7 @@ public class WittyFeedSDKMain {
 
                 try {
                     JSONObject jsonObject = new JSONObject(jsonString);
-                    mainFeedString = jsonObject.optJSONObject("data").toString();
+                    mainFeedString = jsonObject.optJSONObject("feed_data").toString();
                 } catch (JSONException e) {
                     Log.d(TAG, "onSuccess: error in getting fresh data");
                     fetch_more_main_callback.onError(null);
@@ -102,8 +102,8 @@ public class WittyFeedSDKMain {
 
                 try {
                     JSONObject jsonObject = new JSONObject(jsonString);
-                    mainFeedString = jsonObject.optJSONObject("data").toString();
-                    searchBlockFeedString = jsonObject.optJSONObject("block_data").toString();
+                    mainFeedString = jsonObject.optJSONObject("feed_data").toString();
+                    searchBlockFeedString = jsonObject.optJSONObject("search_data").toString();
                 } catch (JSONException e) {
                     Log.d(TAG, "onSuccess: error in getting fresh data");
                     refresh_data_main_callback.onError(null);
@@ -204,7 +204,7 @@ public class WittyFeedSDKMain {
     }
 
 
-    /*
+    /**
     * Private Methods
     *
     *   1. handle_feeds_result: parses the data that is received from web_service response or from either OneFeedCache
@@ -368,7 +368,7 @@ public class WittyFeedSDKMain {
 
                             try {
                                 JSONObject jsonObject = new JSONObject(jObject);
-                                mainFeedString = jsonObject.optJSONObject("data").toString();
+                                mainFeedString = jsonObject.optJSONObject("feed_data").toString();
                             } catch (JSONException e) {
                                 Log.d(TAG, "onSuccess: error in getting fresh data");
                                 wittyFeedSDKMainInterface.onError(null);
@@ -460,7 +460,7 @@ public class WittyFeedSDKMain {
     }
 
 
-    /*
+    /**
     * Public Methods
     *
     *   1. init_wittyfeed_sdk: Starts all initializations for the OneFeed SDK
@@ -577,9 +577,5 @@ public class WittyFeedSDKMain {
             e.printStackTrace();
         }
     }
-
-    /*public WittyFeedSDKOneFeedFragment get_one_feed_support_fragment(){
-        return new WittyFeedSDKOneFeedFragment();
-    }*/
 
 }

@@ -41,17 +41,27 @@ class WittyFeedSDKNetworking {
 
     void getStoryFeedData(final boolean isLoadedMore, final WittyFeedSDKNetworkInterface callback, final int loadmore_offset, final boolean isBackgroundCacheRefresh) {
         hitApiToVerifyCredentials_and_FetchData(callback, isLoadedMore, loadmore_offset, isBackgroundCacheRefresh);
-//        hit_demo_data_api(callback, isLoadedMore, loadmore_offset, isBackgroundCacheRefresh);
     }
 
 
     private void hitApiToVerifyCredentials_and_FetchData(final WittyFeedSDKNetworkInterface callback, final boolean isLoadedMore, final int loadmore_offset, final boolean isBackgroundCacheRefresh) {
 
-        String url_api = base_prefix + "/Sdk/home_feed_v4";
+        String url_api = base_prefix + "/Sdk/home_feed_v5";
 
         final WittyFeedSDKApiClient final_wittyFeedSDKApiClient = this.wittyFeedSDKApiClient;
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url_api,
+        url_api += "?";
+        url_api += "&unique_identifier=" + final_wittyFeedSDKApiClient.getPACKAGE_NAME();
+        if(isLoadedMore)
+            url_api += "&offset=" + loadmore_offset;
+        url_api += "&api_key=" + final_wittyFeedSDKApiClient.getAPI_KEY();
+        url_api += "&app_id=" + final_wittyFeedSDKApiClient.getAPP_ID();
+        url_api += "&user_meta=" + final_wittyFeedSDKApiClient.getUser_meta();
+
+
+
+
+        StringRequest postRequest = new StringRequest(Request.Method.GET, url_api,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -120,81 +130,9 @@ class WittyFeedSDKNetworking {
                         callback.onError(e);
                     }
                 }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> payload = new HashMap<>();
-                payload.put("app_id", final_wittyFeedSDKApiClient.getAPP_ID());
-                payload.put("api_key", final_wittyFeedSDKApiClient.getAPI_KEY());
-                payload.put("unique_identifier", "" + final_wittyFeedSDKApiClient.getPACKAGE_NAME());
-
-                String fcm_token_to_send = final_wittyFeedSDKApiClient.getFCM_TOKEN();
-                String old_fcm_token = "";
-                try {
-                    if (!PreferenceManager.getDefaultSharedPreferences(activity).getString("wf_saved_fcm_token", "").equalsIgnoreCase("")) {
-                        if(PreferenceManager.getDefaultSharedPreferences(activity).getString("wf_saved_fcm_token", "").equalsIgnoreCase(final_wittyFeedSDKApiClient.getFCM_TOKEN())){
-                            Log.d(TAG, "old token: " + PreferenceManager.getDefaultSharedPreferences(activity).getString("wf_saved_fcm_token", ""));
-                            Log.d(TAG, "current token: " + final_wittyFeedSDKApiClient.getFCM_TOKEN());
-                            Log.d(TAG, "Token Not Sending Now");
-                            fcm_token_to_send = "";
-                        } else {
-                            old_fcm_token = PreferenceManager.getDefaultSharedPreferences(activity).getString("wf_saved_fcm_token", "");
-                            Log.d(TAG, "old token: " + old_fcm_token);
-                            Log.d(TAG, "new token: " + final_wittyFeedSDKApiClient.getFCM_TOKEN());
-                            Log.d(TAG, "New Token Sending Now");
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                if (isLoadedMore){
-                    payload.put("offset", "" + loadmore_offset);
-                }
-
-                payload.put("firebase_token", "" + fcm_token_to_send);
-                payload.put("old_firebase_token", "" + old_fcm_token);
-                payload.put("client_meta",  final_wittyFeedSDKApiClient.getUser_meta());
-                return payload;
-            }
-        };
+        );
         Volley.newRequestQueue(activity).add(postRequest);
     }
-
-
-    /*private void hit_demo_data_api(final WittyFeedSDKNetworkInterface callback, final boolean isLoadedMore, final int loadmore_offset, final boolean isBackgroundCacheRefresh) {
-        String url_api = base_prefix + "";
-        final WittyFeedSDKApiClient final_wittyFeedSDKApiClient = this.wittyFeedSDKApiClient;
-        StringRequest postRequest = new StringRequest(Request.Method.GET, url_api,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject result = new JSONObject(response);
-                            callback.onSuccess(response, isLoadedMore, isBackgroundCacheRefresh);
-                        } catch (JSONException e1) {
-                            Log.d(TAG, "onResponse: request failure", e1);
-                            callback.onError(e1);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError e) {
-                        // if error received
-                        Log.d(TAG, "onResponse: request failure", e);
-                        callback.onError(e);
-                    }
-                }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> payload = new HashMap<>();
-                return payload;
-            }
-        };
-        Volley.newRequestQueue(activity).add(postRequest);
-    }*/
 
 
     void update_fcm_token(final WittyFeedSDKNetworkInterface callback) {
@@ -235,9 +173,6 @@ class WittyFeedSDKNetworking {
             protected Map<String, String> getParams() {
                 Map<String, String> payload = new HashMap<>();
                 payload.put("app_id", final_wittyFeedSDKApiClient.getAPP_ID());
-                payload.put("api_key", final_wittyFeedSDKApiClient.getAPI_KEY());
-                payload.put("unique_identifier", "" + final_wittyFeedSDKApiClient.getPACKAGE_NAME());
-
                 String fcm_token_to_send = final_wittyFeedSDKApiClient.getFCM_TOKEN();
                 String old_fcm_token = "";
                 try {
@@ -252,7 +187,7 @@ class WittyFeedSDKNetworking {
                 Log.d(TAG, "Force Update New FCM Token");
                 payload.put("firebase_token", "" + fcm_token_to_send);
                 payload.put("old_firebase_token", "" + old_fcm_token);
-                payload.put("client_meta", "" + final_wittyFeedSDKApiClient.getUser_meta());
+                payload.put("device_meta", "" + final_wittyFeedSDKApiClient.getDevice_meta());
                 return payload;
             }
         };
@@ -262,14 +197,14 @@ class WittyFeedSDKNetworking {
 
     void get_search_results(final String search_input_str, final int loadmore_offset, final WittyFeedSDKNetworkInterface callback) {
 
-        String url_api = base_prefix + "/Sdk/search";
+        String url_api = base_prefix + "/Sdk/search_v5";
 
         final WittyFeedSDKApiClient final_wittyFeedSDKApiClient = this.wittyFeedSDKApiClient;
 
         url_api += "?";
         url_api += "&keyword=" + search_input_str;
         url_api += "&offset=" + (loadmore_offset*10);
-        url_api += "&user_id=66985"/* + WittyFeedSDKSingleton.getInstance().oneFeedConfig.getUser_id()*/;
+        url_api += "&user_id=" + WittyFeedSDKSingleton.getInstance().oneFeedConfig.getUser_id();
         url_api += "&app_id=" + final_wittyFeedSDKApiClient.getAPP_ID();
 
         StringRequest search_stringRequest = new StringRequest(Request.Method.GET, url_api,
@@ -283,7 +218,7 @@ class WittyFeedSDKNetworking {
                                 if(loadmore_offset > 0) {
                                     isLoadedMore = true;
                                 }
-                                callback.onSuccess(resultJson.optJSONObject("data").toString(), isLoadedMore, false);
+                                callback.onSuccess(resultJson.optJSONObject("feed_data").toString(), isLoadedMore, false);
                             } else {
                                 Log.d(TAG, "onResponse: invalid response - " + response);
                                 callback.onError(null);
@@ -316,7 +251,7 @@ class WittyFeedSDKNetworking {
 
     void fetch_interests(final WittyFeedSDKNetworkInterface callback) {
 
-        String url_api = base_prefix + "/Sdk/getCategories";
+        String url_api = base_prefix + "/Sdk/getCategories_v5";
 
         final WittyFeedSDKApiClient final_wittyFeedSDKApiClient = this.wittyFeedSDKApiClient;
 
@@ -332,7 +267,7 @@ class WittyFeedSDKNetworking {
                             JSONObject resultJson = new JSONObject(response);
                             Log.d(TAG, "onResponse: search result received: " + response);
                             if(resultJson.optBoolean("status")) {
-                                callback.onSuccess(resultJson.optJSONObject("data").toString(), false, false);
+                                callback.onSuccess(resultJson.optJSONObject("feed_data").toString(), false, false);
                             } else {
                                 Log.d(TAG, "onResponse: invalid response - " + response);
                                 callback.onError(null);
@@ -409,7 +344,6 @@ class WittyFeedSDKNetworking {
                     is_cat_active = 1;
                 }
                 payload.put("is_selected", ""+is_cat_active);
-                payload.put("client_meta", "" + final_wittyFeedSDKApiClient.getUser_meta());
                 payload.put("device_id", "" + final_wittyFeedSDKApiClient.getDevice_id());
                 return payload;
             }

@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-class Card implements Parcelable
+final class Card implements Parcelable
 {
 
     @SerializedName("id")
@@ -60,7 +60,7 @@ class Card implements Parcelable
     @SerializedName("card_type")
     @Expose
     private String cardType;
-    public final static Parcelable.Creator<Card> CREATOR = new Creator<Card>() {
+    public final static Creator<Card> CREATOR = new Creator<Card>() {
 
 
         @SuppressWarnings({

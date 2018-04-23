@@ -2,52 +2,48 @@ package com.wittyfeed.sdk.demo;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.FrameLayout;
 
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKBackPressInterface;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKOneFeedFragment;
+import com.wittyfeed.sdk.onefeed.OneFeedBuilder;
+import com.wittyfeed.sdk.onefeed.OneFeedMain;
 
-/**
- * Created by aishwarydhare on 30/03/18.
- */
-
-public class OneFeedActivity extends AppCompatActivity {
-
-    FrameLayout onefeed_fl;
-    private final String SIMPLE_FRAGMENT_TAG = "myfragmenttag";
-    WittyFeedSDKOneFeedFragment wittyFeedSDKOneFeedFragment;
-    WittyFeedSDKBackPressInterface wittyFeedSDKBackPressInterface;
+public class OneFeedActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_onefeed);
 
-        onefeed_fl = findViewById(R.id.onefeed_fl);
-
-        if (savedInstanceState != null) { // saved instance state, fragment may exist
-            // look up the instance that already exists by tag
-            wittyFeedSDKOneFeedFragment = (WittyFeedSDKOneFeedFragment) getSupportFragmentManager().findFragmentByTag(SIMPLE_FRAGMENT_TAG);
-        } else if (wittyFeedSDKOneFeedFragment == null) {
-            // only create fragment if they haven't been instantiated already
-            wittyFeedSDKOneFeedFragment = new WittyFeedSDKOneFeedFragment();
-        }
-
-        wittyFeedSDKBackPressInterface = new WittyFeedSDKBackPressInterface() {
+         /*
+          * pass the object of WittyFeedSDKBackPressInterface to fragment so that when
+          * user taps on back button of onefeed, perform_back() function of interface will call
+          */
+        OneFeedMain.getInstance().oneFeedBuilder.setOnBackClickInterface(new OneFeedBuilder.OnBackClickInterface() {
             @Override
-            public void perform_back() {
+            public void onBackClick() {
                 finish();
             }
-        };
+        });
 
-        wittyFeedSDKOneFeedFragment.setWittyFeedSDKBackPressInterface(wittyFeedSDKBackPressInterface);
+        /*
+         * initializing OneFeed Support Fragment. Note- Make sure you have initialized the SDK in previous steps
+         */
+        Fragment fragment = OneFeedMain.getInstance().getOneFeedFragment();
 
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(onefeed_fl.getId(), wittyFeedSDKOneFeedFragment, SIMPLE_FRAGMENT_TAG)
-                .commit();
+        /*
+         * using the OneFeed Fragment
+         */
+        getSupportFragmentManager().executePendingTransactions();
+        if(getSupportFragmentManager().findFragmentByTag("mOneFeedFragment") == null){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(
+                            R.id.onefeed_fl,
+                            fragment,
+                            "mOneFeedFragment"
+                    )
+                    .commit();
+        }
     }
-
-
 }

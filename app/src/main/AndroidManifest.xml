@@ -18,10 +18,8 @@
 
         <activity android:name="com.wittyfeed.sdk.demo.MainActivity"
             android:screenOrientation="portrait"
-            android:largeHeap="true"
             android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:hardwareAccelerated="true">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,9 +29,7 @@
 
         <activity
             android:name="com.wittyfeed.sdk.demo.OneFeedActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:largeHeap="true" />
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages. -->
         <!-- See README(https://goo.gl/l4GJaQ) for more. -->

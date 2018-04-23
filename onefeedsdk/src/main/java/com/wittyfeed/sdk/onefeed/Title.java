@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-class Title implements Parcelable
+final class Title implements Parcelable
 {
 
     @SerializedName("text")
@@ -21,7 +21,7 @@ class Title implements Parcelable
     @SerializedName("color")
     @Expose
     private String color;
-    public final static Parcelable.Creator<Title> CREATOR = new Creator<Title>() {
+    public final static Creator<Title> CREATOR = new Creator<Title>() {
 
 
         @SuppressWarnings({

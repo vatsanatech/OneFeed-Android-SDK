@@ -1,71 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <RelativeLayout
-        android:id="@+id/card_1_v"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        android:layout_margin="5dp"
-        android:layout_weight="1" />
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_vg"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/card_1_v"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            android:layout_margin="5dp"
+            android:layout_weight="1" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/card_2_v"
-                android:layout_width="0dp"
-                android:visibility="visible"
-                android:layout_margin="5dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-            <RelativeLayout
-                android:id="@+id/card_3_v"
-                android:layout_width="0dp"
-                android:visibility="visible"
-                android:layout_margin="5dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                <RelativeLayout
+                    android:id="@+id/card_2_v"
+                    android:layout_width="0dp"
+                    android:visibility="visible"
+                    android:layout_margin="5dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
 
+                <RelativeLayout
+                    android:id="@+id/card_3_v"
+                    android:layout_width="0dp"
+                    android:visibility="visible"
+                    android:layout_margin="5dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/card_4_v"
+                    android:layout_width="0dp"
+                    android:visibility="visible"
+                    android:layout_margin="5dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <RelativeLayout
+                    android:id="@+id/card_5_v"
+                    android:layout_width="0dp"
+                    android:visibility="visible"
+                    android:layout_margin="5dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:id="@+id/card_4_v"
-                android:layout_width="0dp"
-                android:visibility="visible"
-                android:layout_margin="5dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <RelativeLayout
-                android:id="@+id/card_5_v"
-                android:layout_width="0dp"
-                android:visibility="visible"
-                android:layout_margin="5dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-
-
     </LinearLayout>
+
+    <View
+        android:id="@+id/sep_v"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#E5EBEF"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        />
 
 </LinearLayout>

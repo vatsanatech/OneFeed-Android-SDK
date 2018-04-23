@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root_rl"
+    android:id="@+id/root_vg"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     android:layout_marginBottom="10dp">
 
     <LinearLayout
@@ -44,7 +46,7 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="4dp"
-                android:text="Lifestyle"
+                android:text=" -- "
                 android:textColor="#ffffff"
                 android:textSize="10sp" />
 
@@ -64,7 +66,7 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="4dp"
-                android:text="Editor's Choice"
+                android:text=" -- "
                 android:textAllCaps="true"
                 android:textColor="#ffffff"
                 android:textSize="10sp" />
@@ -80,7 +82,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="8dp"
-            android:text="Unusual Parathas to give A treat to your tastebuds"
+            android:text=" -- "
             android:textColor="#000000"
             android:textSize="20sp" />
 
@@ -107,7 +109,7 @@
                 android:layout_toEndOf="@id/publisher_iv"
                 android:layout_toRightOf="@id/publisher_iv"
                 android:fontFamily="@font/cabin_medium"
-                android:text="FoodMate"
+                android:text=" -- "
                 android:textColor="#000"
                 android:textSize="14sp" />
 
@@ -123,12 +125,20 @@
                 android:fontFamily="@font/cabin"
                 android:paddingBottom="2dp"
                 android:paddingTop="2dp"
-                android:text="by Trisha on 1' April 2018"
+                android:text=" -- "
                 android:textColor="#999999"
                 android:textSize="12sp" />
         </RelativeLayout>
 
+        <View
+            android:id="@+id/sep_v"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#E5EBEF"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            />
     </LinearLayout>
-
-
 </RelativeLayout>

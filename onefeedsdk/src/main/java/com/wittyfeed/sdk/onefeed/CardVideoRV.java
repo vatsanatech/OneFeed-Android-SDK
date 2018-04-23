@@ -1,98 +1,82 @@
 package com.wittyfeed.sdk.onefeed;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
-import com.bumptech.glide.RequestManager;
+import java.util.List;
 
-import java.util.ArrayList;
+final class CardVideoRv {
 
-/**
- * Created by aishwarydhare on 30/03/18.
- */
-
-class CardVideoRV {
-
-    private final RequestManager requestManager;
-    private final String default_card_type;
-    private Context context;
-    private ArrayList<Card> cardArrayList = new ArrayList<>();
-
-    CardVideoRV(Context para_context, String default_card_type, ArrayList<Card> para_cards, RequestManager para_requestManager) {
-        this.context = para_context;
-        this.cardArrayList = para_cards;
-        this.requestManager = para_requestManager;
-        this.default_card_type = default_card_type;
-    }
-
-    View get_constructed_video_rv() {
-        View root_view = ((Activity) this.context).getLayoutInflater().inflate(R.layout.block_generic_for_rv, null, false);
-        root_view.setBackgroundColor(Color.parseColor("#e5ebef"));
-        RecyclerView recyclerView = root_view.findViewById(R.id.poster_rv);
-        recyclerView.setPadding(0,(int) (80*WittyFeedSDKSingleton.getInstance().SMALL_TSR),
-                0, (int) (80*WittyFeedSDKSingleton.getInstance().SMALL_TSR));
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context){
+    void initRv(RecyclerView rv, List<Card> cardList, double textSizeRatio){
+        VideoRVAdapter videoRVAdapter = new VideoRVAdapter(cardList, textSizeRatio);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(rv.getContext()){
             @Override
             public boolean canScrollVertically() {
                 return false;
             }
         };
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(new VideoRVAdapter());
-        return root_view;
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setAdapter(videoRVAdapter);
+        rv.setBackgroundColor(Color.parseColor("#e5ebef"));
+        rv.setPadding(
+                0,
+                (int)(80*textSizeRatio),
+                0,
+                (int)(80*textSizeRatio)
+        );
     }
 
-    class VideoRVAdapter extends RecyclerView.Adapter<VideoRVAdapter.ViewHolder>{
+    class VideoRVAdapter extends RecyclerView.Adapter<MainAdapterBaseViewHolder> {
 
-        private WittyFeedSDKCardFactory wittyFeedSDKCardFactory;
+        private final List<Card> cardList;
+        private final double textSizeRatio;
 
-        VideoRVAdapter() {
-            this.wittyFeedSDKCardFactory = new WittyFeedSDKCardFactory(context, requestManager);
+        VideoRVAdapter(List<Card> cardList, double textSizeRatio) {
+            this.cardList = cardList;
+            this.textSizeRatio = textSizeRatio;
         }
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = ((Activity)context).getLayoutInflater().inflate(R.layout.item_generic_rv, parent, false);
-            return new ViewHolder(view);
+        public MainAdapterBaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            CardViewHolderFactory cardViewHolderFactory = new CardViewHolderFactory();
+            cardViewHolderFactory.setInflater(LayoutInflater.from(parent.getContext()));
+            View mView = cardViewHolderFactory.getInflatedBlockViewHolder(Constant.VIDEO_SMALL_SOLO_NUM);
+            return new VideoSmallSoloVH(mView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            if(holder.container_view_rl != null) holder.container_view_rl.removeAllViews();
+        public void onBindViewHolder(@NonNull MainAdapterBaseViewHolder holder, int position) {
+            int width = (int) (Constant.getScreenWidth(holder.root_vg.getContext()) * textSizeRatio);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+            holder.root_vg.setLayoutParams(params);
 
-            RecyclerView.LayoutParams default_params = null;
+            CardDataViewHolderBinder cardDataViewHolderBinder = new CardDataViewHolderBinder();
+            cardDataViewHolderBinder.bindSingleCardData(holder, Constant.VIDEO_SMALL_SOLO_NUM, cardList.get(position), textSizeRatio);
 
-            default_params = (RecyclerView.LayoutParams) holder.container_view_rl.getLayoutParams();
-            default_params.width = (int) (WittyFeedSDKSingleton.getInstance().screenWidth * 0.6);
-            holder.container_view_rl.setLayoutParams(default_params);
-
-            String card_type = default_card_type;
-            if(!cardArrayList.get(holder.getAdapterPosition()).getCardType().equalsIgnoreCase("")){
-                card_type = cardArrayList.get(holder.getAdapterPosition()).getCardType();
-            }
-            holder.container_view_rl.addView(wittyFeedSDKCardFactory.create_single_card(cardArrayList.get(holder.getAdapterPosition()), card_type, WittyFeedSDKSingleton.getInstance().SMALL_TSR));
+            holder.sep_v.setVisibility(View.GONE);
         }
 
         @Override
         public int getItemCount() {
-            return cardArrayList.size();
+            return cardList.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder{
-            RelativeLayout container_view_rl;
-            ViewHolder(View itemView) {
+        private class VideoSmallSoloVH extends MainAdapterBaseViewHolder {
+            VideoSmallSoloVH(View itemView) {
                 super(itemView);
-                container_view_rl = itemView.findViewById(R.id.container_view_rl);
+                root_vg = itemView.findViewById(R.id.root_vg);
+                sep_v = itemView.findViewById(R.id.sep_v);
+                story_title = itemView.findViewById(R.id.title_tv);
+                cover_image_iv = itemView.findViewById(R.id.cover_image_iv);
+                img_container_vg = itemView.findViewById(R.id.img_container_vg);
+                badge_tv = itemView.findViewById(R.id.badge_tv);
             }
         }
     }

@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-class Block implements Parcelable
+final class Block implements Parcelable
 {
 
     @SerializedName("meta")
@@ -18,7 +18,7 @@ class Block implements Parcelable
     @SerializedName("cards")
     @Expose
     private List<Card> cards = new ArrayList<Card>();
-    public final static Parcelable.Creator<Block> CREATOR = new Creator<Block>() {
+    public final static Creator<Block> CREATOR = new Creator<Block>() {
 
 
         @SuppressWarnings({

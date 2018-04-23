@@ -30,14 +30,16 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile 'com.github.bumptech.glide:glide:4.3.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
+    compile 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    compile 'com.android.support:customtabs:27.1.1'
+    compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.android.volley:volley:1.0.0'
+
     compile 'com.android.support:appcompat-v7:27.1.1'
     compile 'com.android.support:support-v4:27.1.1'
     compile 'com.android.support:design:27.1.1'
-    compile 'com.android.support:customtabs:27.1.1'
-    compile 'com.google.code.gson:gson:2.8.2'
+    compile 'com.android.support:recyclerview-v7:27.1.1'
 
     testCompile 'junit:junit:4.12'
 

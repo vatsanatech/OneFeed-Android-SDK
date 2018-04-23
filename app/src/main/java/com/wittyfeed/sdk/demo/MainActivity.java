@@ -14,10 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKApiClient;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKMain;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKMainInterface;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKNotificationManager;
+import com.wittyfeed.sdk.onefeed.ApiClient;
+import com.wittyfeed.sdk.onefeed.OFNotificationManager;
+import com.wittyfeed.sdk.onefeed.OneFeedMain;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,9 +30,7 @@ public class MainActivity extends AppCompatActivity{
     private Activity activity;
 
     private ProgressBar progressBar;
-    private WittyFeedSDKApiClient wittyFeedSDKApiClient;
     private LinearLayout btns_ll;
-    private WittyFeedSDKMainInterface wittyFeedSDKMainInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,69 +58,50 @@ public class MainActivity extends AppCompatActivity{
         // ====================
 
         /*
-         * OPTIONAL to provide basic user_meta.
-         * By providing user_meta your app can receive targeted content which has an higher CPM then regular content.
+         * OPTIONAL to provide basic mUserMeta.
+         * By providing mUserMeta your app can receive targeted content which has an higher CPM then regular content.
          */
-        HashMap<String, String> user_meta = new HashMap<>();
+        HashMap<String, String> mUserMeta = new HashMap<>();
 
         /*
-         * WittyFeedSDKGender has following options = "M" for Male, "F" for Female, "O" for Other, "N" for None
+         * Send Gender of User:- "M" for Male, "F" for Female, "O" for Other, "N" for None
          */
-        user_meta.put("client_gender", "M");
+        mUserMeta.put("client_gender", "M");
 
         /*
          * User Interests.
          * String with a max_length = 100
-        */
-        user_meta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); // string max_length = 100
+         */
+        mUserMeta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); // string max_length = 100
 
         /*
-         * below code is only ***required*** for Initializing WittyFeed Android SDK API, -- providing 'user_meta' is optional --
-        */
-        wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN/*, user_meta*/);
-        mSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, wittyFeedSDKApiClient);
+         * -- passing 'mUserMeta' is OPTIONAL --
+         */
+        ApiClient.getInstance().appendCustomUserMetaToUserMeta(mUserMeta);
 
         /*
+         * setting callback here
          * Use this interface callback to do operations when SDK finished loading
-        */
-        wittyFeedSDKMainInterface = new WittyFeedSDKMainInterface() {
+         */
+        OneFeedMain.getInstance().setOneFeedDidInitialisedCallback(new OneFeedMain.OnInitialized() {
             @Override
-            public void onOperationDidFinish() {
-                // witty sdk did loaded completely successfully
+            public void onSuccess() {
                 Log.d("Main App", "witty sdk did load successfully");
-
                 progressBar.setVisibility(View.GONE);
                 btns_ll.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onError(Exception e) {
-                // if unexpected error
+            public void onError() {
                 Toast.makeText(activity, "OneFeed data couldn't be loaded", Toast.LENGTH_SHORT).show();
-                if(e != null){
-                    Log.e("mAPP", "onError: OneFeed data couldn't be loaded", e);
-                } else {
-                    Log.e("mAPP", "onError: OneFeed data couldn't be loaded");
-                }
+                Log.e("mAPP", "onError: OneFeed data couldn't be loaded");
             }
-        };
+        });
 
         /*
-         * setting callback here
+         * below code is ***required*** for Initializing WittyFeed Android SDK API,
          */
-        mSingleton.getInstance().witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
-
-        /*
-         * Style the content view of OneFeed using the two methods below
-         * NOTE - needs to be done before calling init_wittyfeed_sdk()
-         */
-        mSingleton.getInstance().witty_sdk.set_onefeed_base_color("#000000");
-        //  mSingleton.getInstance().witty_sdk.set_onefeed_back_icon(getBitmapFromDrawable(activity, R.drawable.m_ic_back));
-
-        /*
-         * Initializing SDK here (mandatory)
-         */
-        mSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
+        OneFeedMain.getInstance().init(getApplicationContext(), APP_ID, API_KEY, FCM_TOKEN);
 
         // ==================
         // SDK WORK ENDS HERE
@@ -151,7 +129,6 @@ public class MainActivity extends AppCompatActivity{
 
 
     private void send_demo_fcm() {
-        WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(activity, FCM_TOKEN);
         int preferred_notiff_icon = R.mipmap.ic_launcher;
         Map<String, String> dummy_notiff_data = new HashMap<>();
         try {
@@ -171,8 +148,9 @@ public class MainActivity extends AppCompatActivity{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        OFNotificationManager.getInstance().setHomeScreenIntent(new Intent(getApplicationContext(), OneFeedActivity.class));
 
-        wittyFeedSDKNotificationManager.handleNotification(dummy_notiff_data, preferred_notiff_icon);
+        OFNotificationManager.getInstance().handleNotification(getApplicationContext(),"", dummy_notiff_data, preferred_notiff_icon);
     }
 
 }

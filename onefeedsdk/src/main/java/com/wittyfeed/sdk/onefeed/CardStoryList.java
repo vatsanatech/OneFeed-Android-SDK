@@ -1,52 +1,61 @@
 package com.wittyfeed.sdk.onefeed;
 
-import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import java.util.List;
 
-import com.bumptech.glide.RequestManager;
+final class CardStoryList {
 
-import java.util.ArrayList;
+    void init(ViewGroup vg, List<Card> cardList, double textSizeRatio){
+        vg.removeAllViews();
+        vg.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-/**
- * Created by aishwarydhare on 30/03/18.
- */
+        for(int i=0; i < cardList.size(); i++){
+            Card card = cardList.get(i);
 
-class CardStoryList {
+            CardViewHolderFactory cardViewHolderFactory = new CardViewHolderFactory();
+            cardViewHolderFactory.setInflater(LayoutInflater.from(vg.getContext()));
+            View mView = cardViewHolderFactory.getInflatedBlockViewHolder(Constant.STORY_LIST_ITEM_NUM);
 
-    private final RequestManager requestManager;
-    private final String default_card_type;
-    private Context context;
-    private ArrayList<Card> cardArrayList = new ArrayList<>();
+            StoryListItemVH storyListItemVH = new StoryListItemVH(mView);
 
-    CardStoryList(Context para_context, String default_card_type, ArrayList<Card> para_cards, RequestManager para_requestManager) {
-        this.context = para_context;
-        this.cardArrayList = para_cards;
-        this.requestManager = para_requestManager;
-        this.default_card_type = default_card_type;
-    }
+            CardDataViewHolderBinder cardDataViewHolderBinder = new CardDataViewHolderBinder();
+            cardDataViewHolderBinder.bindSingleCardData(storyListItemVH, Constant.STORY_LIST_ITEM_NUM, card, textSizeRatio);
 
-    View get_constructed_view() {
-        LinearLayout root_ll = new LinearLayout(context);
-        root_ll.setOrientation(LinearLayout.VERTICAL);
-        root_ll.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ViewGroup.LayoutParams layoutParams = storyListItemVH.img_container_vg.getLayoutParams();
+            layoutParams.width = layoutParams.height;
+            storyListItemVH.img_container_vg.setLayoutParams(layoutParams);
 
-        WittyFeedSDKCardFactory wittyFeedSDKCardFactory = new WittyFeedSDKCardFactory(context, requestManager);
+            ViewGroup.LayoutParams layoutParams2 = storyListItemVH.content_container_vg.getLayoutParams();
+            layoutParams2.height = (int) (layoutParams2.height*textSizeRatio);
+            storyListItemVH.content_container_vg.setLayoutParams(layoutParams2);
 
-        for(int i=0; i < cardArrayList.size(); i++){
-            Card card = cardArrayList.get(i);
-
-            String card_type = default_card_type;
-            if(!card.getCardType().equalsIgnoreCase("")) {
-                card_type = card.getCardType();
+            storyListItemVH.sep_v.setVisibility(View.GONE);
+            if(i == cardList.size()-1){
+                storyListItemVH.sep_v.setVisibility(View.VISIBLE);
             }
 
-
-            root_ll.addView(wittyFeedSDKCardFactory.create_single_card(card, card_type, WittyFeedSDKSingleton.getInstance().MEDIUM_TSR));
+            vg.addView(mView);
         }
-        return root_ll;
     }
 
+    private class StoryListItemVH extends MainAdapterBaseViewHolder{
+
+        StoryListItemVH(View itemView) {
+            super(itemView);
+            root_vg = itemView.findViewById(R.id.root_vg);
+            publisher_rl = itemView.findViewById(R.id.publisher_rl);
+            sep_v = itemView.findViewById(R.id.sep_v);
+            story_title = itemView.findViewById(R.id.title_tv);
+            cover_image_iv = itemView.findViewById(R.id.cover_image_iv);
+            img_container_vg = itemView.findViewById(R.id.img_container_vg);
+            shield_tv = itemView.findViewById(R.id.shield_tv);
+            publisher_name_tv = itemView.findViewById(R.id.publisher_name_tv);
+            publisher_iv = itemView.findViewById(R.id.publisher_iv);
+            publisher_meta_tv = itemView.findViewById(R.id.publisher_meta_tv);
+            content_container_vg = itemView.findViewById(R.id.content_container_vg);
+        }
+    }
 }

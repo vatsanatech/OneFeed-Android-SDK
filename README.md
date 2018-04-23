@@ -1,12 +1,11 @@
-# Vatsana Technologies Pvt. Ltd. OneFeed SDK (WittyfeedAndroidApi)
+# Vatsana Technologies Pvt. Ltd. OneFeed SDK
 
 > # Note
-> WittyFeed SDK API is now `OneFeed Android SDK`,
-> New v1.0.4 made live on 11 April' 2018
+> New v1.1.0 made live on 23 April' 2018
 
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](#)
-[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/1.0.4)
-[![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/OneFeed-Android-SDK/blob/master/LICENSE)
+[![JitPack](https://img.shields.io/badge/JitPack-1.1.0-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/1.1.0)
+[![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/OneFeed_android_dev/blob/master/LICENSE)
 
 ## Table Of Contents
 1. [Getting Started](#1-getting-started)
@@ -34,7 +33,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ### 1.2. Incorporating the SDK
 
-1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/1.0.4)
+1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/1.1.0)
 
 2. SignUp at [viral9.com](https://viral9.com) and create a new application to integrate with
 
@@ -54,24 +53,23 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 * add OneFeed-Android-SDK:1.0.2 in your app level build.gradle
 ```gradle
     dependencies {
-	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:1.0.4'
+	        compile 'compile 'com.github.vatsanatech:OneFeed_android_dev:1.1.0'
 	}
 ```
 
 4. Add the following library dependency to your project
   
   ```gradle
-    compile 'com.android.support:appcompat-v7:27.1.0'
-    compile 'com.android.support:support-v4:27.1.0'
-    compile 'com.android.support:design:27.1.0'
-    compile 'com.android.support:cardview-v7:27.1.0'
-    compile 'com.android.support:recyclerview-v7:27.1.0'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:support-v4:27.1.1'
+    compile 'com.android.support:design:27.1.1'
+    compile 'com.android.support:recyclerview-v7:27.1.1'
     
-    compile 'com.github.bumptech.glide:glide:4.3.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
+    compile 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.android.volley:volley:1.0.0'
-    compile 'com.android.support:customtabs:27.1.0'
+    compile 'com.android.support:customtabs:27.1.1'
  ```
 
 > ## Notice
@@ -80,120 +78,140 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 ### 1.3. Initializing the SDK
 
 ```java
-    // OPTIONAL to provide basic user_meta.
-    // By providing basic user_meta your app can receive targeted content which has an higher CPM then regular content.
+    /*
+     * OPTIONAL to provide basic mUserMeta.
+     * By providing mUserMeta your app can receive targeted content which has an higher CPM then regular content.
+     */
     HashMap<String, String> user_meta = new HashMap<>();
 
-    // WittyFeedSDKGender has following options = MALE, FEMALE, OTHER, NONE
-    // SAMPLE CODE BELOW, DO ADD YOUR OWN CATEOGORIES OF INTERESTS
-    // OPTIONAL
-    user_meta.put("client_gender", WittyFeedSDKGender.MALE);
+    /*
+     * Send Gender of User:- "M" for Male, "F" for Female, "O" for Other, "N" for None
+     */
+    mUserMeta.put("client_gender", "M");
 
-    // user Interests. String with a max_length = 100
-    // SAMPLE CODE BELOW, DO ADD YOUR OWN CATEOGORIES OF INTERESTS
-    // OPTIONAL
+    /*
+     * User Interests.
+     * String with a max_length = 100
+     */
     user_meta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); // string max_length = 100
 
-    // below code is only ***required*** for Initializing Wittyfeed Android SDK API
-    // PROVIDING 'user_meta' ARGUMENT IS OPTIONAL
-    WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN  /*, user_meta*/  ););
+    /*
+     * -- below line and appending custom 'mUserMeta' is OPTIONAL --
+     */
+    ApiClient.getInstance().appendCustomUserMetaToUserMeta(mUserMeta);
 
-    WittyFeedSDKSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, WittyFeedSDKSingleton.getInstance().wittyFeedSDKApiClient);
-
-    // use this interface callback to do operations when SDK finished loading
-    WittyFeedSDKMainInterface wittyFeedSDKMainInterface = new WittyFeedSDKMainInterface() {
+    /*
+     * setting callback here
+     * Use this interface callback to do operations when SDK finished loading
+     */
+    OneFeedMain.getInstance().setOneFeedDidInitialisedCallback(new OneFeedMain.OnInitialized() {
         @Override
-        public void onOperationDidFinish() {
-            // witty sdk did loaded completely successfully
+        public void onSuccess() {
             Log.d("Main App", "witty sdk did load successfully");
-        }	
+            progressBar.setVisibility(View.GONE);
+            btns_ll.setVisibility(View.VISIBLE);
+        }
 
         @Override
-        public void onError(Exception e) {
-            // if unexpected error
+        public void onError() {
+            Toast.makeText(activity, "OneFeed data couldn't be loaded", Toast.LENGTH_SHORT).show();
+            Log.e("mAPP", "onError: OneFeed data couldn't be loaded");
         }
-    };
-
-    // setting callback here
-    WittyFeedSDKSingleton.getInstance().witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
-
-    // initializing SDK here (mandatory)
-    WittyFeedSDKSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
+    });
+    
+    /*
+     * below code is ***required*** for Initializing OneFeed-Android-SDK
+     */
+    OneFeedMain.getInstance().init(getApplicationContext(), APP_ID, API_KEY, FCM_TOKEN);
 ```
 
 ### 1.4. For OneFeed ready-to-deploy feed layout
 
 ```java
-    // initializing OneFeed Support Fragment. Note- Make sure you have initialized the SDK in previous steps
-    WittyFeedSDKOneFeedFragment wittyFeedSDKOneFeedFragment = new WittyFeedSDKOneFeedFragment();
+    /*
+     * initializing OneFeed Support Fragment. Note- Make sure you have initialized the SDK in previous steps
+     */
+    Fragment fragment = OneFeedMain.getInstance().getOneFeedFragment();
 
-    // using our WittyFeedSDKWaterfallFragment, replace <ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED> with your
-    // viewgroup's ID (i.e. LinearLayout, RelativeLayout etc)
-    getSupportFragmentManager().beginTransaction().add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_WATERFALL_FEED_FRAGMENT_WILL_BE_PLACED>, fragment, "OneFeed").commit();
+    /*
+     * using the OneFeed Fragment
+     */
+    getSupportFragmentManager().executePendingTransactions();
+    if(getSupportFragmentManager().findFragmentByTag("mOneFeedFragment") == null){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(
+                        R.id.onefeed_fl,
+                        fragment,
+                        "mOneFeedFragment"
+                )
+                .commit();
+    }
 ```
 
 ### 1.5. Handle back-button of onefeed for custom callback
 
 ```java
-    // create a WittyFeedSDKBackPressInterface object
-    WittyFeedSDKBackPressInterface wittyFeedSDKBackPressInterface = new WittyFeedSDKBackPressInterface() {
+    /*
+     * pass the object of 
+     
+     SDKBackPressInterface to fragment so that when 
+     * user taps on back button of onefeed, perform_back() function of interface will call
+     */
+    OneFeedMain.getInstance().oneFeedBuilder.setOnBackClickInterface(new OneFeedBuilder.OnBackClickInterface() {
         @Override
-        public void perform_back() {
+        public void onBackClick() {
             finish();
         }
-    };
-
-    // pass the object of WittyFeedSDKBackPressInterface to fragment so that when user taps on back button of onefeed, perform_back() function of interface will call
-    wittyFeedSDKOneFeedFragment.setWittyFeedSDKBackPressInterface(wittyFeedSDKBackPressInterface);
+    });
 ```
 
-### 1.6. For Notifications Service of WittyFeedAndroidSDK
+### 1.6. For Notifications Service of OneFeed-Android-SDK
 
 In your class which extends FirebaseInstanceIDService, update with the code below
 ```java
     @Override
     public void onTokenRefresh() {
-        // Get updated InstanceID token.
+        /*
+         * Get updated InstanceID token
+         */
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d("FCM_CUSTOM", "Refreshed token:- " + refreshedToken);
-
-        //
-        // * Mandatory for Using Notification Service by OneFeed*
-        // To notify WittyFeedSDK about your updated fcm_token
-        //
-        WittyFeedSDKMain witty_sdk_main = new WittyFeedSDKMain(getApplicationContext(), new WittyFeedSDKApiClient(getApplicationContext(), APP_ID,  API_KEY, refreshedToken));
-        witty_sdk_main.update_fcm_token(refreshedToken);
+        
+        /*
+         * Mandatory for Using Notification Service by OneFeed*
+         * To notify OneFeed Server about your updated fcm_token
+         */
+        OneFeedMain.getInstance().init(getApplicationContext(), APP_ID, API_KEY, refreshedToken);
+        OneFeedMain.getInstance().getFcmTokenManager().refreshToken(refreshedToken);
     }
 ```
 
 
 In your class which extends FirebaseMessagingService, update with the code below
 ```java
-    //
-    // should be initialised at the class level
-    //
-    WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager;
-
     public void onMessageReceived(RemoteMessage remoteMessage) {
-      //
-      // This line is required to be just after the onMessageReceived block starts
-      //
-      wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
+      /*
+       * If you want to open any of your app's activity on back press from Story Activity (That loads on clicking the notification)
+       * Set Intent of the Activity you want to open on Back press from Story opens from Notification
+       */
+      OFNotificationManager.getInstance().setHomeScreenIntent(new Intent(getApplicationContext(), MainActivity.class));
       
-      //If you want to open any of your app's activity on back press from Story Activity(That loads on clicking the notification)
-      // Set Intent of the activity you want to open as follows:
-      
-      wittyFeedSDKNotificationManager.setHomeScreenIntent(new Intent(getApplicationContext(), <ACTIVITY_NAME>.class));
-      //
-      // this 2 lines below handle the notifications
-      //
-      int your_preferred_icon_for_notifications =  <YOUR_PREFERRED_ICON_FOR_NOTIFICATION>  //example: R.mipmap.ic_launcher
-      wittyFeedSDKNotificationManager.handleNotification(remoteMessage.getData(), your_preferred_icon_for_notifications);
+      /*
+       * NOTE: optionally you can check that notification has arrived from OneFeed Server by below line -
+       *       if(remoteMessage.getData().get("notiff_agent").equals("wittyfeed_sdk")
+       */
+      int your_preferred_icon_for_notifications = R.mipmap.ic_launcher; // <YOUR_PREFERRED_ICON_FOR_NOTIFICATION> 
+      OFNotificationManager.getInstance().handleNotification(
+              getApplicationContext(),
+              FirebaseInstanceId.getInstance().getToken(),
+              remoteMessage.getData(),
+              your_preferred_icon_for_notifications
+      );
     }
 ```
 
 > ## Note
-> Notification service with WittyFeedNativeAndroidSDK is optional to use but is highly recommended. You will get to handle this notifications on Viral9 Dashbaord
+> Notification service with OneFeed-Android-SDK is optional to use but is highly recommended. You will get to handle this notifications on Viral9 Dashbaord
 
 
 ## 2. License

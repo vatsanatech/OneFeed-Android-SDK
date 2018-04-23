@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-class Meta implements Parcelable
+final class Meta implements Parcelable
 {
 
     @SerializedName("id")
@@ -30,7 +30,7 @@ class Meta implements Parcelable
     @SerializedName("title")
     @Expose
     private Title title;
-    public final static Parcelable.Creator<Meta> CREATOR = new Creator<Meta>() {
+    public final static Creator<Meta> CREATOR = new Creator<Meta>() {
 
 
         @SuppressWarnings({

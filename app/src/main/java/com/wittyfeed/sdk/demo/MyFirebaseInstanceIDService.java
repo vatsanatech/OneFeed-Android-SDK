@@ -4,11 +4,10 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKApiClient;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKMain;
+import com.wittyfeed.sdk.onefeed.OneFeedMain;
 
 /**
- * Created by aishwarydhare on 24/10/17.
+ * Created by aishwarydhare on 19/10/17.
  */
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
@@ -23,11 +22,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         Log.d("FCM_CUSTOM", "Refreshed token:- " + refreshedToken);
 
         /*
-         * Compulsory for Using Notification Service by OneFeed
-         *      To notify WittyFeedSDK about your updated fcm_token
-        */
-        WittyFeedSDKMain witty_sdk_main = new WittyFeedSDKMain(getApplicationContext(), new WittyFeedSDKApiClient(getApplicationContext(),APP_ID,API_KEY, refreshedToken));
-        witty_sdk_main.update_fcm_token(refreshedToken);
+         * Mandatory for Using Notification Service by OneFeed*
+         * To notify WittyFeedSDK about your updated fcm_token
+         */
+        OneFeedMain.getInstance().init(getApplicationContext(), APP_ID, API_KEY, refreshedToken);
+        OneFeedMain.getInstance().getFcmTokenManager().refreshToken(refreshedToken);
     }
 
 }

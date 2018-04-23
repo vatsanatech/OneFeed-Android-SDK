@@ -9,16 +9,16 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-class MainDatum implements Parcelable
+final class MainDatum implements Parcelable
 {
 
     @SerializedName("config")
     @Expose
-    private OneFeedConfig config;
+    private mConfig config;
     @SerializedName("blocks")
     @Expose
     private List<Block> blocks = new ArrayList<Block>();
-    public final static Parcelable.Creator<MainDatum> CREATOR = new Creator<MainDatum>() {
+    public final static Creator<MainDatum> CREATOR = new Creator<MainDatum>() {
 
         @SuppressWarnings({
             "unchecked"
@@ -35,18 +35,18 @@ class MainDatum implements Parcelable
     ;
 
     protected MainDatum(Parcel in) {
-        this.config = ((OneFeedConfig) in.readValue((OneFeedConfig.class.getClassLoader())));
+        this.config = ((mConfig) in.readValue((mConfig.class.getClassLoader())));
         in.readList(this.blocks, (Block.class.getClassLoader()));
     }
 
     public MainDatum() {
     }
 
-    public OneFeedConfig getConfig() {
+    public mConfig getConfig() {
         return config;
     }
 
-    public void setConfig(OneFeedConfig config) {
+    public void setConfig(mConfig config) {
         this.config = config;
     }
 

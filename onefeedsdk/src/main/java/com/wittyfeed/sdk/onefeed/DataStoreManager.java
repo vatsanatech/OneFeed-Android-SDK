@@ -22,8 +22,6 @@ import android.content.Context;
 
 final class DataStoreManager {
 
-    // TODO: 23/04/18 handle crash if cache-loading fails
-
     private OnStoreManagerDidFinishDataFetch onStoreManagerDidFinishDataFetch;
 
     DataStoreManager(OnStoreManagerDidFinishDataFetch arg){
@@ -36,14 +34,26 @@ final class DataStoreManager {
             String dataStr = DataStoreCacheManager.readCachedJSON(applicationContext);
             if(!dataStr.equalsIgnoreCase("")){
                 // parse cache
-                OneFeedMain.getInstance().dataStore.setMainFeedData( DataStoreParser.parseMainFeedString(dataStr) );
-                OneFeedMain.getInstance().dataStore.setSearchDefaultData( DataStoreParser.parseSearchDefaultString(dataStr) );
-                OneFeedMain.getInstance().dataStore.incrementMainFeedDataOffset();
-                OFLogger.log(OFLogger.DEBUG, OFLogger.CacheReadSuccess);
-                onStoreManagerDidFinishDataFetch.onSuccess();
+                MainDatum mainDatum = DataStoreParser.parseMainFeedString(dataStr);
+                MainDatum searchDefaultDatum = DataStoreParser.parseSearchDefaultString(dataStr);
+
+                if (mainDatum == null || searchDefaultDatum == null) {
+                    // cache loaded is invalid or deprecated, requesting fresh feed instead
+                    OFLogger.log(OFLogger.ERROR, "cache parsing failed, cache is either invalid or deprecated, requesting fresh feed instead");
+                    requestFreshMainFeedData(false, applicationContext);
+
+                } else {
+                    OneFeedMain.getInstance().dataStore.setMainFeedData(mainDatum);
+                    OneFeedMain.getInstance().dataStore.setSearchDefaultData(searchDefaultDatum);
+                    OneFeedMain.getInstance().dataStore.incrementMainFeedDataOffset();
+                    OFLogger.log(OFLogger.DEBUG, OFLogger.CacheReadSuccess);
+                    OFLogger.log(OFLogger.DEBUG, "cache loaded successfully");
+                    onStoreManagerDidFinishDataFetch.onSuccess();
+                }
 
             } else {
                 // unable to parse cache, request fresh feed instead
+                OFLogger.log(OFLogger.ERROR, "unable to parse cache, requesting fresh feed instead");
                 requestFreshMainFeedData(false, applicationContext);
 
             }

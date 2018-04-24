@@ -19,27 +19,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
-        /*
-         * Set Intent of the Activity you want to open on Back press from Story opens from Notification
-         */
-        OFNotificationManager.getInstance().setHomeScreenIntent(new Intent(getApplicationContext(), MainActivity.class));
-
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(FCM_TAG, "From: " + remoteMessage.getFrom());
-
         // Check if message contains a data payload.
         if (remoteMessage.getData() != null) {
             if (remoteMessage.getData().size() > 0) {
                 Log.d(FCM_TAG, "Message data payload: " + remoteMessage.getData());
             }
         }
-
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(FCM_TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
+
+
+        /*
+         * Set Intent of the Activity you want to open on Back press from Story opens from Notification
+         */
+        OFNotificationManager.getInstance().setHomeScreenIntent(new Intent(getApplicationContext(), MainActivity.class));
 
         /*
          * NOTE: optionally you can check that notification has arrived from WittyFeed by below line -
@@ -52,6 +50,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 remoteMessage.getData(),
                 your_preferred_icon_for_notifications
         );
+
     }
 
     @Override

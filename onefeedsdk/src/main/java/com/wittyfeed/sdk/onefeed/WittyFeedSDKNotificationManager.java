@@ -316,6 +316,9 @@ public class WittyFeedSDKNotificationManager {
         homeScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.homeScreenIntent = homeScreenIntent;
         WittyFeedSDKSingleton.getInstance().homeActivityIntent = homeScreenIntent;
+        String classPassedInIntent = homeScreenIntent.getComponent().getClassName();
+        WittyFeedSDKSingleton.getInstance().editor_sharedPref.putString("homeScreenIntentClassName", classPassedInIntent).commit();
+
     }
 
 

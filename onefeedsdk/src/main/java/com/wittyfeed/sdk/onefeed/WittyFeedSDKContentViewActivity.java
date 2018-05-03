@@ -3,10 +3,12 @@ package com.wittyfeed.sdk.onefeed;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -213,6 +215,17 @@ public class WittyFeedSDKContentViewActivity extends AppCompatActivity{
             is_from_notification = false;
             this.activity.startActivity(WittyFeedSDKSingleton.getInstance().homeActivityIntent);
         }else {
+            if(!PreferenceManager.getDefaultSharedPreferences(this).getString("homeScreenIntentClassName","").isEmpty()){
+                try {
+                    Class<?> classNameToOpen = Class.forName(PreferenceManager.getDefaultSharedPreferences(this).getString("homeScreenIntentClassName",""));
+                    this.activity.startActivity(new Intent(this, classNameToOpen));
+                    finish();
+
+                } catch (ClassNotFoundException e) {
+                    Log.d(TAG, "custom_finish_app: Invalid class in HomeActivityIntent");
+                    finish();
+                }
+            }
             finish();
         }
     }

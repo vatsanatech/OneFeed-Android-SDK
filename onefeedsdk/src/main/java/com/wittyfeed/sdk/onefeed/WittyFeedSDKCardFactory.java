@@ -145,7 +145,7 @@ class WittyFeedSDKCardFactory {
         if(card.getUserFullName().equalsIgnoreCase("") || card.getDoa().equalsIgnoreCase("")){
             publisher_meta_tv.setVisibility(View.INVISIBLE);
         } else {
-            publisher_meta_tv.setText("by " + card.getUserFullName() + " on " + card.getDoa());
+            publisher_meta_tv.setText("by " + card.getUserFullName() + " | " + card.getDoa());
             publisher_meta_tv.setTextSize((float) (12 * text_size_ratio));
         }
 
@@ -234,7 +234,7 @@ class WittyFeedSDKCardFactory {
         if(card.getUserFullName().equalsIgnoreCase("") || card.getDoa().equalsIgnoreCase("")){
             publisher_meta_tv.setVisibility(View.INVISIBLE);
         } else {
-            publisher_meta_tv.setText("by " + card.getUserFullName() + " on " + card.getDoa());
+            publisher_meta_tv.setText("by " + card.getUserFullName() + " | " + card.getDoa());
             publisher_meta_tv.setTextSize((float) (12 * text_size_ratio));
         }
 
@@ -376,7 +376,7 @@ class WittyFeedSDKCardFactory {
         if(card.getUserFullName().equalsIgnoreCase("") || card.getDoa().equalsIgnoreCase("")){
             publisher_meta_tv.setVisibility(View.INVISIBLE);
         } else {
-            publisher_meta_tv.setText("by " + card.getUserFullName() + " on " + card.getDoa());
+            publisher_meta_tv.setText("by " + card.getUserFullName() + " | " + card.getDoa());
             publisher_meta_tv.setTextSize((float) (14 * text_size_ratio));
         }
 

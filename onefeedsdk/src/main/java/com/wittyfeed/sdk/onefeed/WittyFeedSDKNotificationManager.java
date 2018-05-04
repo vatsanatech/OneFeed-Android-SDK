@@ -315,17 +315,21 @@ public class WittyFeedSDKNotificationManager {
 
 
     public void setHomeScreenIntent(Intent homeScreenIntent){
-        homeScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.homeScreenIntent = homeScreenIntent;
-        WittyFeedSDKSingleton.getInstance().homeActivityIntent = homeScreenIntent;
-        String classPassedInIntent = homeScreenIntent.getComponent().getClassName();
-        SharedPreferences.Editor prefsEditor;
-        if(WittyFeedSDKSingleton.getInstance().editor_sharedPref == null){
-            prefsEditor = PreferenceManager.getDefaultSharedPreferences(application).edit();
-        } else {
-            prefsEditor = WittyFeedSDKSingleton.getInstance().editor_sharedPref;
+        try {
+            homeScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.homeScreenIntent = homeScreenIntent;
+            WittyFeedSDKSingleton.getInstance().homeActivityIntent = homeScreenIntent;
+            String classPassedInIntent = homeScreenIntent.getComponent().getClassName();
+            SharedPreferences.Editor prefsEditor;
+            if(WittyFeedSDKSingleton.getInstance().editor_sharedPref == null){
+                prefsEditor = PreferenceManager.getDefaultSharedPreferences(application).edit();
+            } else {
+                prefsEditor = WittyFeedSDKSingleton.getInstance().editor_sharedPref;
+            }
+            prefsEditor.putString("homeScreenIntentClassName", classPassedInIntent).apply();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        prefsEditor.putString("homeScreenIntentClassName", classPassedInIntent).apply();
     }
 
 

@@ -12,7 +12,6 @@
 
         <activity
             android:name="com.wittyfeed.sdk.onefeed.WittyFeedSDKContentViewActivity"
-            android:largeHeap="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:hardwareAccelerated="true">

@@ -137,7 +137,7 @@ class WittyFeedSDKNetworking {
 
     void update_fcm_token(final WittyFeedSDKNetworkInterface callback) {
 
-        String url_api = base_prefix + "/Sdk/updateToken";
+        String url_api = base_prefix + "/Sdk/fetchFcmToken";
         final WittyFeedSDKApiClient final_wittyFeedSDKApiClient = this.wittyFeedSDKApiClient;
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url_api,
@@ -173,6 +173,7 @@ class WittyFeedSDKNetworking {
             protected Map<String, String> getParams() {
                 Map<String, String> payload = new HashMap<>();
                 payload.put("app_id", final_wittyFeedSDKApiClient.getAPP_ID());
+                payload.put("device_id", final_wittyFeedSDKApiClient.getDevice_id());
                 String fcm_token_to_send = final_wittyFeedSDKApiClient.getFCM_TOKEN();
                 String old_fcm_token = "";
                 try {
@@ -185,9 +186,11 @@ class WittyFeedSDKNetworking {
                 Log.d(TAG, "old token: " + old_fcm_token);
                 Log.d(TAG, "new token: " + final_wittyFeedSDKApiClient.getFCM_TOKEN());
                 Log.d(TAG, "Force Update New FCM Token");
+                payload.put("onefeed_sdk_version", WittyFeedSDKApiClient.SDK_Version);
                 payload.put("firebase_token", "" + fcm_token_to_send);
                 payload.put("old_firebase_token", "" + old_fcm_token);
                 payload.put("device_meta", "" + final_wittyFeedSDKApiClient.getDevice_meta());
+                Log.d(TAG, "FCM Token Params: " + final_wittyFeedSDKApiClient.getDevice_meta());
                 return payload;
             }
         };

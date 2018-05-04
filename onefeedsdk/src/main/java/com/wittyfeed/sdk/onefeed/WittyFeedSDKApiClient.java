@@ -23,7 +23,7 @@ import java.util.UUID;
 public class WittyFeedSDKApiClient {
 
     private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
-    private static final String SDK_Version = "1.0.5";
+    public static final String SDK_Version = "1.0.7";
     private static String uniqueID = null;
     private String APP_ID = "";
     private String API_KEY = "";
@@ -116,7 +116,7 @@ public class WittyFeedSDKApiClient {
         device_meta.put("onefeed_sdk_version", SDK_Version);
 
         //It’s a 64-bit number that should remain constant for the lifetime of a device
-        @SuppressLint("HardwareIds") String android_id = Settings.Secure.getString(context.getContentResolver(),
+        String android_id = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         device_meta.put("android_id", android_id);
         device_meta.put("device_id", android_id);

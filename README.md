@@ -2,10 +2,10 @@
 
 > # Note
 > WittyFeed SDK API is now `OneFeed Android SDK`,
-> New v1.0.6 made live on 3 May' 2018
+> New v1.0.9 made live on 5 May' 2018
 
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](#)
-[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/1.0.6)
+[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/1.0.9)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/OneFeed-Android-SDK/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -34,7 +34,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ### 1.2. Incorporating the SDK
 
-1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/1.0.6)
+1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/1.0.9)
 
 2. SignUp at [viral9.com](https://viral9.com) and create a new application to integrate with
 
@@ -54,7 +54,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 * add OneFeed-Android-SDK:1.0.2 in your app level build.gradle
 ```gradle
     dependencies {
-	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:1.0.6'
+	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:1.0.9'
 	}
 ```
 

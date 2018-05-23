@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/Theme.AppCompat.NoActionBar">
+
+    <LinearLayout
+        android:id="@+id/btns_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:textSize="24sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/cabin_bold"
+            android:layout_marginBottom="20dp"
+            android:text="Right Swipe for OneFeed Demo"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/simulate_notiff_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/cabin_bold"
+            android:text="Simulate WittyFeed Notification"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</RelativeLayout>

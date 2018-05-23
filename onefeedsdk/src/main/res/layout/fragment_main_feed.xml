@@ -12,11 +12,11 @@
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/main_feed_srl"
+        android:id="@+id/mainFeed_srl"
+        android:descendantFocusability="blocksDescendants"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/header_rl"
-        android:descendantFocusability="blocksDescendants"
         android:splitMotionEvents="false">
 
         <android.support.v7.widget.RecyclerView

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/root_rl"
+    android:id="@+id/root_vg"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="4dp"
-            android:text="Editor's Choice"
+            android:text=" -- "
             android:textAllCaps="true"
             android:textColor="#ffffff"
             android:textSize="10sp" />
@@ -60,7 +60,7 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="4dp"
-                android:text="Lifestyle"
+                android:text=" -- "
                 android:textColor="#ffffff"
                 android:textSize="10sp"  />
 
@@ -75,7 +75,7 @@
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:paddingRight="15dp"
-                android:text="Unusual Parathas to give A treat to your tastebuds"
+                android:text=" -- "
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
 
@@ -100,7 +100,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/publisher_iv"
-                    android:text="FoodMate"
+                    android:text=" -- "
                     android:textColor="#ffffff"
                     android:textStyle="bold"
                     android:textSize="18sp"
@@ -116,7 +116,7 @@
                     android:layout_toRightOf="@id/publisher_iv"
                     android:paddingBottom="2dp"
                     android:paddingTop="2dp"
-                    android:text="by Trisha on 1' April 2018"
+                    android:text=" -- "
                     android:textColor="#999999"
                     android:textSize="12sp"
                     android:layout_toEndOf="@id/publisher_iv"
@@ -124,8 +124,6 @@
             </RelativeLayout>
 
         </LinearLayout>
-
-
     </RelativeLayout>
 
 
@@ -135,6 +133,18 @@
         android:alpha="0.7"
         android:layout_centerInParent="true"
         android:src="@drawable/play_button_big" />
+
+    <View
+        android:id="@+id/sep_v"
+        android:layout_below="@id/img_container_vg"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#E5EBEF"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        />
 
 </RelativeLayout>
 

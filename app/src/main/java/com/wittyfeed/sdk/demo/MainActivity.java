@@ -1,39 +1,37 @@
 package com.wittyfeed.sdk.demo;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKApiClient;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKMain;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKMainInterface;
-import com.wittyfeed.sdk.onefeed.WittyFeedSDKNotificationManager;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.wittyfeed.sdk.onefeed.ApiClient;
+import com.wittyfeed.sdk.onefeed.OFNotificationManager;
+import com.wittyfeed.sdk.onefeed.OneFeedMain;
+import com.wittyfeed.sdk.onefeed.Utils.Constant;
+import com.wittyfeed.sdk.onefeed.Utils.OneFeedBuilder;
+
 
 import java.util.HashMap;
-import java.util.Map;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private String APP_ID = "108";
     private String API_KEY = "963a1cf4d081b0b0bdc6e9e13de66dd3";
     private String FCM_TOKEN = "";
-
     private Activity activity;
+    public ViewPager viewPager;
 
-    private ProgressBar progressBar;
-    private WittyFeedSDKApiClient wittyFeedSDKApiClient;
-    private LinearLayout btns_ll;
-    private WittyFeedSDKMainInterface wittyFeedSDKMainInterface;
+    public int selected_frag_id = 0;
+    private VPAdapter vpAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +40,18 @@ public class MainActivity extends AppCompatActivity{
 
         activity = this;
         FCM_TOKEN = FirebaseInstanceId.getInstance().getToken();
-
-        progressBar = findViewById(R.id.progressBar);
-        btns_ll = findViewById(R.id.btns_ll);
-
-        progressBar.setVisibility(View.VISIBLE);
-        btns_ll.setVisibility(View.GONE);
+        viewPager = findViewById(R.id.viewPager);
 
         if (FCM_TOKEN == null) {
             FCM_TOKEN = "";
         }
 
-        Log.d("FCM_CUSTOM", "FCM Token: " + FCM_TOKEN);
+
+        String topicName = "OneFeed_" + APP_ID + "_" + Constant.ONE_FEED_VERSION;
+
+        FirebaseMessaging.getInstance().subscribeToTopic(topicName);
+
+        System.out.println("FCM Token: " + FCM_TOKEN);
 
 
         // ====================
@@ -61,118 +59,111 @@ public class MainActivity extends AppCompatActivity{
         // ====================
 
         /*
-         * OPTIONAL to provide basic user_meta.
-         * By providing user_meta your app can receive targeted content which has an higher CPM then regular content.
+         * OPTIONAL to provide basic mUserMeta.
+         * By providing mUserMeta your app can receive targeted content which has an higher CPM then regular content.
          */
-        HashMap<String, String> user_meta = new HashMap<>();
+        HashMap<String, String> mUserMeta = new HashMap<>();
 
         /*
-         * WittyFeedSDKGender has following options = "M" for Male, "F" for Female, "O" for Other, "N" for None
+         * Send Gender of User:- "M" for Male, "F" for Female, "O" for Other, "N" for None
          */
-        user_meta.put("client_gender", "M");
+        mUserMeta.put("client_gender", "M");
 
         /*
          * User Interests.
          * String with a max_length = 100
-        */
-        user_meta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); // string max_length = 100
+         */
+        mUserMeta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); // string max_length = 100
 
         /*
-         * below code is only ***required*** for Initializing WittyFeed Android SDK API, -- providing 'user_meta' is optional --
-        */
-        wittyFeedSDKApiClient = new WittyFeedSDKApiClient(activity, APP_ID, API_KEY, FCM_TOKEN/*, user_meta*/);
-        mSingleton.getInstance().witty_sdk = new WittyFeedSDKMain(activity, wittyFeedSDKApiClient);
-
-        /*
-         * Use this interface callback to do operations when SDK finished loading
-        */
-        wittyFeedSDKMainInterface = new WittyFeedSDKMainInterface() {
-            @Override
-            public void onOperationDidFinish() {
-                // witty sdk did loaded completely successfully
-                Log.d("Main App", "witty sdk did load successfully");
-
-                progressBar.setVisibility(View.GONE);
-                btns_ll.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                // if unexpected error
-                Toast.makeText(activity, "OneFeed data couldn't be loaded", Toast.LENGTH_SHORT).show();
-                if(e != null){
-                    Log.e("mAPP", "onError: OneFeed data couldn't be loaded", e);
-                } else {
-                    Log.e("mAPP", "onError: OneFeed data couldn't be loaded");
-                }
-            }
-        };
+         * -- passing 'mUserMeta' is OPTIONAL --
+         */
+        ApiClient.getInstance().appendCustomUserMetaToUserMeta(mUserMeta);
 
         /*
          * setting callback here
+         * Use this interface callback to do operations when SDK finished loading
          */
-        mSingleton.getInstance().witty_sdk.set_operationDidFinish_callback(wittyFeedSDKMainInterface);
+
+
+        OneFeedMain.getInstance().setOneFeedDidInitialisedCallback(new OneFeedMain.OnInitialized() {
+            @Override
+            public void onSuccess() {
+                Log.d("Main App", "witty sdk did load successfully");
+                viewPager.setVisibility(View.VISIBLE);
+
+                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        selected_frag_id = position;
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+                    }
+                });
+
+                Fragment oneFeedFragment = OneFeedMain.getInstance().getOneFeedFragment();
+
+                OneFeedMain.getInstance().oneFeedBuilder.setOnBackClickInterface(new OneFeedBuilder.OnBackClickInterface() {
+                    @Override
+                    public void onBackClick() {
+                        viewPager.setCurrentItem(0);
+                    }
+                });
+
+                vpAdapter = new VPAdapter(getSupportFragmentManager(), oneFeedFragment);
+                viewPager.setAdapter(vpAdapter);
+                viewPager.setCurrentItem(0);
+                viewPager.setOffscreenPageLimit(3);
+
+            }
+
+            @Override
+            public void onError() {
+                Toast.makeText(activity, "OneFeed data couldn't be loaded", Toast.LENGTH_SHORT).show();
+                Log.e("mAPP", "onError: OneFeed data couldn't be loaded");
+            }
+        });
 
         /*
-         * Style the content view of OneFeed using the two methods below
-         * NOTE - needs to be done before calling init_wittyfeed_sdk()
+         * below code is ***required*** for Initializing WittyFeed Android SDK API,
          */
-        mSingleton.getInstance().witty_sdk.set_onefeed_base_color("#000000");
-        //  mSingleton.getInstance().witty_sdk.set_onefeed_back_icon(getBitmapFromDrawable(activity, R.drawable.m_ic_back));
+        OneFeedMain.getInstance().init(getApplicationContext(), APP_ID, API_KEY, FCM_TOKEN);
 
         /*
-         * Initializing SDK here (mandatory)
+         * Below code is ***required*** for consistent unsubscription and token update on sdk version change
          */
-        mSingleton.getInstance().witty_sdk.init_wittyfeed_sdk();
+        if(!(OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(""))){
+            if(!OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(Constant.ONE_FEED_VERSION)){
+                OneFeedMain.getInstance().fcmTokenManager.updateTokenForVersionChange();
+                String oldTopic = "OneFeed_" + APP_ID + "_" + OneFeedMain.getInstance().ofSharedPreference.getSDKVersion();
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(oldTopic);
+            }
+        }
+        OneFeedMain.getInstance().ofSharedPreference.setSDKVersion(Constant.ONE_FEED_VERSION);
+
+        /*
+         * Set Intent of the Activity you want to open on Back press from Story opens from Notification
+         */
+        OFNotificationManager.getInstance().setHomeScreenIntent(this, new Intent(this.getApplicationContext(),MainActivity.class));
+
 
         // ==================
         // SDK WORK ENDS HERE
         // ==================
 
-
-
-        findViewById(R.id.goto_waterfall_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(activity, OneFeedActivity.class));
-            }
-        });
-
-        findViewById(R.id.simulate_notiff_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                send_demo_fcm(); // For Directly going to the WebPage Story of WittyFeed
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("",""+FirebaseInstanceId.getInstance().getToken());
-                clipboard.setPrimaryClip(clip);
-            }
-        });
     }
 
-
-    private void send_demo_fcm() {
-        WittyFeedSDKNotificationManager wittyFeedSDKNotificationManager = new WittyFeedSDKNotificationManager(activity, FCM_TOKEN);
-        int preferred_notiff_icon = R.mipmap.ic_launcher;
-        Map<String, String> dummy_notiff_data = new HashMap<>();
-        try {
-            dummy_notiff_data.put("story_id", "60496");
-            dummy_notiff_data.put("story_title", "10 Things Every Girl Should Put On Her List");
-            dummy_notiff_data.put("cover_image", "https://cdn.wittyfeed.com/41441/ilik0kqmr2hpv1i4l8ya.jpeg?imwidth=960");
-            dummy_notiff_data.put("story_url","https://www.wittyfeed.me/story/41441/things-every-girl-should-put-in-her-list?utm_hash=ArD51&nohead=1");
-
-            dummy_notiff_data.put("id", "400");
-            dummy_notiff_data.put("body", "Hey, Here's a new amazing story for you!");
-            dummy_notiff_data.put("title", "10 Things Every Girl Should Put On Her List");
-            dummy_notiff_data.put("notiff_agent", "wittyfeed_sdk");
-            dummy_notiff_data.put("app_id" , "108");
-
-            dummy_notiff_data.put("action", "" + "WittyFeedSDKContentViewActivity");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        wittyFeedSDKNotificationManager.handleNotification(dummy_notiff_data, preferred_notiff_icon);
+    @Override
+    public void onBackPressed() {
+        if (viewPager.getCurrentItem() == 1) {
+            viewPager.setCurrentItem(0);
+        } else
+            super.onBackPressed();
     }
-
 }

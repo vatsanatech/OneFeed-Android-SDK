@@ -4,39 +4,10 @@
     android:layout_height="match_parent"
     style="@style/Theme.AppCompat.NoActionBar">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="visible"/>
-
-    <LinearLayout
-        android:id="@+id/btns_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <Button
-            android:id="@+id/goto_waterfall_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/cabin_bold"
-            android:text="Goto OneFeed Demo"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/simulate_notiff_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/cabin_bold"
-            android:text="Simulate WittyFeed Notification"
-            android:textAllCaps="false" />
-
-    </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
 
 </RelativeLayout>

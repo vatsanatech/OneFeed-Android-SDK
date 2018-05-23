@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/root_vg"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
 
     <RelativeLayout
         android:id="@+id/img_container_vg"
@@ -75,6 +78,18 @@
             android:textSize="20sp" />
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/sep_v"
+        android:layout_below="@id/img_container_vg"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#E5EBEF"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        />
 
 </RelativeLayout>
 

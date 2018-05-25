@@ -204,7 +204,7 @@ In your class which extends FirebaseMessagingService, update with the code below
                 FirebaseInstanceId.getInstance().getToken(),
                 remoteMessage.getData(),
                 your_preferred_icon_for_notifications,
-                "108"
+                YOUR_APP_ID
         );
     }
 ```

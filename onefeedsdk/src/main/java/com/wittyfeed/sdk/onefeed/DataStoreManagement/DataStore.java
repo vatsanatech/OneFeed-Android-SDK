@@ -35,6 +35,10 @@ import java.util.List;
 
 public final class DataStore {
 
+    public MainDatum getMainFeedData() {
+        return mainFeedData;
+    }
+
     private MainDatum mainFeedData;
     private MainDatum searchFeedData;
     private MainDatum searchDefaultData;

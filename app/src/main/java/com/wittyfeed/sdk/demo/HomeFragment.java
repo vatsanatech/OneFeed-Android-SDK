@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.wittyfeed.sdk.onefeed.OFInterface;
 import com.wittyfeed.sdk.onefeed.OFNotificationManager;
+import com.wittyfeed.sdk.onefeed.OneFeedMain;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +22,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container,false);
+        final View view = inflater.inflate(R.layout.fragment_home, container,false);
 
         Button notiff_btn = view.findViewById(R.id.simulate_notiff_btn);
 
@@ -28,6 +30,43 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 send_demo_fcm();
+            }
+        });
+
+        Button nativeCards_btn = view.findViewById(R.id.simulate_native_cards);
+
+        Button simulate_repeating_card_btn = view.findViewById(R.id.simulate_repeating_card);
+
+        simulate_repeating_card_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), NonRepeatingDemoActivity.class);
+                startActivity(i);
+
+            }
+        });
+
+        nativeCards_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                final ViewGroup btns_ll = view.findViewById(R.id.btns_ll);
+//                OFInterface ofInterface = new OFInterface() {
+//                    @Override
+//                    public void OnSuccess(View view) {
+//                        btns_ll.addView(view);
+//                    }
+//
+//                    @Override
+//                    public void onError(Exception e) {
+//
+//                    }
+//                };
+//                OneFeedMain.getInstance().ofCardFetcher.setOfInterface(ofInterface);
+//                OneFeedMain.getInstance().ofCardFetcher.fetch_a_card();
+                Intent i = new Intent(getActivity(), NativeCardsActivity.class);
+                startActivity(i);
+
+
             }
         });
 

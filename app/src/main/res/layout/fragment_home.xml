@@ -31,6 +31,24 @@
             android:text="Simulate WittyFeed Notification"
             android:textAllCaps="false" />
 
+        <Button
+            android:id="@+id/simulate_native_cards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/cabin_bold"
+            android:text="Simulate Native Cards"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/simulate_repeating_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/cabin_bold"
+            android:text="Simulate Non Repeating Cards"
+            android:textAllCaps="false" />
+
     </LinearLayout>
 
 </RelativeLayout>

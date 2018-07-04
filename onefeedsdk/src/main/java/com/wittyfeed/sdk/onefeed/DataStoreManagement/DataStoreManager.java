@@ -44,8 +44,9 @@ public final class DataStoreManager {
                 // parse cache
                 MainDatum mainDatum = DataStoreParser.parseMainFeedString(dataStr);
                 MainDatum searchDefaultDatum = DataStoreParser.parseSearchDefaultString(dataStr);
+                MainDatum nonRepeatingDatum  =  DataStoreParser.parseNonRepeatingDataString(dataStr);
 
-                if (mainDatum == null || searchDefaultDatum == null) {
+                if (mainDatum == null || searchDefaultDatum == null || nonRepeatingDatum == null) {
                     // cache loaded is invalid or deprecated, requesting fresh feed instead
                     OFLogger.log(OFLogger.ERROR, OFLogger.CacheIsDeprecated);
                     requestFreshMainFeedData(false, applicationContext);
@@ -53,6 +54,7 @@ public final class DataStoreManager {
                 } else {
                     OneFeedMain.getInstance().dataStore.setMainFeedData(mainDatum);
                     OneFeedMain.getInstance().dataStore.setSearchDefaultData(searchDefaultDatum);
+                    OneFeedMain.getInstance().dataStore.setNonRepeatingDatum(nonRepeatingDatum);
                     OneFeedMain.getInstance().dataStore.incrementMainFeedDataOffset();
                     OFLogger.log(OFLogger.DEBUG, OFLogger.CacheReadSuccess);
                     OFLogger.log(OFLogger.DEBUG, OFLogger.CacheLoadSuccessful);
@@ -95,9 +97,10 @@ public final class DataStoreManager {
                     public void onSuccessResponse(String response) {
                         DataStoreCacheManager.createCachedJSON(response, applicationContext);
                         if(!isBackgroundRefresh){
-                            OneFeedMain.getInstance().dataStore.setMainFeedData( DataStoreParser.parseMainFeedString(response) );
+                            OneFeedMain.getInstance().dataStore.setMainFeedData( DataStoreParser.parseMainFeedString(response));
                             OneFeedMain.getInstance().dataStore.incrementMainFeedDataOffset();
-                            OneFeedMain.getInstance().dataStore.setSearchDefaultData( DataStoreParser.parseSearchDefaultString(response) );
+                            OneFeedMain.getInstance().dataStore.setSearchDefaultData( DataStoreParser.parseSearchDefaultString(response));
+                            OneFeedMain.getInstance().dataStore.setNonRepeatingDatum(DataStoreParser.parseNonRepeatingDataString(response));
                             onStoreManagerDidFinishDataFetch.onSuccess();
                         }
                         OFLogger.log(OFLogger.DEBUG, OFLogger.MainFeedFetchedSuccess);

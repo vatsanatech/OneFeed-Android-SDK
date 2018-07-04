@@ -78,6 +78,7 @@ public final class OFLogger {
     public static final String SearchFeedRequestQueueIsNull = "searchFeedRequestQueue is null, initialize it first";
     public static final String InterestRequestQueueIsNull = "interestFeedRequestQueue is null, initialize it first";
     public static final String ConfigRequestQueueIsNull = "configFeedRequestQueue is null, initialize it first";
+    public static final String repeatingDataRequestQueueIsNull = "configFeedRequestQueue is null, initialize it first";
     public static final String CouldNotFetchData = "couldn't fetch data: ";
     public static final String OffsetCount = "Last Offset Sent: ";
     public static final String ForceUpdatedFCMToken = "Force Updated FCM Token";

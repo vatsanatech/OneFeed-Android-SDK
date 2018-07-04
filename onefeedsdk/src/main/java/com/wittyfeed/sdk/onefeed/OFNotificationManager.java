@@ -216,7 +216,6 @@ public final class OFNotificationManager {
                                 /*notify the user*/
                                 notificationManager.notify(NOTIFICATION_ID, mNotification);
 
-
                                 OFLogger.log(OFLogger.DEBUG, "done showing notificaiton");
                                 if(!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
                                     playNotificationSound(applicationContext);
@@ -297,7 +296,7 @@ public final class OFNotificationManager {
     }
 
     /**
-     * plays the sound for notification received to alert the user about the same
+     * plays the sound for notification received to alert tshe user about the same
      * @param applicationContext the application context
      */
     private void playNotificationSound(Context applicationContext) {

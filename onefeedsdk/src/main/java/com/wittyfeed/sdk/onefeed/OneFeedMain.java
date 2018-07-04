@@ -36,6 +36,7 @@ public final class OneFeedMain {
     public FCMTokenManager fcmTokenManager;
     private ContentViewMaker contentViewMaker;
     private OnInitialized onInitialized;
+    public OFCardFetcher ofCardFetcher;
 
     private OneFeedMain() {}
 
@@ -89,6 +90,12 @@ public final class OneFeedMain {
         loadDataStore(applicationContext);
 
         OFAnalytics.getInstance().sendAnalytics(OFAnalytics.AnalyticsType.SDK, "OneFeed Initialized");
+
+        Log.i("init", "ONEFEED INITIALIZED: ");
+
+        initOFCardFetcher(dataStore, applicationContext);
+
+
     }
 
     /**
@@ -195,6 +202,11 @@ public final class OneFeedMain {
         } else {
             OFLogger.log(OFLogger.ERROR, OFLogger.SDKMainInterFaceIsNull);
         }
+    }
+
+    private void initOFCardFetcher(DataStore dataStore,Context applicationContext){
+        ofCardFetcher = new OFCardFetcher();
+        ofCardFetcher.setDataStore(dataStore, applicationContext);
     }
 
     /**

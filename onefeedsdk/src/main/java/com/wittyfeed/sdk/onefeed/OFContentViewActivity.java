@@ -110,15 +110,15 @@ public final class OFContentViewActivity extends AppCompatActivity {
                             + jsonObject.optString("notification_id","")
             );
 
-            OFAnalytics.getInstance().sendAnalytics(
-                    this,
-                    jsonObject.optString("app_id",""),
-                    OFAnalytics.AnalyticsType.Story,
-                    ""
-                            + jsonObject.optString("story_id","")
-                            + ":"
-                            + "notification"
-            );
+//            OFAnalytics.getInstance().sendAnalytics(
+//                    this,
+//                    jsonObject.optString("app_id",""),
+//                    OFAnalytics.AnalyticsType.Story,
+//                    ""
+//                            + jsonObject.optString("story_id","")
+//                            + ":"
+//                            + "notification"
+//            );
         }
 
         if(chromeStatus == ChromeInstallationStatus.ACTIVE){

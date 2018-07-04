@@ -30,6 +30,19 @@ public final class Meta implements Parcelable
     @SerializedName("title")
     @Expose
     private Title title;
+
+    public int getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(int cardId) {
+        this.cardId = cardId;
+    }
+
+    @SerializedName("card_id")
+    @Expose
+    private int cardId;
+
     public final static Creator<Meta> CREATOR = new Creator<Meta>() {
 
 

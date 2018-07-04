@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.wittyfeed.sdk.onefeed.Models.Block;
 import com.wittyfeed.sdk.onefeed.Utils.OFLogger;
 import com.wittyfeed.sdk.onefeed.Models.MainDatum;
 
@@ -74,12 +75,51 @@ public final class DataStoreParser {
         return temp_mainDatum;
     }
 
+
+    public synchronized static MainDatum parseNonRepeatingDataString(@NonNull String rawDataStr) {
+        MainDatum temp_mainDatum = null;
+        try {
+            JSONObject jsonObject = new JSONObject(rawDataStr);
+            if(!jsonObject.optBoolean("status")){
+                return null;
+            } else {
+                if(jsonObject.optJSONObject("non_repeating_data")!=null)
+                    temp_mainDatum = parseDataStr(jsonObject.optJSONObject("non_repeating_data").toString());
+            }
+        } catch (JSONException e) {
+            OFLogger.log(OFLogger.ERROR, OFLogger.DataParseError);
+        }
+        return temp_mainDatum;
+    }
+
+    public synchronized static Block parseRepeatingDataString(@NonNull String rawDataStr) {
+        Block temp_block = null;
+        try {
+            JSONObject jsonObject = new JSONObject(rawDataStr);
+            if(!jsonObject.optBoolean("status")){
+                return null;
+            } else {
+                if(jsonObject.optJSONObject("repeating_data")!=null)
+                    temp_block = parseStrToBlock(jsonObject.optJSONObject("repeating_data").toString());
+            }
+        } catch (JSONException e) {
+            OFLogger.log(OFLogger.ERROR, OFLogger.DataParseError);
+        }
+        return temp_block;
+    }
+
     /**
      * Parses the string, maps to the corresponding GSON model object and returns it
      */
     private synchronized static MainDatum parseDataStr(@NonNull String rawDataString) {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         return gson.fromJson(rawDataString, MainDatum.class);
+    }
+
+
+    private synchronized static Block parseStrToBlock(@NonNull String rawDataString) {
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        return gson.fromJson(rawDataString, Block.class);
     }
 
 }

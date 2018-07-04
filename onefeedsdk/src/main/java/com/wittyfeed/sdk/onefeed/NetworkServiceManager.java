@@ -1,6 +1,7 @@
 package com.wittyfeed.sdk.onefeed;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,6 +22,22 @@ import java.util.Map;
  <p><span style="font-size: 13pt;"><strong>All web services for OneFeed are written here</strong></span></p>
  */
 public final class NetworkServiceManager {
+
+    public int getRepeatingDataOffset() {
+        return repeatingDataOffset;
+    }
+
+    public void incrementRepeatingDataOffset(){
+        repeatingDataOffset++;
+    }
+
+    public void resetRepeatingDataOffset(){
+        repeatingDataOffset = 0;
+    }
+
+
+    private int repeatingDataOffset = 0;
+
 
     /**
      * base url to OneFeed Server
@@ -46,6 +63,8 @@ public final class NetworkServiceManager {
      */
     private RequestQueue interestRequestQueue;
 
+    private RequestQueue repeatingDataRequestQueue;
+
     /**
      * separate request queue for independent configurations changes such as registering new FCM Token <br>
      * works with application context
@@ -61,6 +80,7 @@ public final class NetworkServiceManager {
             return;
         }
         this.mainFeedRequestQueue = Volley.newRequestQueue(applicationContext);
+        repeatingDataRequestQueue = Volley.newRequestQueue(applicationContext);
     }
 
     /**
@@ -153,6 +173,62 @@ public final class NetworkServiceManager {
                 }
         );
         mainFeedRequestQueue.add(request);
+    }
+
+
+    public void hitRepeatingDataAPI(final int offset, final OnNetworkServiceDidRespond onNetworkServiceDidRespond, int card_id){
+        if(repeatingDataRequestQueue == null){
+            OFLogger.log(OFLogger.ERROR, OFLogger.repeatingDataRequestQueueIsNull);
+            return;
+        }
+
+        String fcmTokenToSend = OneFeedMain.getInstance().getFcmTokenManager().getCurrentFcmToken();
+
+        OFLogger.log(OFLogger.DEBUG, OFLogger.OffsetCount + offset);
+
+        String url_api = basePrefix + "/Sdk/home_feed_v5";
+
+        url_api += "?";
+        url_api += "&unique_identifier=" + ApiClient.getInstance().getUniqueIdentifier();
+        url_api += "&offset=" + offset;
+        url_api += "&app_id=" + ApiClient.getInstance().getAppId();
+        url_api += "&api_key=" + ApiClient.getInstance().getApiKey();
+        url_api += "&firebase_token=" + fcmTokenToSend;
+        url_api += "&onefeed_sdk_version=" + Constant.ONE_FEED_VERSION;
+        url_api += "&device_id=" + ApiClient.getInstance().getDeviceId();
+        url_api += "&user_meta=" + ApiClient.getInstance().getUserMeta();
+        url_api += "&device_meta=" + ApiClient.getInstance().getDeviceMeta();
+        url_api += "&repeatingCard=" + 1;
+        url_api += "&card_id=" + card_id+"";
+
+        StringRequest request = new StringRequest(Request.Method.GET, url_api,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject resultJson = null;
+                        try {
+                            resultJson = new JSONObject(response);
+                            if(resultJson.optBoolean("status")) {
+                                onNetworkServiceDidRespond.onSuccessResponse(response);
+                            } else {
+                                OFLogger.log(OFLogger.ERROR, OFLogger.CouldNotFetchData + "MainFeed");
+                                onNetworkServiceDidRespond.onError();
+                            }
+                        } catch (JSONException e) {
+                            OFLogger.log(OFLogger.ERROR, OFLogger.CouldNotFetchData + "MainFeed", e);
+                            onNetworkServiceDidRespond.onError();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError e) {
+                        OFLogger.log(OFLogger.ERROR, OFLogger.CouldNotFetchData + "MainFeed", e);
+                        onNetworkServiceDidRespond.onError();
+                    }
+                }
+        );
+        repeatingDataRequestQueue.add(request);
     }
 
     /**

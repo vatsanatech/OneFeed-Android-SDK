@@ -55,7 +55,8 @@ public final class OFAnalytics {
         mainPayload.put("sdkvr","" + Constant.ONE_FEED_VERSION);
         mainPayload.put("lng", "" + Locale.getDefault().getISO3Language());
         mainPayload.put("cc", "" + Locale.getDefault().getISO3Country());
-        mainPayload.put("appuid",  "" + Utils.getPackageName(applicationContext));
+        mainPayload.put("pckg",  "" + Utils.getPackageName(applicationContext));
+        mainPayload.put("device_id", "" + ApiClient.getInstance().getDeviceId());
     }
 
     /**
@@ -110,7 +111,7 @@ public final class OFAnalytics {
             mainPayload.put("sdkvr",  "" + Constant.ONE_FEED_VERSION);
             mainPayload.put("lng", "" + Locale.getDefault().getISO3Language());
             mainPayload.put("cc", "" + Locale.getDefault().getISO3Country());
-            mainPayload.put("appuid",  "" + Utils.getPackageName(context));
+            mainPayload.put("pckg",  "" + Utils.getPackageName(context));
 
         }
 
@@ -148,6 +149,8 @@ public final class OFAnalytics {
         payload.put("sid", ""+storyId);
         payload.put("rsrc", "notification");
         payload.put("noid", ""+notificationId);
+        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
 
         sendRequest(payload);
     }
@@ -167,6 +170,9 @@ public final class OFAnalytics {
         payload.put("rsrc", "notification");
         payload.put("noid", ""+notificationId);
 
+        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+
         sendRequest(payload);
     }
 
@@ -179,6 +185,9 @@ public final class OFAnalytics {
         final Map<String, String> payload = new HashMap<>(mainPayload);
         payload.put("etype", ""+ eventType);
         payload.put("appid", ""+ appId);
+
+        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
 
         sendRequest(payload);
     }
@@ -197,6 +206,9 @@ public final class OFAnalytics {
         payload.put("sid", ""+storyId);
         payload.put("rsrc", ""+source);
 
+        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+
         sendRequest(payload);
     }
 
@@ -212,6 +224,9 @@ public final class OFAnalytics {
         payload.put("appid", ""+ appId);
         payload.put("srchstr", ""+ searchStr);
 
+        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+
         sendRequest(payload);
     }
 
@@ -225,6 +240,9 @@ public final class OFAnalytics {
         payload.put("etype", ""+ eventType);
         payload.put("appid", ""+ appId);
 
+        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+
         sendRequest(payload);
     }
 
@@ -235,7 +253,7 @@ public final class OFAnalytics {
             @Override
             public void onResponse(String response) {
                 OFLogger.log(OFLogger.VERBOSE, "response: " + response);
-                OFLogger.log(OFLogger.DEBUG, "Tracking Sent: " + payload.get("etype"));
+                OFLogger.log(OFLogger.DEBUG, "Tracking Sent: " + response+  payload.get("etype"));
             }
         }, new Response.ErrorListener() {
             @Override

@@ -1,9 +1,12 @@
 package com.wittyfeed.sdk.onefeed.DataStoreManagement;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.wittyfeed.sdk.onefeed.Models.Block;
+import com.wittyfeed.sdk.onefeed.Models.Card;
 import com.wittyfeed.sdk.onefeed.Models.MainDatum;
+import com.wittyfeed.sdk.onefeed.OneFeedMain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +39,31 @@ import java.util.List;
 public final class DataStore {
 
     private MainDatum mainFeedData;
+
+    public ArrayList<Card> getAllCardData() {
+        return allCardData;
+    }
+
+    private ArrayList<Card> allCardData = new ArrayList<>();
     private MainDatum searchFeedData;
     private MainDatum searchDefaultData;
     private MainDatum interestsDataDatum;
+    private MainDatum nonRepeatingDatum;
+
+    public MainDatum getMainFeedData() {
+        return mainFeedData;
+    }
+
+    public Block getRepeatingDatum() {
+        return repeatingDatum;
+    }
+
+    private Block repeatingDatum;
 
     private int mainFeedDataOffset = 0;
     private String lastStringSearched;
+    boolean isDataUpdated = false;
+
 
 
     /**
@@ -54,11 +76,23 @@ public final class DataStore {
         }
     }
 
+
     /**
      * Appends tbe data to the main list of Blocks
      */
 
     public void appendInMainFeedDataArray(MainDatum datumToAppend){
+        if(mainFeedData!=null)
+            mainFeedData.getBlocks().addAll(datumToAppend.getBlocks());
+    }
+
+    public void appendInRepeatingDataArray(Block datumToAppend){
+        if(repeatingDatum!=null)
+            repeatingDatum.getCards().addAll(datumToAppend.getCards());
+    }
+
+
+    public void appendInAllCardDataArray(MainDatum datumToAppend){
         if(mainFeedData!=null)
             mainFeedData.getBlocks().addAll(datumToAppend.getBlocks());
     }
@@ -76,6 +110,11 @@ public final class DataStore {
      */
     public void setMainFeedData(MainDatum mainFeedData) {
         this.mainFeedData = mainFeedData;
+//        OneFeedMain.getInstance().dataStore.getCardArray();
+    }
+
+    public void setRepeatingBlock(Block repeatingDatum) {
+        this.repeatingDatum = repeatingDatum;
     }
 
     /**
@@ -208,6 +247,14 @@ public final class DataStore {
         this.searchDefaultData = searchDefaultData;
     }
 
+    public void setNonRepeatingDatum(MainDatum nonRepeatingDatum) {
+        this.nonRepeatingDatum = nonRepeatingDatum;
+    }
+
+    public MainDatum getNonRepeatingDatum() {
+        return nonRepeatingDatum;
+    }
+
     /**
      * Clears the interest data list
      */
@@ -241,5 +288,38 @@ public final class DataStore {
      */
     public void setInterestsDataDatum(MainDatum interestsDataDatum) {
         this.interestsDataDatum = interestsDataDatum;
+    }
+
+//    public void refresh_all_card_arr(){
+//        allCardData.clear();
+//        if (!isDataUpdated) {
+//            if(mainFeedData.getBlocks().size() > 0){
+//                for (int i = 0; i < mainFeedData.getBlocks().size(); i++) {
+//                    ourInstance.block_arr.get(i).setBlock_pos(i);
+//                    for (int j = 0; j < ourInstance.block_arr.get(i).getStory().size(); j++) {
+//                        if(!ourInstance.block_arr.get(i).getStory().get(j).getCardType().equalsIgnoreCase("filler")){
+//                            ourInstance.block_arr.get(i).getStory().get(j).setBlock_pos(i);
+//                            ourInstance.block_arr.get(i).getStory().get(j).setStory_pos(j);
+//                            ourInstance.block_arr.get(i).getStory().get(j).setAll_card_pos(ourInstance.all_card_arr.size());
+//                            ourInstance.all_card_arr.add(ourInstance.block_arr.get(i).getStory().get(j));
+//                        }
+//                    }
+//                }
+//            }
+//            sort_cards_in_categories();
+//        } else {
+//
+//        }
+//    }
+
+    public void buildAllCardArray(){
+        if(OneFeedMain.getInstance().dataStore.repeatingDatum!=null){
+            if(allCardData == null)
+                allCardData = new ArrayList<Card>();
+            OneFeedMain.getInstance().dataStore.getAllCardData().clear();
+            allCardData.addAll(repeatingDatum.getCards());
+            for(int i = 0; i<repeatingDatum.getCards().size() ; i++)
+                Log.i("ALLCARDSTITLE", "getCardArray: "+repeatingDatum.getCards().get(i).getStoryTitle());
+        }
     }
 }

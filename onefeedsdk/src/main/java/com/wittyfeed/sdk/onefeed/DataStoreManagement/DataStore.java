@@ -38,6 +38,10 @@ import java.util.List;
 
 public final class DataStore {
 
+    public MainDatum getMainFeedData() {
+        return mainFeedData;
+    }
+
     private MainDatum mainFeedData;
 
     public ArrayList<Card> getAllCardData() {
@@ -49,10 +53,6 @@ public final class DataStore {
     private MainDatum searchDefaultData;
     private MainDatum interestsDataDatum;
     private MainDatum nonRepeatingDatum;
-
-    public MainDatum getMainFeedData() {
-        return mainFeedData;
-    }
 
     public Block getRepeatingDatum() {
         return repeatingDatum;

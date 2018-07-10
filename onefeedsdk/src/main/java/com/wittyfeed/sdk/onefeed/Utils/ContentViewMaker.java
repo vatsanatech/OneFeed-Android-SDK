@@ -203,7 +203,7 @@ public final class ContentViewMaker {
         OFLogger.log(OFLogger.DEBUG, OFLogger.URLToOpen + url_to_open);
         if(chromeStatus == ChromeInstallationStatus.ACTIVE && is_customTab_init_successful) {
             customTabsIntent.intent.setPackage(Constant.CHROME_PACKAGE_NAME);
-            customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             customTabsIntent.launchUrl(context, Uri.parse(url_to_open));
         } else {
             launchInContentViewActivity(context, url_to_open);

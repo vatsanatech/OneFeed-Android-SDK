@@ -275,7 +275,10 @@ public class OFCardFetcher {
                         public void onError() {
                             is_fetching_data = false;
                             Log.i(TAG, "onError: Could'nt load More Data");
-
+                            //Handle same card repeating when api is not fetching data
+                            if(cards_already_used_map.size() == OneFeedMain.getInstance().dataStore.getAllCardData().size()){
+                                clean_hashmap();
+                            }
                         }
                     },
                     card_id
@@ -300,15 +303,16 @@ public class OFCardFetcher {
                             OneFeedMain.getInstance().dataStore.buildAllCardArray();
                             OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(card_id, position, shouldHideCategory, textColor);
                             is_fetching_data = false;
-
                         }
 
                         @Override
                         public void onError() {
                             is_fetching_data = false;
                             Log.i(TAG, "onError: Could'nt load More Data");
-
-
+                            //Handle same card repeating when api is not fetching data
+                            if(cards_already_used_map.size() == OneFeedMain.getInstance().dataStore.getAllCardData().size()){
+                                clean_hashmap();
+                            }
                         }
                     },
                     card_id
@@ -403,7 +407,8 @@ public class OFCardFetcher {
                 cards_already_used_map.put(story_to_return.getId()+"", true);
                 break;
             }
-        }return story_to_return;
+        }
+        return story_to_return;
     }
 
 }

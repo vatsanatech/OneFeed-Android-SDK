@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         /*
          * below code is ***required*** for Initializing WittyFeed Android SDK API,
          */
-        OneFeedMain.getInstance().init(getApplicationContext(), APP_ID, API_KEY, FCM_TOKEN);
+        OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, FCM_TOKEN);
 
         /*
          * Below code is ***required*** for consistent unsubscription and token update on sdk version change

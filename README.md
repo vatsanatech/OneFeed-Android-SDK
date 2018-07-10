@@ -117,7 +117,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
         });
 
     // initializing SDK here (mandatory)
-    OneFeedMain.getInstance().init(getApplicationContext(), APP_ID, API_KEY, FCM_TOKEN);
+    OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, FCM_TOKEN);
     
     // Below code is required for consistent unsubscription from FCM topics and token update on onefeed sdk version change
     

@@ -51,10 +51,10 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 		}
 	}
 ```
-* add OneFeed-Android-SDK:2.1.1 in your app level build.gradle
+* add OneFeed-Android-SDK:2.1.3 in your app level build.gradle
 ```gradle
     dependencies {
-	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.1.1'
+	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.1.3'
 	}
 ```
 

@@ -2,7 +2,7 @@
 
 > # Note
 > WittyFeed SDK API is now `OneFeed Android SDK`,
-> New v2.1.1 made live on 18 June' 2018
+> New v2.1.3 made live on 10 July' 2018
 
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](#)
 [![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.1)
@@ -51,10 +51,10 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 		}
 	}
 ```
-* add OneFeed-Android-SDK:2.1.1 in your app level build.gradle
+* add OneFeed-Android-SDK:2.1.3 in your app level build.gradle
 ```gradle
     dependencies {
-	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.1.1'
+	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.1.3'
 	}
 ```
 
@@ -117,7 +117,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
         });
 
     // initializing SDK here (mandatory)
-    OneFeedMain.getInstance().init(getApplicationContext(), APP_ID, API_KEY, FCM_TOKEN);
+    OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, FCM_TOKEN);
     
     // Below code is required for consistent unsubscription from FCM topics and token update on onefeed sdk version change
     
@@ -160,7 +160,53 @@ Browse through the example app in this repository to see how the OneFeed SDK can
                 })
 ```
 
-### 1.6. For Notifications Service of OneFeed
+### 1.6. Fetch a Modular Native Card
+
+Step 1:
+In dashboard(https://onefeed.ai), Go to your added app section and Make a card according to your requirements and note the card id.
+
+Step 2:
+In activity/Fragment you intend to place native cards, update this line of code in OnCreate/OnCreateView
+
+```java
+        OneFeedMain.getInstance().ofCardFetcher.loadInitData(CARD_ID);
+```
+
+Step 3:
+```java
+    // Create a OfInterface to receive the card in view form in callback method OnSuccess.
+    // Also set the interface using setOfInterface().
+    
+    OFInterface ofInterface = new OFInterface() {
+
+                        @Override
+                        public void OnSuccess(View view) {
+                            //Use this veiw to drop in a holder layout
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            // handle unexpected happens here
+                        }
+                    };
+		   
+		   
+    OneFeedMain.getInstance().ofCardFetcher.setOfInterface(ofInterface);
+                    
+```
+
+Step 4:
+```java
+    // Finally call the below method to fetch a card (If you want same set of cards on every app launch)
+    // Give text size ratio between 0.1f to 1f.
+    // Hide Category title 
+    
+    OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(CARD_ID, TEXT_SIZE_RATIO, HIDE_CATEGORY, TEXT_COLOR);		   
+		                     
+```
+
+### 1.7. For Notifications Service of OneFeed
 
 In your class which extends FirebaseInstanceIDService, update with the code below
 ```java
@@ -209,7 +255,7 @@ In your class which extends FirebaseMessagingService, update with the code below
     }
 ```
 
-### 1.7. OneFeed is built for Potrait
+### 1.8. OneFeed is built for Potrait
 OneFeed works best in the world's default mode i.e Potrait, So don't forget to add the below line in Manifest.
 
 ```java

@@ -103,13 +103,14 @@ public class OFCardFetcher {
     }
 
 
-    public void loadInitData(int card_id) {
-
-        if (OneFeedMain.getInstance().dataStore.getAllCardData().size() < 1) {
-
-            if (!is_fetching_data) {
-
-                is_fetching_data = true;
+    public void loadInitData(int card_id, final OnInitialized onInitialized) {
+        OneFeedMain.getInstance().networkServiceManager.resetRepeatingDataOffset();
+        clean_hashmap();
+//        if (OneFeedMain.getInstance().dataStore.getAllCardData().size() < 1) {
+//
+//            if (!is_fetching_data) {
+//
+//                is_fetching_data = true;
 
                 OneFeedMain.getInstance().networkServiceManager.hitRepeatingDataAPI(
                         OneFeedMain.getInstance().networkServiceManager.getRepeatingDataOffset(),
@@ -120,22 +121,22 @@ public class OFCardFetcher {
                                 OneFeedMain.getInstance().dataStore.setRepeatingBlock(DataStoreParser.parseRepeatingDataString(response));
                                 OneFeedMain.getInstance().dataStore.buildAllCardArray();
                                 is_fetching_data = false;
-
+                                onInitialized.onSuccess();
                                 Log.i("TAG", "SUCCESSFULLY LOADED INITIAL DATA: ");
                             }
 
                             @Override
                             public void onError() {
                                 is_fetching_data = false;
-
+                                onInitialized.onError();
                             }
                         },
                         card_id
                 );
 
 
-            }
-        }
+//            }
+//        }
 
     }
 

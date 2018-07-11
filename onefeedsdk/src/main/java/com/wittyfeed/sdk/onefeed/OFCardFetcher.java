@@ -45,7 +45,7 @@ public class OFCardFetcher {
         TextView title_tv = inflatedView.findViewById(R.id.title_tv);
         TextView cat_tv = inflatedView.findViewById(R.id.cat_tv);
 
-        if(shouldHideCategory){
+        if (shouldHideCategory) {
             cat_tv.setVisibility(View.GONE);
             shouldHideCategory = false;
         }
@@ -56,13 +56,13 @@ public class OFCardFetcher {
 
         title_tv.setText(card.getStoryTitle());
 
-        title_tv.setTextSize(27*text_size_ratio);
+        title_tv.setTextSize(27 * text_size_ratio);
 
         cat_tv.setText(card.getSheildText());
 
-        cat_tv.setTextSize(20*text_size_ratio);
+        cat_tv.setTextSize(20 * text_size_ratio);
 
-        if(color!=null){
+        if (color != null) {
             title_tv.setTextColor(Color.parseColor(color));
             cat_tv.setTextColor(Color.parseColor(color));
         }
@@ -103,11 +103,11 @@ public class OFCardFetcher {
     }
 
 
-    public void loadInitData(int card_id){
+    public void loadInitData(int card_id) {
 
-        if(OneFeedMain.getInstance().dataStore.getAllCardData().size() < 1){
+        if (OneFeedMain.getInstance().dataStore.getAllCardData().size() < 1) {
 
-            if(!is_fetching_data){
+            if (!is_fetching_data) {
 
                 is_fetching_data = true;
 
@@ -117,7 +117,7 @@ public class OFCardFetcher {
                             @Override
                             public void onSuccessResponse(String response) {
                                 OneFeedMain.getInstance().networkServiceManager.incrementRepeatingDataOffset();
-                                OneFeedMain.getInstance().dataStore.setRepeatingBlock( DataStoreParser.parseRepeatingDataString(response));
+                                OneFeedMain.getInstance().dataStore.setRepeatingBlock(DataStoreParser.parseRepeatingDataString(response));
                                 OneFeedMain.getInstance().dataStore.buildAllCardArray();
                                 is_fetching_data = false;
 
@@ -147,14 +147,14 @@ public class OFCardFetcher {
 
         Card story = null;
 
-        if(OneFeedMain.getInstance().dataStore.getNonRepeatingDatum()!=null){
-            for(int i=0; i<OneFeedMain.getInstance().dataStore.getNonRepeatingDatum().getBlocks().size();i++){
-                if(OneFeedMain.getInstance().dataStore.getNonRepeatingDatum().getBlocks().get(i).getMeta().getCardId() == card_id){
+        if (OneFeedMain.getInstance().dataStore.getNonRepeatingDatum() != null) {
+            for (int i = 0; i < OneFeedMain.getInstance().dataStore.getNonRepeatingDatum().getBlocks().size(); i++) {
+                if (OneFeedMain.getInstance().dataStore.getNonRepeatingDatum().getBlocks().get(i).getMeta().getCardId() == card_id) {
                     story = OneFeedMain.getInstance().dataStore.getNonRepeatingDatum().getBlocks().get(i).getCards().get(0);
                 }
             }
 
-            if(story!=null){
+            if (story != null) {
                 view = makeCardUI(story, text_size_ratio, textColor);
                 ofInterface.OnSuccess(view);
 
@@ -162,7 +162,15 @@ public class OFCardFetcher {
         }
     }
 
-    public void fetch_repeating_card(int card_id, float text_size_ratio, boolean hideCategory, String textColor) {
+    //First time initialize for fetching repeating card
+    public void fetch_repeating_card(int card_id, float text_size_ratio, boolean hideCategory, String textColor, OnInitialized onInitialized) {
+        Log.i("TAG", "fetch_repeating_card: " + "ALL CARD IS EMPTY, LOADING NEW DATA NOW");
+        clean_hashmap();
+        load_fresh_data(card_id, onInitialized);
+        return;
+    }
+
+    public synchronized void fetch_repeating_card(int card_id, float text_size_ratio, boolean hideCategory, String textColor) {
 
         shouldHideCategory = hideCategory;
 
@@ -197,21 +205,21 @@ public class OFCardFetcher {
     }
 
 
-    public void fetch_repeating_card(int card_id, int position, float text_size_ratio, boolean hideCategory, String textColor){
+    public void fetch_repeating_card(int card_id, int position, float text_size_ratio, boolean hideCategory, String textColor) {
 
         shouldHideCategory = hideCategory;
 
-        if(OneFeedMain.getInstance().dataStore.getAllCardData().size()>0){
-            if(OneFeedMain.getInstance().dataStore.getRepeatingDatum().getMeta().getCardId() == card_id){
+        if (OneFeedMain.getInstance().dataStore.getAllCardData().size() > 0) {
+            if (OneFeedMain.getInstance().dataStore.getRepeatingDatum().getMeta().getCardId() == card_id) {
                 View view = null;
                 Card story = null;
 
-                if(OneFeedMain.getInstance().dataStore.getAllCardData().size() > position){
+                if (OneFeedMain.getInstance().dataStore.getAllCardData().size() > position) {
                     int temp_pos = get_next_static_card(position);
                     story = OneFeedMain.getInstance().dataStore.getAllCardData().get(temp_pos);
                 }
 
-                if(story == null){
+                if (story == null) {
                     load_more_data(card_id, position, textColor);
                     return;
                 }
@@ -227,7 +235,7 @@ public class OFCardFetcher {
                 load_fresh_data(card_id, position, textColor);
                 return;
             }
-        }else {
+        } else {
             load_fresh_data(card_id, position, textColor);
             return;
         }
@@ -235,14 +243,14 @@ public class OFCardFetcher {
     }
 
 
-    public int get_next_static_card(int position){
+    public int get_next_static_card(int position) {
         int arr_index = 0;
 
-        if(cards_mapper.get(position)!=null){
+        if (cards_mapper.get(position) != null) {
             arr_index = cards_mapper.get(position);
 
         } else {
-            cards_mapper.put(position,local_index);
+            cards_mapper.put(position, local_index);
             arr_index = local_index;
             local_index++;
         }
@@ -250,9 +258,9 @@ public class OFCardFetcher {
         return arr_index;
     }
 
-    public void load_more_data_np(final int card_id, final int all_card_size, final float text_size_ratio, final String textColor){
+    public void load_more_data_np(final int card_id, final int all_card_size, final float text_size_ratio, final String textColor) {
 
-        if(!is_fetching_data){
+        if (!is_fetching_data) {
 
             is_fetching_data = true;
             OneFeedMain.getInstance().networkServiceManager.hitRepeatingDataAPI(
@@ -263,7 +271,7 @@ public class OFCardFetcher {
                             OneFeedMain.getInstance().networkServiceManager.incrementRepeatingDataOffset();
                             OneFeedMain.getInstance().dataStore.appendInRepeatingDataArray(DataStoreParser.parseRepeatingDataString(response));
                             OneFeedMain.getInstance().dataStore.buildAllCardArray();
-                            if(all_card_size == OneFeedMain.getInstance().dataStore.getAllCardData().size()) {
+                            if (all_card_size == OneFeedMain.getInstance().dataStore.getAllCardData().size()) {
                                 OneFeedMain.getInstance().networkServiceManager.resetRepeatingDataOffset();
                             }
                             is_fetching_data = false;
@@ -276,7 +284,7 @@ public class OFCardFetcher {
                             is_fetching_data = false;
                             Log.i(TAG, "onError: Could'nt load More Data");
                             //Handle same card repeating when api is not fetching data
-                            if(cards_already_used_map.size() == OneFeedMain.getInstance().dataStore.getAllCardData().size()){
+                            if (cards_already_used_map.size() == OneFeedMain.getInstance().dataStore.getAllCardData().size()) {
                                 clean_hashmap();
                             }
                         }
@@ -288,9 +296,9 @@ public class OFCardFetcher {
 
     }
 
-    public void load_more_data(final int card_id, final int position, final String textColor){
+    public void load_more_data(final int card_id, final int position, final String textColor) {
 
-        if(!is_fetching_data){
+        if (!is_fetching_data) {
             is_fetching_data = true;
 
             OneFeedMain.getInstance().networkServiceManager.hitRepeatingDataAPI(
@@ -310,7 +318,7 @@ public class OFCardFetcher {
                             is_fetching_data = false;
                             Log.i(TAG, "onError: Could'nt load More Data");
                             //Handle same card repeating when api is not fetching data
-                            if(cards_already_used_map.size() == OneFeedMain.getInstance().dataStore.getAllCardData().size()){
+                            if (cards_already_used_map.size() == OneFeedMain.getInstance().dataStore.getAllCardData().size()) {
                                 clean_hashmap();
                             }
                         }
@@ -321,9 +329,9 @@ public class OFCardFetcher {
 
     }
 
-    public void load_fresh_data(final int card_id, final int position, final String textColor){
+    public void load_fresh_data(final int card_id, final int position, final String textColor) {
 
-        if(!is_fetching_data){
+        if (!is_fetching_data) {
             is_fetching_data = true;
 
             OneFeedMain.getInstance().networkServiceManager.hitRepeatingDataAPI(
@@ -351,9 +359,9 @@ public class OFCardFetcher {
 
     }
 
-    public void load_fresh_data(final int card_id){
+    public void load_fresh_data(final int card_id) {
 
-        if(!is_fetching_data){
+        if (!is_fetching_data) {
             is_fetching_data = true;
 
             OneFeedMain.getInstance().networkServiceManager.hitRepeatingDataAPI(
@@ -380,10 +388,38 @@ public class OFCardFetcher {
 
     }
 
+    public void load_fresh_data(final int card_id, final OnInitialized onInitialized) {
+
+
+        OneFeedMain.getInstance().networkServiceManager.resetRepeatingDataOffset();
+
+        OneFeedMain.getInstance().networkServiceManager.hitRepeatingDataAPI(
+                OneFeedMain.getInstance().networkServiceManager.getRepeatingDataOffset(),
+                new NetworkServiceManager.OnNetworkServiceDidRespond() {
+                    @Override
+                    public void onSuccessResponse(String response) {
+                        OneFeedMain.getInstance().networkServiceManager.incrementRepeatingDataOffset();
+                        OneFeedMain.getInstance().dataStore.setRepeatingBlock(DataStoreParser.parseRepeatingDataString(response));
+                        OneFeedMain.getInstance().dataStore.buildAllCardArray();
+                        onInitialized.onSuccess();
+                        is_fetching_data = false;
+                    }
+
+                    @Override
+                    public void onError() {
+                        Log.i("ALLCARDSTITLE", "onError: Could'nt load Fresh Data");
+                        onInitialized.onError();
+                        is_fetching_data = false;
+                    }
+                },
+                card_id
+        );
+    }
+
 
     private Card getNextCard() {
         Card card = null;
-        if (OneFeedMain.getInstance().dataStore.getAllCardData().size()-1 >= currentindex + 1) {
+        if (OneFeedMain.getInstance().dataStore.getAllCardData().size() - 1 >= currentindex + 1) {
             card = OneFeedMain.getInstance().dataStore.getAllCardData().get(currentindex);
             currentindex++;
             return card;
@@ -391,24 +427,31 @@ public class OFCardFetcher {
             return null;
     }
 
-    public void clean_hashmap(){
-        cards_already_used_map.clear();
+    public void clean_hashmap() {
+        if (cards_already_used_map != null)
+            cards_already_used_map.clear();
     }
 
-    private Card get_block_wise_next_available_card(){
+    private Card get_block_wise_next_available_card() {
         int i = 0;
         Card story_to_return = null;
-        if(cards_already_used_map == null)
+        if (cards_already_used_map == null)
             cards_already_used_map = new HashMap<>();
         for (; i < OneFeedMain.getInstance().dataStore.getAllCardData().size(); i++) {
             Card temp_story = OneFeedMain.getInstance().dataStore.getAllCardData().get(i);
-            if(!cards_already_used_map.containsKey(temp_story.getId()+"")){
+            if (!cards_already_used_map.containsKey(temp_story.getId() + "")) {
                 story_to_return = temp_story;
-                cards_already_used_map.put(story_to_return.getId()+"", true);
+                cards_already_used_map.put(story_to_return.getId() + "", true);
                 break;
             }
         }
         return story_to_return;
+    }
+
+
+    public interface OnInitialized {
+        void onSuccess();
+        void onError();
     }
 
 }

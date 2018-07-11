@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wittyfeed.sdk.onefeed.OFCardFetcher;
 import com.wittyfeed.sdk.onefeed.OFInterface;
@@ -49,10 +50,24 @@ public class NativeCardsActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(activity);
         endless_feed_rv.setLayoutManager(linearLayoutManager);
 
-        endlessFeedAdapter = new EndlessFeedAdapter(this);
-        endless_feed_rv.setAdapter(endlessFeedAdapter);
+        OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(3, 0.7f, false, "#4286f4", new OFCardFetcher.OnInitialized() {
+            @Override
+            public void onSuccess() {
+                endlessFeedAdapter = new EndlessFeedAdapter(NativeCardsActivity.this);
+                endless_feed_rv.setAdapter(endlessFeedAdapter);
+                Toast.makeText(NativeCardsActivity.this, "onSuccess", Toast.LENGTH_LONG).show();
+            }
 
-        OneFeedMain.getInstance().ofCardFetcher.loadInitData(3);
+            @Override
+            public void onError() {
+                endlessFeedAdapter = new EndlessFeedAdapter(NativeCardsActivity.this);
+                endless_feed_rv.setAdapter(endlessFeedAdapter);
+                Toast.makeText(NativeCardsActivity.this, "onError", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
 
         // Second Step is this
         // Tip: use the object of OfCardFetcher from Singleton class if you want to use cards in difference activities

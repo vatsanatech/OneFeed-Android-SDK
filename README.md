@@ -13,9 +13,9 @@
 2. [License](#2-license)
 
 ## Basic concepts
-OneFeed brings you new revolutionary way to monetize your App Business. OneFeed provides engaging content from top publishers in your app, and through the [Viral9 Dashboard](https://viral9.com) you can track your earning with the content consumption.
+OneFeed brings you new revolutionary way to monetize your App Business. OneFeed provides engaging content from top publishers in your app, and through the [OneFeed Dashboard](http://www.onefeed.ai/) you can track your earning with the content consumption.
 
-[Viral9 is World's Top Paying Network](https://viral9.com)
+[OneFeed is World's Top Paying Network](http://www.onefeed.ai/)
 
 OneFeed SDK has its core competency at its personalised feed recommendation algorithms and lightweight architecture.
 
@@ -36,7 +36,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.5)
 
-2. SignUp at [viral9.com](https://viral9.com) and create a new application to integrate with
+2. SignUp at [OneFeed](http://www.onefeed.ai/) and create a new application to integrate with
 
 3. Gather the API_KEY and APP_ID from the Viral9 Dashboard
 

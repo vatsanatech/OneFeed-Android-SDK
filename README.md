@@ -2,10 +2,10 @@
 
 > # Note
 > WittyFeed SDK API is now `OneFeed Android SDK`,
-> New v2.1.3 made live on 10 July' 2018
+> New v2.1.5 made live on 11 July' 2018
 
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](#)
-[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.1)
+[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.5)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/OneFeed-Android-SDK/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -34,7 +34,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ### 1.2. Incorporating the SDK
 
-1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.1)
+1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.5)
 
 2. SignUp at [viral9.com](https://viral9.com) and create a new application to integrate with
 
@@ -54,7 +54,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 * add OneFeed-Android-SDK:2.1.3 in your app level build.gradle
 ```gradle
     dependencies {
-	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.1.3'
+	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.1.5'
 	}
 ```
 
@@ -169,7 +169,17 @@ Step 2:
 In activity/Fragment you intend to place native cards, update this line of code in OnCreate/OnCreateView
 
 ```java
-        OneFeedMain.getInstance().ofCardFetcher.loadInitData(CARD_ID);
+        OneFeedMain.getInstance().ofCardFetcher.loadInitData(CARD_ID, new OFCardFetcher.OnInitialized() {
+            @Override
+            public void onSuccess() {
+                // Initialize your view when repeating card load successfully
+            }
+
+            @Override
+            public void onError() {
+		// if unexpected error
+            }
+        });
 ```
 
 Step 3:

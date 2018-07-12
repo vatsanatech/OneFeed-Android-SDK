@@ -50,7 +50,7 @@ public class NativeCardsActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(activity);
         endless_feed_rv.setLayoutManager(linearLayoutManager);
 
-        OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(3, 0.7f, false, "#4286f4", new OFCardFetcher.OnInitialized() {
+        OneFeedMain.getInstance().ofCardFetcher.loadInitData(3, new OFCardFetcher.OnInitialized() {
             @Override
             public void onSuccess() {
                 endlessFeedAdapter = new EndlessFeedAdapter(NativeCardsActivity.this);
@@ -180,7 +180,7 @@ public class NativeCardsActivity extends AppCompatActivity {
             if(position%7 == 0 && position != 0){
                 return 2;
             }
-            return 1;
+            return 2;
         }
 
         @Override

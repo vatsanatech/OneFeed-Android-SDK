@@ -38,7 +38,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 2. SignUp at [OneFeed](http://www.onefeed.ai/) and create a new application to integrate with
 
-3. Gather the API_KEY and APP_ID from the Viral9 Dashboard
+3. Gather the API_KEY and APP_ID from the OneFeed Dashboard
 
 4. Import OneFeed SDK in your project
 
@@ -273,7 +273,7 @@ OneFeed works best in the world's default mode i.e Potrait, So don't forget to a
 ```
 
 > ## Note
-> Notification service with WittyFeedNativeAndroidSDK is optional to use but is highly recommended. You will get to handle this notifications on Viral9 Dashbaord
+> Notification service with WittyFeedNativeAndroidSDK is optional to use but is highly recommended. You will get to handle this notifications on OneFeed Dashbaord
 
 
 ## 2. License

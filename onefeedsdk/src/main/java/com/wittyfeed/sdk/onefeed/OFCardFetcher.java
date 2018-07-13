@@ -39,7 +39,7 @@ public class OFCardFetcher {
 
     private OFInterface ofInterface;
 
-    public View makeCardUI(final Card card, float text_size_ratio, @Nullable String color) {
+    public View makeCardUI(final Card card, float text_size_ratio, @Nullable String color, boolean imageVertical) {
         inflatedView = LayoutInflater.from(context).inflate(R.layout.card_native, null);
 
         TextView title_tv = inflatedView.findViewById(R.id.title_tv);
@@ -68,7 +68,7 @@ public class OFCardFetcher {
         }
 
         OFGlide.with(context)
-                .load(card.getCoverImage())
+                .load(imageVertical ? card.getSquareCoverImage() : card.getCoverImage())
                 .into(cover_iv);
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) title_tv.getLayoutParams();
@@ -141,7 +141,7 @@ public class OFCardFetcher {
     }
 
 
-    public void fetch_non_repeating_card(int card_id, float text_size_ratio, boolean hideCategory, String textColor) {
+    public void fetch_non_repeating_card(int card_id, float text_size_ratio, boolean hideCategory, String textColor, boolean imageVertical) {
         View view = null;
 
         shouldHideCategory = hideCategory;
@@ -156,7 +156,7 @@ public class OFCardFetcher {
             }
 
             if (story != null) {
-                view = makeCardUI(story, text_size_ratio, textColor);
+                view = makeCardUI(story, text_size_ratio, textColor, imageVertical);
                 ofInterface.OnSuccess(view);
 
             }
@@ -171,7 +171,7 @@ public class OFCardFetcher {
         return;
     }
 
-    public synchronized void fetch_repeating_card(int card_id, float text_size_ratio, boolean hideCategory, String textColor) {
+    public synchronized void fetch_repeating_card(int card_id, float text_size_ratio, boolean hideCategory, String textColor, boolean imageVertical) {
 
         shouldHideCategory = hideCategory;
 
@@ -183,11 +183,11 @@ public class OFCardFetcher {
                 story = get_block_wise_next_available_card();
 
                 if (story == null) {
-                    load_more_data_np(card_id, OneFeedMain.getInstance().dataStore.getAllCardData().size(), text_size_ratio, textColor);
+                    load_more_data_np(card_id, OneFeedMain.getInstance().dataStore.getAllCardData().size(), text_size_ratio, textColor, imageVertical);
                     return;
                 }
 
-                view = makeCardUI(story, text_size_ratio, textColor);
+                view = makeCardUI(story, text_size_ratio, textColor, imageVertical);
                 ofInterface.OnSuccess(view);
                 return;
 
@@ -206,7 +206,7 @@ public class OFCardFetcher {
     }
 
 
-    public void fetch_repeating_card(int card_id, int position, float text_size_ratio, boolean hideCategory, String textColor) {
+    public void fetch_repeating_card(int card_id, int position, float text_size_ratio, boolean hideCategory, String textColor, boolean imageVertical) {
 
         shouldHideCategory = hideCategory;
 
@@ -221,11 +221,11 @@ public class OFCardFetcher {
                 }
 
                 if (story == null) {
-                    load_more_data(card_id, position, textColor);
+                    load_more_data(card_id, position, textColor, imageVertical);
                     return;
                 }
 
-                view = makeCardUI(story, text_size_ratio, textColor);
+                view = makeCardUI(story, text_size_ratio, textColor, imageVertical);
                 ofInterface.OnSuccess(view);
                 return;
 
@@ -233,11 +233,11 @@ public class OFCardFetcher {
                 OneFeedMain.getInstance().dataStore.getAllCardData().clear();
                 OneFeedMain.getInstance().dataStore.getRepeatingDatum().setMeta(null);
                 OneFeedMain.getInstance().dataStore.getRepeatingDatum().setCards(null);
-                load_fresh_data(card_id, position, textColor);
+                load_fresh_data(card_id, position, textColor, imageVertical);
                 return;
             }
         } else {
-            load_fresh_data(card_id, position, textColor);
+            load_fresh_data(card_id, position, textColor, imageVertical);
             return;
         }
 
@@ -259,7 +259,7 @@ public class OFCardFetcher {
         return arr_index;
     }
 
-    public void load_more_data_np(final int card_id, final int all_card_size, final float text_size_ratio, final String textColor) {
+    public void load_more_data_np(final int card_id, final int all_card_size, final float text_size_ratio, final String textColor, final boolean imageVertical) {
 
         if (!is_fetching_data) {
 
@@ -276,7 +276,7 @@ public class OFCardFetcher {
                                 OneFeedMain.getInstance().networkServiceManager.resetRepeatingDataOffset();
                             }
                             is_fetching_data = false;
-                            OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(card_id, text_size_ratio, shouldHideCategory, textColor);
+                            OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(card_id, text_size_ratio, shouldHideCategory, textColor, imageVertical);
 
                         }
 
@@ -297,7 +297,7 @@ public class OFCardFetcher {
 
     }
 
-    public void load_more_data(final int card_id, final int position, final String textColor) {
+    public void load_more_data(final int card_id, final int position, final String textColor, final boolean imageVertical) {
 
         if (!is_fetching_data) {
             is_fetching_data = true;
@@ -310,7 +310,7 @@ public class OFCardFetcher {
                             OneFeedMain.getInstance().networkServiceManager.incrementRepeatingDataOffset();
                             OneFeedMain.getInstance().dataStore.appendInRepeatingDataArray(DataStoreParser.parseRepeatingDataString(response));
                             OneFeedMain.getInstance().dataStore.buildAllCardArray();
-                            OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(card_id, position, shouldHideCategory, textColor);
+                            OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(card_id, position, shouldHideCategory, textColor, imageVertical);
                             is_fetching_data = false;
                         }
 
@@ -330,7 +330,7 @@ public class OFCardFetcher {
 
     }
 
-    public void load_fresh_data(final int card_id, final int position, final String textColor) {
+    public void load_fresh_data(final int card_id, final int position, final String textColor, final boolean imageVertical) {
 
         if (!is_fetching_data) {
             is_fetching_data = true;
@@ -343,7 +343,7 @@ public class OFCardFetcher {
                             OneFeedMain.getInstance().networkServiceManager.incrementRepeatingDataOffset();
                             OneFeedMain.getInstance().dataStore.setRepeatingBlock(DataStoreParser.parseRepeatingDataString(response));
                             OneFeedMain.getInstance().dataStore.buildAllCardArray();
-                            OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(card_id, position, shouldHideCategory, textColor);
+                            OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(card_id, position, shouldHideCategory, textColor, imageVertical);
                             is_fetching_data = false;
                         }
 

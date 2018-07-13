@@ -38,7 +38,7 @@ public class NonRepeatingDemoActivity extends AppCompatActivity{
         OneFeedMain.getInstance().ofCardFetcher.setOfInterface(ofInterface);
 
         // Third and Last Step is this
-        OneFeedMain.getInstance().ofCardFetcher.fetch_non_repeating_card(2, 1, true,null);
+        OneFeedMain.getInstance().ofCardFetcher.fetch_non_repeating_card(2, 1, true,null, false);
 
     }
 }

@@ -2,10 +2,10 @@
 
 > # Note
 > WittyFeed SDK API is now `OneFeed Android SDK`,
-> New v2.1.5 made live on 11 July' 2018
+> New v2.1.6 made live on 13 July' 2018
 
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](#)
-[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.5)
+[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.6)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/OneFeed-Android-SDK/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -13,9 +13,9 @@
 2. [License](#2-license)
 
 ## Basic concepts
-OneFeed brings you new revolutionary way to monetize your App Business. OneFeed provides engaging content from top publishers in your app, and through the [Viral9 Dashboard](https://viral9.com) you can track your earning with the content consumption.
+OneFeed brings you new revolutionary way to monetize your App Business. OneFeed provides engaging content from top publishers in your app, and through the [OneFeed Dashboard](http://www.onefeed.ai/) you can track your earning with the content consumption.
 
-[Viral9 is World's Top Paying Network](https://viral9.com)
+[OneFeed is World's Top Paying Network](http://www.onefeed.ai/)
 
 OneFeed SDK has its core competency at its personalised feed recommendation algorithms and lightweight architecture.
 
@@ -34,11 +34,11 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ### 1.2. Incorporating the SDK
 
-1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.5)
+1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.6)
 
-2. SignUp at [viral9.com](https://viral9.com) and create a new application to integrate with
+2. SignUp at [OneFeed](http://www.onefeed.ai/) and create a new application to integrate with
 
-3. Gather the API_KEY and APP_ID from the Viral9 Dashboard
+3. Gather the API_KEY and APP_ID from the OneFeed Dashboard
 
 4. Import OneFeed SDK in your project
 
@@ -51,10 +51,10 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 		}
 	}
 ```
-* add OneFeed-Android-SDK:2.1.5 in your app level build.gradle
+* add OneFeed-Android-SDK:2.1.6 in your app level build.gradle
 ```gradle
     dependencies {
-	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.1.5'
+	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.1.6'
 	}
 ```
 
@@ -210,9 +210,10 @@ Step 4:
 ```java
     // Finally call the below method to fetch a card (If you want same set of cards on every app launch)
     // Give text size ratio between 0.1f to 1f.
-    // Hide Category title 
+    // Hide Category title
+    // Pass parameter true for vertical image and false for horizontal image
     
-    OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(CARD_ID, TEXT_SIZE_RATIO, HIDE_CATEGORY, TEXT_COLOR);		   
+    OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(CARD_ID, TEXT_SIZE_RATIO, HIDE_CATEGORY, TEXT_COLOR, VERTICAL_IMAGE);
 		                     
 ```
 
@@ -273,7 +274,7 @@ OneFeed works best in the world's default mode i.e Potrait, So don't forget to a
 ```
 
 > ## Note
-> Notification service with WittyFeedNativeAndroidSDK is optional to use but is highly recommended. You will get to handle this notifications on Viral9 Dashbaord
+> Notification service with WittyFeedNativeAndroidSDK is optional to use but is highly recommended. You will get to handle this notifications on OneFeed Dashbaord
 
 
 ## 2. License

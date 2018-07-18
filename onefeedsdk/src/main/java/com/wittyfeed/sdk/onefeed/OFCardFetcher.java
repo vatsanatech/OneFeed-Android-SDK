@@ -157,7 +157,7 @@ public class OFCardFetcher {
 
             if (story != null) {
                 view = makeCardUI(story, text_size_ratio, textColor, imageVertical);
-                ofInterface.OnSuccess(view);
+                ofInterface.OnSuccess(view, story.getSheildText(), story.getStoryTitle());
 
             }
         }
@@ -188,7 +188,7 @@ public class OFCardFetcher {
                 }
 
                 view = makeCardUI(story, text_size_ratio, textColor, imageVertical);
-                ofInterface.OnSuccess(view);
+                ofInterface.OnSuccess(view, story.getSheildText(), story.getStoryTitle());
                 return;
 
             } else {
@@ -226,7 +226,7 @@ public class OFCardFetcher {
                 }
 
                 view = makeCardUI(story, text_size_ratio, textColor, imageVertical);
-                ofInterface.OnSuccess(view);
+                ofInterface.OnSuccess(view, story.getSheildText(), story.getStoryTitle());
                 return;
 
             } else {

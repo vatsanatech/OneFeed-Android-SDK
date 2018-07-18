@@ -147,7 +147,7 @@ public class NativeCardsActivity extends AppCompatActivity {
                     OFInterface ofInterface = new OFInterface() {
 
                         @Override
-                        public void OnSuccess(View view) {
+                        public void OnSuccess(View view, String categoryName, String storyTitle) {
                             finalHolder.item_ll.removeAllViewsInLayout();
                             finalHolder.item_ll.addView(view);
                         }

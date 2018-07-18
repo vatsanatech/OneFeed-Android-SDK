@@ -22,7 +22,7 @@ public class NonRepeatingDemoActivity extends AppCompatActivity{
 
 
             @Override
-            public void OnSuccess(View view) {
+            public void OnSuccess(View view, String categoryName, String storyTitle) {
                 item_ll.addView(view);
             }
 

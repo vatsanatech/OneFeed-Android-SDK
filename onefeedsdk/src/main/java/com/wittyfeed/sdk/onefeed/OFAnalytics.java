@@ -31,6 +31,7 @@ import java.util.Map;
 
 public final class OFAnalytics {
 
+    private static OFAnalytics ourInstance;
     private Map<String, String> mainPayload;
     private RequestQueue requestQueue;
 
@@ -41,7 +42,12 @@ public final class OFAnalytics {
      * @return instance of OFAnalytics
      */
     public static OFAnalytics getInstance() {
-        return LazyHolder.ourInstance;
+
+        //Changed by yogesh soni
+        if(ourInstance == null) {
+            ourInstance = new OFAnalytics();
+        }
+        return ourInstance;
     }
 
     /**
@@ -150,7 +156,8 @@ public final class OFAnalytics {
         payload.put("sid", ""+storyId);
         payload.put("rsrc", "notification");
         payload.put("noid", ""+notificationId);
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
+        //Changes by yogesh soni
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
             payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
 
         sendRequest(payload);

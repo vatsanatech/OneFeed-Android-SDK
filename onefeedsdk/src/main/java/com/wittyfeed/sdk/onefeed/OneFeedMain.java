@@ -28,6 +28,8 @@ import com.wittyfeed.sdk.onefeed.Utils.OneFeedBuilder;
 
 public final class OneFeedMain {
 
+    private static OneFeedMain ourInstance;
+
     public DataStore dataStore;
     public OFSharedPreference ofSharedPreference;
     public NetworkServiceManager networkServiceManager;
@@ -44,7 +46,10 @@ public final class OneFeedMain {
      * @return singleton instance of {@link OneFeedMain}
      */
     public static OneFeedMain getInstance() {
-        return LazyHolder.ourInstance;
+        if(ourInstance == null) {
+            ourInstance = new OneFeedMain();
+        }
+        return ourInstance;
     }
 
     /**
@@ -154,9 +159,16 @@ public final class OneFeedMain {
      * DataStore holds the data of OneFeed
      */
     private void initDataStore(){
-        dataStore = new DataStore();
+            dataStore = new DataStore();
     }
 
+    //Changed by Yogesh
+    public DataStore getInstanceDataStore(){
+        if(dataStore == null){
+            dataStore = new DataStore();
+        }
+        return dataStore;
+    }
     /**
      * initialises SharedPref that will be used by OneFeed
      * @param applicationContext    the appliation context

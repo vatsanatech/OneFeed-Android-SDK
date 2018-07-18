@@ -266,7 +266,7 @@ In your class which extends FirebaseMessagingService, update with the code below
     }
 ```
 
-### 1.8. OneFeed is built for Potrait
+### 1.8. OneFeed is built for Portrait
 OneFeed works best in the world's default mode i.e Potrait, So don't forget to add the below line in Manifest.
 
 ```java

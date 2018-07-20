@@ -158,7 +158,7 @@ public final class OFAnalytics {
         payload.put("noid", ""+notificationId);
         //Changes by yogesh soni
         if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
         sendRequest(payload);
     }
@@ -177,11 +177,11 @@ public final class OFAnalytics {
         payload.put("sid", ""+storyId);
         payload.put("rsrc", "notification");
         payload.put("noid", ""+notificationId);
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
         sendRequest(payload);
     }
@@ -195,11 +195,11 @@ public final class OFAnalytics {
         final Map<String, String> payload = new HashMap<>(mainPayload);
         payload.put("etype", ""+ eventType);
         payload.put("appid", ""+ appId);
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
         sendRequest(payload);
     }
@@ -217,11 +217,11 @@ public final class OFAnalytics {
         payload.put("appid", ""+ appId);
         payload.put("sid", ""+storyId);
         payload.put("rsrc", ""+source);
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
         sendRequest(payload);
     }
@@ -237,11 +237,11 @@ public final class OFAnalytics {
         payload.put("etype", ""+ eventType);
         payload.put("appid", ""+ appId);
         payload.put("srchstr", ""+ searchStr);
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
         sendRequest(payload);
     }
@@ -255,11 +255,11 @@ public final class OFAnalytics {
         final Map<String, String> payload = new HashMap<>(mainPayload);
         payload.put("etype", ""+ eventType);
         payload.put("appid", ""+ appId);
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
-        if(OneFeedMain.getInstance().dataStore.getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig());
+        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
+            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
         sendRequest(payload);
     }

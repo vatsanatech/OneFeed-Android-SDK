@@ -64,51 +64,55 @@ public final class OFContentViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_content_view_wfsdk);
-
         Bundle bundle = getIntent().getExtras();
+        init(bundle);
+     }
 
-        if (bundle != null && bundle.containsKey("is_loaded_notification")) {
-            isFromNotification = true;
-        }
+     private void init(Bundle bundle){
 
-        try {
-            this.getActionBar().hide();
-        } catch (Exception e) {
-            // do nothing
-        }
-        try {
-            this.getSupportActionBar().hide();
-        } catch (Exception e) {
-            // do nothing
-        }
 
-        web_view = findViewById(R.id.wv_data);
-        determinateBar = findViewById(R.id.determinateBar);
-        loaderView_rl = findViewById(R.id.loaderView_rl);
-        loader_iv = findViewById(R.id.loader_iv);
+         if (bundle != null && bundle.containsKey("is_loaded_notification")) {
+             isFromNotification = true;
+         }
 
-        getValuesFromExtras();
+         try {
+             this.getActionBar().hide();
+         } catch (Exception e) {
+             // do nothing
+         }
+         try {
+             this.getSupportActionBar().hide();
+         } catch (Exception e) {
+             // do nothing
+         }
 
-        checkGoogleChromeStatus(this);
+         web_view = findViewById(R.id.wv_data);
+         determinateBar = findViewById(R.id.determinateBar);
+         loaderView_rl = findViewById(R.id.loaderView_rl);
+         loader_iv = findViewById(R.id.loader_iv);
 
-        setOnBackFromOFWebViewInterface(new OnBackFromOFWebViewInterface() {
-            @Override
-            public void performBack() {
-                customFinishApp();
-            }
-        });
+         getValuesFromExtras();
 
-        if(isFromNotification){
-            OFAnalytics.getInstance().sendAnalytics(
-                    this,
-                    jsonObject.optString("app_id",""),
-                    OFAnalytics.AnalyticsType.NotificationOpened,
-                    ""
-                            + ""
-                            + jsonObject.optString("story_id","")
-                            + ":"
-                            + jsonObject.optString("notification_id","")
-            );
+         checkGoogleChromeStatus(this);
+
+         setOnBackFromOFWebViewInterface(new OnBackFromOFWebViewInterface() {
+             @Override
+             public void performBack() {
+                 customFinishApp();
+             }
+         });
+
+         if(isFromNotification){
+             OFAnalytics.getInstance().sendAnalytics(
+                     this,
+                     jsonObject.optString("app_id",""),
+                     OFAnalytics.AnalyticsType.NotificationOpened,
+                     ""
+                             + ""
+                             + jsonObject.optString("story_id","")
+                             + ":"
+                             + jsonObject.optString("notification_id","")
+             );
 
 //            OFAnalytics.getInstance().sendAnalytics(
 //                    this,
@@ -119,25 +123,23 @@ public final class OFContentViewActivity extends AppCompatActivity {
 //                            + ":"
 //                            + "notification"
 //            );
-        }
+         }
 
-        if(chromeStatus == ChromeInstallationStatus.ACTIVE){
-            try{
-                OneFeedMain.getInstance().getContentViewMaker(this.getApplicationContext()).launch(this, urlToOpen );
-                Constant.hasChromeCustomTabLoaded = true;
-            }catch (Exception e){
-                isBeingLoadedInWebview = true;
-                initLoaderView(this);
-                initWebViewContent();
-            }
-        }else {
-            isBeingLoadedInWebview = true;
-            initLoaderView(this);
-            initWebViewContent();
-        }
-
-
-    }
+         if(chromeStatus == ChromeInstallationStatus.ACTIVE){
+             try{
+                 OneFeedMain.getInstance().getContentViewMaker(this.getApplicationContext()).launch(this, urlToOpen );
+                 Constant.hasChromeCustomTabLoaded = true;
+             }catch (Exception e){
+                 isBeingLoadedInWebview = true;
+                 initLoaderView(this);
+                 initWebViewContent();
+             }
+         }else {
+             isBeingLoadedInWebview = true;
+             initLoaderView(this);
+             initWebViewContent();
+         }
+     }
 
     /**
      * Checks if chrome is disabled
@@ -275,5 +277,14 @@ public final class OFContentViewActivity extends AppCompatActivity {
 
     interface OnBackFromOFWebViewInterface {
         void performBack();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        //super.onNewIntent(intent);
+
+        Bundle bundle = intent.getExtras();
+        init(bundle);
+        finish();
     }
 }

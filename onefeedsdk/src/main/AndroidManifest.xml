@@ -7,10 +7,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <application
-        android:supportsRtl="true">
+    <application android:supportsRtl="true">
 
-        <activity android:name=".OFContentViewActivity">
+        <activity android:name=".OFContentViewActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="OpenOneFeedActivity" />
                 <category android:name="android.intent.category.DEFAULT" />

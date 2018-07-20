@@ -248,7 +248,7 @@ public final class NetworkServiceManager {
         url_api += "?";
         url_api += "&keyword=" + stringToSearch;
         url_api += "&offset=" + (searchLoadmoreOffset*10);
-        url_api += "&user_id=" + OneFeedMain.getInstance().dataStore.getUserIdFromConfig();
+        url_api += "&user_id=" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig();
         url_api += "&app_id=" + ApiClient.getInstance().getAppId();
 
         StringRequest request = new StringRequest(Request.Method.GET, url_api,

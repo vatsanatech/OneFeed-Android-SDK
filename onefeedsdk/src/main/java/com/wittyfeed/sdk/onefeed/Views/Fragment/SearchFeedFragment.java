@@ -93,10 +93,10 @@ public final class SearchFeedFragment extends Fragment {
         search_v.getLayoutParams().width = Utils.getSearchBarBackgroundWidth(getContext());
         search_et.getLayoutParams().width = Utils.getSearchBarWidth(getContext());
 
-        lastStringSearched = OneFeedMain.getInstance().dataStore.getLastStringSearched();
+        lastStringSearched = OneFeedMain.getInstance().getInstanceDataStore().getLastStringSearched();
         search_et.setText(""+ lastStringSearched);
 
-        mainAdapter = new MainAdapter((ArrayList<Block>) OneFeedMain.getInstance().dataStore.getSearchFeedDataBlockArr(), 2);
+        mainAdapter = new MainAdapter((ArrayList<Block>) OneFeedMain.getInstance().getInstanceDataStore().getSearchFeedDataBlockArr(), 2);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         searchFeedRv.setLayoutManager(linearLayoutManager);
         searchFeedRv.setAdapter(mainAdapter);
@@ -169,16 +169,16 @@ public final class SearchFeedFragment extends Fragment {
                     @Override
                     public void onSuccessResponse(String response) {
                         OFLogger.log(OFLogger.DEBUG, OFLogger.SuccessfullySearchedFor + lastStringSearched);
-                        OneFeedMain.getInstance().dataStore.setLastStringSearched(lastStringSearched);
+                        OneFeedMain.getInstance().getInstanceDataStore().setLastStringSearched(lastStringSearched);
 
-                        OneFeedMain.getInstance().dataStore.setSearchFeedData( DataStoreParser.parseGenericFeedString(response) );
+                        OneFeedMain.getInstance().getInstanceDataStore().setSearchFeedData( DataStoreParser.parseGenericFeedString(response) );
 
                         OFLogger.log(OFLogger.DEBUG, OFLogger.SearchFeedArraySize +
-                                OneFeedMain.getInstance().dataStore.getSearchFeedDataBlockArr().size());
+                                OneFeedMain.getInstance().getInstanceDataStore().getSearchFeedDataBlockArr().size());
 
                         OFAnalytics.getInstance().sendAnalytics(OFAnalytics.AnalyticsType.Search, stringToSearch);
 
-                        mainAdapter = new MainAdapter((ArrayList<Block>) OneFeedMain.getInstance().dataStore.getSearchFeedDataBlockArr(), 2);
+                        mainAdapter = new MainAdapter((ArrayList<Block>) OneFeedMain.getInstance().getInstanceDataStore().getSearchFeedDataBlockArr(), 2);
                         searchFeedRv.setAdapter(mainAdapter);
 
                         pb.setVisibility(View.GONE);

@@ -142,7 +142,7 @@ public final class OFNotificationManager {
         final NotificationManager notificationManager = (NotificationManager) applicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
         final String CHANNEL_NAME = "Trending Stories";
         final String NOTIFICATION_CHANNEL_ID = "notification_channel_location";
-        final int NOTIFICATION_ID = 100;
+        final int NOTIFICATION_ID = (int) System.currentTimeMillis();
         int importance = NotificationManager.IMPORTANCE_HIGH;
         try {
             final PendingIntent pendingIntent = PendingIntent.getActivity(
@@ -272,6 +272,7 @@ public final class OFNotificationManager {
                                         .setLargeIcon(BitmapFactory.decodeResource(applicationContext.getResources(), notiff_icon))
                                         .build();
 
+                                mNotification.defaults = Notification.DEFAULT_ALL;
                                 /*notification flag for cancel notification automatically*/
                                 mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 

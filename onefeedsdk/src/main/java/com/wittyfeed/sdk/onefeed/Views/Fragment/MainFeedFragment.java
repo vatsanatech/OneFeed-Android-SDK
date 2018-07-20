@@ -76,7 +76,7 @@ public class MainFeedFragment extends Fragment {
         onefeed_rv = view.findViewById(R.id.onefeed_rv);
         mainFeed_srl = view.findViewById(R.id.mainFeed_srl);
 
-        mainAdapter = new MainAdapter((ArrayList<Block>) OneFeedMain.getInstance().dataStore.getMainFeedDataBlockArr(), 1);
+        mainAdapter = new MainAdapter((ArrayList<Block>) OneFeedMain.getInstance().getInstanceDataStore().getMainFeedDataBlockArr(), 1);
 
         linearLayoutManager = new LinearLayoutManager(getContext());
         onefeed_rv.setLayoutManager(linearLayoutManager);
@@ -111,14 +111,14 @@ public class MainFeedFragment extends Fragment {
                             isFetchingData = true;
 
                             OneFeedMain.getInstance().networkServiceManager.hitMainFeedDataAPI(
-                                    OneFeedMain.getInstance().dataStore.getMainFeedDataOffset(),
+                                    OneFeedMain.getInstance().getInstanceDataStore().getMainFeedDataOffset(),
                                     new NetworkServiceManager.OnNetworkServiceDidRespond() {
                                         @Override
                                         public void onSuccessResponse(String response) {
-                                            OneFeedMain.getInstance().dataStore.appendInMainFeedDataArray( DataStoreParser.parseMainFeedString(response) );
+                                            OneFeedMain.getInstance().getInstanceDataStore().appendInMainFeedDataArray( DataStoreParser.parseMainFeedString(response) );
 
                                             mainAdapter.notifyDataSetChanged();
-                                            OneFeedMain.getInstance().dataStore.incrementMainFeedDataOffset();
+                                            OneFeedMain.getInstance().getInstanceDataStore().incrementMainFeedDataOffset();
                                             OFLogger.log(OFLogger.DEBUG, OFLogger.FetchMoreEnd);
                                             isFetchingData = false;
                                         }
@@ -152,18 +152,18 @@ public class MainFeedFragment extends Fragment {
                 }
 
                 OFLogger.log(OFLogger.DEBUG, OFLogger.RefreshDataStart);
-                OneFeedMain.getInstance().dataStore.resetMainFeedDataOffset();
+                OneFeedMain.getInstance().getInstanceDataStore().resetMainFeedDataOffset();
                 OneFeedMain.getInstance().networkServiceManager.hitMainFeedDataAPI(
-                        OneFeedMain.getInstance().dataStore.getMainFeedDataOffset(),
+                        OneFeedMain.getInstance().getInstanceDataStore().getMainFeedDataOffset(),
                         new NetworkServiceManager.OnNetworkServiceDidRespond() {
                             @Override
                             public void onSuccessResponse(String response) {
-                                OneFeedMain.getInstance().dataStore.clearMainFeedDataArray();
-                                OneFeedMain.getInstance().dataStore.setMainFeedData( DataStoreParser.parseMainFeedString(response) );
-                                mainAdapter.setBlock_arr((ArrayList<Block>) OneFeedMain.getInstance().dataStore.getMainFeedDataBlockArr());
+                                OneFeedMain.getInstance().getInstanceDataStore().clearMainFeedDataArray();
+                                OneFeedMain.getInstance().getInstanceDataStore().setMainFeedData( DataStoreParser.parseMainFeedString(response) );
+                                mainAdapter.setBlock_arr((ArrayList<Block>) OneFeedMain.getInstance().getInstanceDataStore().getMainFeedDataBlockArr());
                                 mainAdapter.notifyDataSetChanged();
                                 mainFeed_srl.setRefreshing(false);
-                                OneFeedMain.getInstance().dataStore.incrementMainFeedDataOffset();
+                                OneFeedMain.getInstance().getInstanceDataStore().incrementMainFeedDataOffset();
                                 OFLogger.log(OFLogger.DEBUG, OFLogger.RefreshDataEnd);
                             }
 

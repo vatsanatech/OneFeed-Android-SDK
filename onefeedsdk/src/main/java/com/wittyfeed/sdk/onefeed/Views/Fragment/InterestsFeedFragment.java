@@ -79,8 +79,8 @@ public final class InterestsFeedFragment extends Fragment {
 
         pb.setVisibility(View.GONE);
 
-        if (OneFeedMain.getInstance().dataStore.getInterestsDataBlockArray() != null){
-            if(OneFeedMain.getInstance().dataStore.getInterestsDataBlockArray().size() > 0) {
+        if (OneFeedMain.getInstance().getInstanceDataStore().getInterestsDataBlockArray() != null){
+            if(OneFeedMain.getInstance().getInstanceDataStore().getInterestsDataBlockArray().size() > 0) {
                 interestsRVAdapter = new InterestsRVAdapter();
                 feed_rv.setLayoutManager(new LinearLayoutManager(getContext()));
                 feed_rv.setAdapter(interestsRVAdapter);
@@ -91,7 +91,7 @@ public final class InterestsFeedFragment extends Fragment {
             OneFeedMain.getInstance().networkServiceManager.hitGetInterestsAPI(new NetworkServiceManager.OnNetworkServiceDidRespond() {
                 @Override
                 public void onSuccessResponse(String response) {
-                    OneFeedMain.getInstance().dataStore.setInterestsDataDatum( DataStoreParser.parseGenericFeedString(response) );
+                    OneFeedMain.getInstance().getInstanceDataStore().setInterestsDataDatum( DataStoreParser.parseGenericFeedString(response) );
                     interestsRVAdapter = new InterestsRVAdapter();
                     feed_rv.setLayoutManager(new LinearLayoutManager(getContext()));
                     feed_rv.setAdapter(interestsRVAdapter);
@@ -135,7 +135,7 @@ public final class InterestsFeedFragment extends Fragment {
 
             final CheckedTextView checkedTextView = holder.checkedTextView;
 
-            final Card card = OneFeedMain.getInstance().dataStore.getInterestsDataBlockArray().get(0).getCards().get(holder.getAdapterPosition());
+            final Card card = OneFeedMain.getInstance().getInstanceDataStore().getInterestsDataBlockArray().get(0).getCards().get(holder.getAdapterPosition());
             checkedTextView.setText(card.getStoryTitle());
 
             if(card.getBadgeText().equalsIgnoreCase("selected")){
@@ -202,7 +202,7 @@ public final class InterestsFeedFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return OneFeedMain.getInstance().dataStore.getInterestsDataBlockArray().get(0).getCards().size();
+            return OneFeedMain.getInstance().getInstanceDataStore().getInterestsDataBlockArray().get(0).getCards().size();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder{

@@ -166,9 +166,9 @@ public final class HolderFragment extends Fragment {
                 updateUI(false);
                 break;
             case SEARCH_FEED:
-                OneFeedMain.getInstance().dataStore.clearSearchFeedDataArray();
-                OneFeedMain.getInstance().dataStore.setSearchFeedData(OneFeedMain.getInstance().dataStore.getSearchDefaultDatum());
-                OneFeedMain.getInstance().dataStore.resetLastStringSearched();
+                OneFeedMain.getInstance().getInstanceDataStore().clearSearchFeedDataArray();
+                OneFeedMain.getInstance().getInstanceDataStore().setSearchFeedData(OneFeedMain.getInstance().getInstanceDataStore().getSearchDefaultDatum());
+                OneFeedMain.getInstance().getInstanceDataStore().resetLastStringSearched();
                 showSearchFragmentFeed();
                 break;
             case INTEREST_FEED:

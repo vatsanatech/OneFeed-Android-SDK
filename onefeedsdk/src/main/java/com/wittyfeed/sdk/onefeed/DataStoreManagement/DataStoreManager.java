@@ -52,10 +52,10 @@ public final class DataStoreManager {
                     requestFreshMainFeedData(false, applicationContext);
 
                 } else {
-                    OneFeedMain.getInstance().dataStore.setMainFeedData(mainDatum);
-                    OneFeedMain.getInstance().dataStore.setSearchDefaultData(searchDefaultDatum);
-                    OneFeedMain.getInstance().dataStore.setNonRepeatingDatum(nonRepeatingDatum);
-                    OneFeedMain.getInstance().dataStore.incrementMainFeedDataOffset();
+                    OneFeedMain.getInstance().getInstanceDataStore().setMainFeedData(mainDatum);
+                    OneFeedMain.getInstance().getInstanceDataStore().setSearchDefaultData(searchDefaultDatum);
+                    OneFeedMain.getInstance().getInstanceDataStore().setNonRepeatingDatum(nonRepeatingDatum);
+                    OneFeedMain.getInstance().getInstanceDataStore().incrementMainFeedDataOffset();
                     OFLogger.log(OFLogger.DEBUG, OFLogger.CacheReadSuccess);
                     OFLogger.log(OFLogger.DEBUG, OFLogger.CacheLoadSuccessful);
                     onStoreManagerDidFinishDataFetch.onSuccess();
@@ -86,8 +86,8 @@ public final class DataStoreManager {
 
         int offsetToSend = 0;
         if(!isBackgroundRefresh) {
-            OneFeedMain.getInstance().dataStore.resetMainFeedDataOffset();
-            offsetToSend = OneFeedMain.getInstance().dataStore.getMainFeedDataOffset();
+            OneFeedMain.getInstance().getInstanceDataStore().resetMainFeedDataOffset();
+            offsetToSend = OneFeedMain.getInstance().getInstanceDataStore().getMainFeedDataOffset();
         }
 
         OneFeedMain.getInstance().networkServiceManager.hitMainFeedDataAPI(
@@ -97,10 +97,10 @@ public final class DataStoreManager {
                     public void onSuccessResponse(String response) {
                         DataStoreCacheManager.createCachedJSON(response, applicationContext);
                         if(!isBackgroundRefresh){
-                            OneFeedMain.getInstance().dataStore.setMainFeedData( DataStoreParser.parseMainFeedString(response));
-                            OneFeedMain.getInstance().dataStore.incrementMainFeedDataOffset();
-                            OneFeedMain.getInstance().dataStore.setSearchDefaultData( DataStoreParser.parseSearchDefaultString(response));
-                            OneFeedMain.getInstance().dataStore.setNonRepeatingDatum(DataStoreParser.parseNonRepeatingDataString(response));
+                            OneFeedMain.getInstance().getInstanceDataStore().setMainFeedData( DataStoreParser.parseMainFeedString(response));
+                            OneFeedMain.getInstance().getInstanceDataStore().incrementMainFeedDataOffset();
+                            OneFeedMain.getInstance().getInstanceDataStore().setSearchDefaultData( DataStoreParser.parseSearchDefaultString(response));
+                            OneFeedMain.getInstance().getInstanceDataStore().setNonRepeatingDatum(DataStoreParser.parseNonRepeatingDataString(response));
                             onStoreManagerDidFinishDataFetch.onSuccess();
                         }
                         OFLogger.log(OFLogger.DEBUG, OFLogger.MainFeedFetchedSuccess);

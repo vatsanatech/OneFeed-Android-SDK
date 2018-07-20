@@ -19,6 +19,7 @@
         <activity
             android:name="com.wittyfeed.sdk.demo.MainActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <!--<action android:name="OPEN_MYACTIVITY" />-->

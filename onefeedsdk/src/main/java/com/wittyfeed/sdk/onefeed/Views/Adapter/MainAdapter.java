@@ -113,9 +113,9 @@ public class  MainAdapter extends RecyclerView.Adapter<MainAdapterBaseViewHolder
 
         List<Card> cardList = null;
         if (fragment_type == 1) {
-            cardList = OneFeedMain.getInstance().dataStore.getMainFeedDataBlockArr().get(mPosition).getCards();
+            cardList = OneFeedMain.getInstance().getInstanceDataStore().getMainFeedDataBlockArr().get(mPosition).getCards();
         } else if(fragment_type == 2) {
-            cardList = OneFeedMain.getInstance().dataStore.getSearchFeedDataBlockArr().get(mPosition).getCards();
+            cardList = OneFeedMain.getInstance().getInstanceDataStore().getSearchFeedDataBlockArr().get(mPosition).getCards();
         }
 
         switch (itemViewType){

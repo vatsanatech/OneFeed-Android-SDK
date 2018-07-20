@@ -3,6 +3,7 @@ package com.wittyfeed.sdk.demo;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -54,6 +55,18 @@ public class NativeCardsActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 endlessFeedAdapter = new EndlessFeedAdapter(NativeCardsActivity.this);
+                endlessFeedAdapter.setNotifyListener(new NotifyListener() {
+                    @Override
+                    public void loadMore() {
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                endlessFeedAdapter.setSize(10);
+                                endlessFeedAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
                 endless_feed_rv.setAdapter(endlessFeedAdapter);
                 Toast.makeText(NativeCardsActivity.this, "onSuccess", Toast.LENGTH_LONG).show();
             }
@@ -105,6 +118,17 @@ public class NativeCardsActivity extends AppCompatActivity {
     class EndlessFeedAdapter extends RecyclerView.Adapter<EndlessFeedAdapter.ViewHolder>{
 
         Activity activity;
+        int size = 10;
+
+        NotifyListener notifyListener;
+
+        public void setSize(int size) {
+            this.size += size;
+        }
+
+        public void setNotifyListener(NotifyListener notifyListener) {
+            this.notifyListener = notifyListener;
+        }
 
         EndlessFeedAdapter(Activity activity){
             this.activity = activity;
@@ -168,11 +192,16 @@ public class NativeCardsActivity extends AppCompatActivity {
                     break;
 
             }
+
+            if(size-1 == position && notifyListener != null){
+                size+=10;
+                notifyListener.loadMore();
+            }
         }
 
         @Override
         public int getItemCount() {
-            return 50;
+            return size;
         }
 
         @Override
@@ -180,7 +209,7 @@ public class NativeCardsActivity extends AppCompatActivity {
             if(position%7 == 0 && position != 0){
                 return 2;
             }
-            return 2;
+            return 1;
         }
 
         @Override
@@ -205,5 +234,9 @@ public class NativeCardsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    public interface NotifyListener{
+        void loadMore();
     }
 }

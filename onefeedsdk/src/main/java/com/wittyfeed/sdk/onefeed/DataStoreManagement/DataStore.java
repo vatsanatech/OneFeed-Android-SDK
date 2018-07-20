@@ -110,7 +110,7 @@ public final class DataStore {
      */
     public void setMainFeedData(MainDatum mainFeedData) {
         this.mainFeedData = mainFeedData;
-//        OneFeedMain.getInstance().dataStore.getCardArray();
+//        OneFeedMain.getInstance().getInstanceDataStore().getCardArray();
     }
 
     public void setRepeatingBlock(Block repeatingDatum) {
@@ -313,10 +313,10 @@ public final class DataStore {
 //    }
 
     public void buildAllCardArray(){
-        if(OneFeedMain.getInstance().dataStore.repeatingDatum!=null){
+        if(OneFeedMain.getInstance().getInstanceDataStore().repeatingDatum!=null){
             if(allCardData == null)
                 allCardData = new ArrayList<Card>();
-            OneFeedMain.getInstance().dataStore.getAllCardData().clear();
+            OneFeedMain.getInstance().getInstanceDataStore().getAllCardData().clear();
             allCardData.addAll(repeatingDatum.getCards());
             for(int i = 0; i<repeatingDatum.getCards().size() ; i++)
                 Log.i("ALLCARDSTITLE", "getCardArray: "+repeatingDatum.getCards().get(i).getStoryTitle());

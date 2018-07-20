@@ -9,8 +9,7 @@
 
     <application android:supportsRtl="true">
 
-        <activity android:name=".OFContentViewActivity"
-            android:launchMode="singleTask">
+        <activity android:name=".OFContentViewActivity">
             <intent-filter>
                 <action android:name="OpenOneFeedActivity" />
                 <category android:name="android.intent.category.DEFAULT" />

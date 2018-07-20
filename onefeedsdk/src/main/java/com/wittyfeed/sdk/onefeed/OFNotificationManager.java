@@ -93,6 +93,9 @@ public final class OFNotificationManager {
                         Intent contentViewIntent;
 
                         contentViewIntent = new Intent(applicationContext, OFContentViewActivity.class);
+                        // Set the Activity to start in a new, empty task
+                        contentViewIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                             OFAnalytics.getInstance().sendAnalytics(
                                     applicationContext,

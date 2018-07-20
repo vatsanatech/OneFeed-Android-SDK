@@ -281,10 +281,11 @@ public final class OFContentViewActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        //super.onNewIntent(intent);
+        super.onNewIntent(intent);
 
         Bundle bundle = intent.getExtras();
         init(bundle);
         finish();
+
     }
 }

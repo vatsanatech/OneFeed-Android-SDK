@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseMessaging.getInstance().subscribeToTopic(topicName);
 
-        System.out.println("FCM Token: " + FCM_TOKEN);
+        //System.out.println("FCM Token: " + FCM_TOKEN);
 
 
         // ====================

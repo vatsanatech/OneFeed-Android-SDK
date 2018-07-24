@@ -192,7 +192,10 @@ public final class OFContentViewActivity extends AppCompatActivity {
             jsonObject.putOpt("url_to_open",urlToOpen);
 
         } catch (JSONException e) {
-            e.printStackTrace();
+
+            //Changed by Yogesh
+            //e.printStackTrace();
+            OFLogger.log(OFLogger.ERROR ,e.getMessage(), e);
         }
     }
 

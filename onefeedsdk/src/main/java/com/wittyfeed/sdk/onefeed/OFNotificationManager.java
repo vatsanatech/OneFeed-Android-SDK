@@ -67,7 +67,10 @@ public final class OFNotificationManager {
             NotificationManager notificationManager = (NotificationManager) applicationContext.getSystemService(NOTIFICATION_SERVICE);
             notificationManager.cancelAll();
         } catch (Exception e) {
-            e.printStackTrace();
+
+            //Changed by Yogesh
+            //e.printStackTrace();
+            OFLogger.log(OFLogger.ERROR ,e.getMessage(), e);
         }
     }
 
@@ -127,7 +130,9 @@ public final class OFNotificationManager {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //Changed by Yogesh
+            //e.printStackTrace();
+            OFLogger.log(OFLogger.ERROR ,e.getMessage(), e);
         }
     }
 
@@ -295,7 +300,10 @@ public final class OFNotificationManager {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+
+            //Changed by Yogesh
+            //e.printStackTrace();
+            OFLogger.log(OFLogger.ERROR ,e.getMessage(), e);
         }
     }
 
@@ -310,7 +318,10 @@ public final class OFNotificationManager {
             Ringtone r = RingtoneManager.getRingtone(applicationContext, notiffSound);
             r.play();
         } catch (Exception e) {
-            e.printStackTrace();
+
+            //Changed by Yogesh
+            //e.printStackTrace();
+            OFLogger.log(OFLogger.ERROR ,e.getMessage(), e);
         }
     }
 

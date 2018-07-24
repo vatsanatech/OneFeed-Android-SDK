@@ -114,7 +114,10 @@ public final class ContentViewMaker {
         try {
             back_icon_bitmap = getBitmapFromDrawable(context, R.drawable.ic_back);
         } catch (Exception e) {
-            e.printStackTrace();
+
+            //Changed by Yogesh
+            //e.printStackTrace();
+            OFLogger.log(OFLogger.ERROR ,e.getMessage(), e);
         }
 
         // TODO: 17/04/18 custom_tab_customisation options
@@ -172,7 +175,10 @@ public final class ContentViewMaker {
                 try {
                     return getBitmapFromVectorDrawable((VectorDrawable) drawable);
                 } catch (Exception e) {
-                    e.printStackTrace();
+
+                    //Changed by Yogesh
+                    //e.printStackTrace();
+                    OFLogger.log(OFLogger.ERROR ,e.getMessage(), e);
                 }
             } else {
                 OFLogger.log(OFLogger.DEBUG,OFLogger.UnableToConvertToBitmap);

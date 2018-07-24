@@ -35,8 +35,12 @@ public final class OFWebViewConfigManager {
         try {
             web_view.getSettings().setAppCachePath(context.getCacheDir().getAbsolutePath());
         } catch (Exception e) {
-            e.printStackTrace();
+
+            //Changed by Yogesh
+            //e.printStackTrace();
+            OFLogger.log(OFLogger.ERROR ,e.getMessage(), e);
         }
+
         web_view.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         web_view.getSettings().setAppCacheEnabled(true);
         web_view.getSettings().setAllowFileAccess(true);
@@ -86,7 +90,10 @@ public final class OFWebViewConfigManager {
                 OFLogger.log(OFLogger.DEBUG, "onCreate: cache method: LOAD_DEFAULT");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
+            //Changed by Yogesh
+            //e.printStackTrace();
+            OFLogger.log(OFLogger.ERROR ,e.getMessage(), e);
         }
     }
 

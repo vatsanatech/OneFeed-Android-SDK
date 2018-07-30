@@ -39,6 +39,7 @@
         android:layout_alignParentRight="true"
         android:orientation="vertical"
         android:paddingTop="10dp"
+        android:visibility="invisible"
         android:paddingBottom="10dp">
 
         <TextView

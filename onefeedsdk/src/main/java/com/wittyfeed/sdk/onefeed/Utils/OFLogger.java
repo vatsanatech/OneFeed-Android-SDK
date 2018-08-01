@@ -2,6 +2,8 @@ package com.wittyfeed.sdk.onefeed.Utils;
 
 import android.util.Log;
 
+import com.wittyfeed.sdk.onefeed.BuildConfig;
+
 /**
  *
  * Contains all the required values to be used in logging
@@ -21,7 +23,7 @@ public final class OFLogger {
 
     private static final String OneFeed_TAG = "OF_SDK";
 
-    private static final boolean to_show_logs = true;
+    private static final boolean to_show_logs = BuildConfig.DEBUG;
 
     public static void log(int type, String msg){
         if (to_show_logs) {

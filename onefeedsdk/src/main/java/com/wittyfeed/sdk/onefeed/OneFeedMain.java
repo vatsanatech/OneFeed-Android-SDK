@@ -30,6 +30,8 @@ public final class OneFeedMain {
 
     private static OneFeedMain ourInstance;
 
+    private static boolean hideBackButton = false;
+
     public DataStore dataStore;
     public OFSharedPreference ofSharedPreference;
     public NetworkServiceManager networkServiceManager;
@@ -101,6 +103,14 @@ public final class OneFeedMain {
         initOFCardFetcher(dataStore, applicationContext);
 
 
+    }
+
+    public static void setHideBackButtonFromMainFeed(boolean hideBackButton) {
+        OneFeedMain.hideBackButton = hideBackButton;
+    }
+
+    public static boolean isHideBackButton() {
+        return hideBackButton;
     }
 
     /**

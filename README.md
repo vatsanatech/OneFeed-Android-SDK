@@ -2,10 +2,10 @@
 
 > # Note
 > WittyFeed SDK API is now `OneFeed Android SDK`,
-> New v2.1.10 made live on 30 July' 2018
+> New v2.1.11 made live on 02 Aug' 2018
 
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](#)
-[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.10)
+[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.11)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/OneFeed-Android-SDK/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -34,7 +34,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ### 1.2. Incorporating the SDK
 
-1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.10)
+1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.1.11)
 
 2. SignUp at [OneFeed](http://www.onefeed.ai/) and create a new application to integrate with
 
@@ -51,10 +51,10 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 		}
 	}
 ```
-* add OneFeed-Android-SDK:2.1.10 in your app level build.gradle
+* add OneFeed-Android-SDK:2.1.11 in your app level build.gradle
 ```gradle
     dependencies {
-	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.1.10'
+	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.1.11'
 	}
 ```
 
@@ -115,6 +115,11 @@ Browse through the example app in this repository to see how the OneFeed SDK can
                 // if unexpected error
             }
         });
+
+    //For Hiding back button from MainFeed Fragment
+    //Pass parameter true for hiding back button and false for showing back button
+
+    OneFeedMain.setHideBackButtonFromMainFeed(true);
 
     // initializing SDK here (mandatory)
     OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, FCM_TOKEN);

@@ -17,23 +17,27 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:src="@drawable/ic_back" />
+            android:paddingLeft="@dimen/margin_15"
+            android:paddingRight="@dimen/margin_15"
+            android:visibility="visible"/>
 
         <View
             android:id="@+id/search_v"
-            android:layout_width="280dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/back_iv"
             android:layout_margin="4dp"
             android:background="@drawable/search_bg"
+            android:layout_toLeftOf="@+id/plus_iv"
             android:hint="Search" />
 
         <TextView
             android:id="@+id/search_tv"
-            android:layout_width="260dp"
+            android:layout_width="0dp"
+            android:layout_toLeftOf="@+id/plus_iv"
+            android:layout_toRightOf="@+id/back_iv"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"

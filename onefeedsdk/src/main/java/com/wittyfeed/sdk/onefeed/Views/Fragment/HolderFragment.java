@@ -1,10 +1,12 @@
 package com.wittyfeed.sdk.onefeed.Views.Fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wittyfeed.sdk.onefeed.OFAnalytics;
 import com.wittyfeed.sdk.onefeed.Utils.OFLogger;
@@ -22,27 +25,26 @@ import com.wittyfeed.sdk.onefeed.R;
 import com.wittyfeed.sdk.onefeed.Utils.Utils;
 
 /**
- *
  * Holds whole UI of OneFeed, and manages it according to user-created events and OneFeedBuilder
- *
+ * <p>
  * has 3 child fragments to manage -
- *      1) MainFeedFragment
- *          read more in MainFeedFragment
- *      2) SearchFeedFragment
- *          read more in SearchFeedFragment
- *      3) InterestFeedFragment
- *          read more in InterestFeedFragment
- *
+ * 1) MainFeedFragment
+ * read more in MainFeedFragment
+ * 2) SearchFeedFragment
+ * read more in SearchFeedFragment
+ * 3) InterestFeedFragment
+ * read more in InterestFeedFragment
+ * <p>
  * has following responsibilities -
- *      1) show progressBar until data store is loaded
- *      2) updateUI accordingly when OneFeedBuilder notifies about DataStore loading completion
- *      3) switch feeds from MainFeed, SearchFeed, InterestFeed (interest selection)
- *          with respect to user-generated events
- *      4) execute method onBackClick() of callback interface OnBackClickClick from OneFeedBuilder
- *          when back is tapped, and if interface is set or non-null
- *      5) keep alive the proper fragments after screen orientation change or other onPause()
- *          events
- *
+ * 1) show progressBar until data store is loaded
+ * 2) updateUI accordingly when OneFeedBuilder notifies about DataStore loading completion
+ * 3) switch feeds from MainFeed, SearchFeed, InterestFeed (interest selection)
+ * with respect to user-generated events
+ * 4) execute method onBackClick() of callback interface OnBackClickClick from OneFeedBuilder
+ * when back is tapped, and if interface is set or non-null
+ * 5) keep alive the proper fragments after screen orientation change or other onPause()
+ * events
+ * <p>
  * Read about: MainAdapter, OneFeedBuilder, HolderFragment
  */
 
@@ -58,6 +60,7 @@ public final class HolderFragment extends Fragment {
     private View progress_rl;
 
     private boolean isAttached = false;
+    private int backButtonWidth = 50;
 
     @Override
     public void onDetach() {
@@ -86,14 +89,12 @@ public final class HolderFragment extends Fragment {
 
         childFragmentManager = getChildFragmentManager();
 
-        search_v.getLayoutParams().width = Utils.getSearchBarBackgroundWidth(getContext());
-        search_tv.getLayoutParams().width = Utils.getSearchBarWidth(getContext());
+        hideBackButton(0);
 
-        if(OneFeedMain.getInstance().oneFeedBuilder.isNotifiedDataStoreLoaded) {
+        if (OneFeedMain.getInstance().oneFeedBuilder.isNotifiedDataStoreLoaded) {
             updateUI(false);
             showMainFragmentFeed();
-        }
-        else {
+        } else {
             updateUI(true);
         }
 
@@ -111,9 +112,9 @@ public final class HolderFragment extends Fragment {
             }
         });
 
-        if(OneFeedMain.getInstance().oneFeedBuilder.hasSearchFragmentOrientationChanged) {
+        if (OneFeedMain.getInstance().oneFeedBuilder.hasSearchFragmentOrientationChanged) {
             showSearchFragmentFeed();
-        } else if(OneFeedMain.getInstance().oneFeedBuilder.hasInterestFragmentOrientationChanged) {
+        } else if (OneFeedMain.getInstance().oneFeedBuilder.hasInterestFragmentOrientationChanged) {
             showInterestFeedFragment();
         }
 
@@ -125,22 +126,36 @@ public final class HolderFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser && isResumed()){
-            OFAnalytics.getInstance().sendAnalytics(OFAnalytics.AnalyticsType.OneFeed,"OneFeed Opened");
+        if (isVisibleToUser && isResumed()) {
+            OFAnalytics.getInstance().sendAnalytics(OFAnalytics.AnalyticsType.OneFeed, "OneFeed Opened");
         }
     }
 
+    private void hideBackButton(int id){
+//        search_v.getLayoutParams().width = Utils.getSearchBarBackgroundWidth(getContext());
+//        search_tv.getLayoutParams().width = Utils.getSearchBarWidth(getContext());
+
+        if(id == 0 && OneFeedMain.isHideBackButton()){
+            back_iv.setImageResource(0);
+            back_iv.setPadding((int) getResources().getDimension(R.dimen.margin_15), 0, 0, 0);
+        }else{
+            back_iv.setImageResource(R.drawable.ic_back);
+            back_iv.setPadding((int) getResources().getDimension(R.dimen.margin_15), 0,
+                    (int) getResources().getDimension(R.dimen.margin_15), 0);
+        }
+    }
 
     public void notifyDataStoreLoaded() {
         OFLogger.log(OFLogger.DEBUG, OFLogger.DataStoreLoaded);
-        if(isAttached) {
+        if (isAttached) {
+
             updateUI(false);
             showMainFragmentFeed();
         }
     }
 
-    private void updateUI(boolean isLoading){
-        if(isLoading){
+    private void updateUI(boolean isLoading) {
+        if (isLoading) {
 
             header_rl.setVisibility(View.GONE);
             main_feed_holder_fl.setVisibility(View.GONE);
@@ -160,26 +175,30 @@ public final class HolderFragment extends Fragment {
         }
     }
 
-    private void switchFragmentFeed(OneFeedBuilder.FragmentFeedType fragmentFeedType){
-        switch (fragmentFeedType){
+    private void switchFragmentFeed(OneFeedBuilder.FragmentFeedType fragmentFeedType) {
+        switch (fragmentFeedType) {
             case MAIN_FEED:
+                hideBackButton(0);
                 updateUI(false);
                 break;
             case SEARCH_FEED:
+                hideBackButton(1);
                 OneFeedMain.getInstance().getInstanceDataStore().clearSearchFeedDataArray();
                 OneFeedMain.getInstance().getInstanceDataStore().setSearchFeedData(OneFeedMain.getInstance().getInstanceDataStore().getSearchDefaultDatum());
                 OneFeedMain.getInstance().getInstanceDataStore().resetLastStringSearched();
                 showSearchFragmentFeed();
                 break;
             case INTEREST_FEED:
+
+                hideBackButton(1);
                 showInterestFeedFragment();
                 break;
         }
     }
 
-    private void showMainFragmentFeed(){
+    private void showMainFragmentFeed() {
         getChildFragmentManager().executePendingTransactions();
-        if(getChildFragmentManager().findFragmentByTag("MainFeed") != null){
+        if (getChildFragmentManager().findFragmentByTag("MainFeed") != null) {
             getChildFragmentManager().beginTransaction().remove(childFragmentManager.findFragmentByTag("MainFeed")).commit();
         }
         getChildFragmentManager().beginTransaction().add(main_feed_holder_fl.getId(), new MainFeedFragment(), "MainFeed").commit();
@@ -191,9 +210,9 @@ public final class HolderFragment extends Fragment {
         });
     }
 
-    private void showSearchFragmentFeed(){
+    private void showSearchFragmentFeed() {
         childFragmentManager.executePendingTransactions();
-        if(childFragmentManager.findFragmentByTag("SearchFeed") != null){
+        if (childFragmentManager.findFragmentByTag("SearchFeed") != null) {
             childFragmentManager.beginTransaction().remove(childFragmentManager.findFragmentByTag("SearchFeed")).commitNow();
         }
         childFragmentManager.beginTransaction().add(search_feed_holder_fl.getId(), new SearchFeedFragment(), "SearchFeed").commit();
@@ -204,7 +223,7 @@ public final class HolderFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 childFragmentManager.executePendingTransactions();
-                if(childFragmentManager.findFragmentByTag("SearchFeed") != null){
+                if (childFragmentManager.findFragmentByTag("SearchFeed") != null) {
                     childFragmentManager.beginTransaction().remove(childFragmentManager.findFragmentByTag("SearchFeed")).commitNow();
                 }
                 back_iv.setOnClickListener(new View.OnClickListener() {
@@ -216,14 +235,16 @@ public final class HolderFragment extends Fragment {
                 plus_iv.setVisibility(View.VISIBLE);
                 search_v.setVisibility(View.VISIBLE);
                 search_tv.setVisibility(View.VISIBLE);
+
+                hideBackButton(0);
             }
         });
         OneFeedMain.getInstance().oneFeedBuilder.hasSearchFragmentOrientationChanged = false;
     }
 
-    private void showInterestFeedFragment(){
+    private void showInterestFeedFragment() {
         childFragmentManager.executePendingTransactions();
-        if(childFragmentManager.findFragmentByTag("InterestsFeed") != null){
+        if (childFragmentManager.findFragmentByTag("InterestsFeed") != null) {
             childFragmentManager.beginTransaction().remove(childFragmentManager.findFragmentByTag("InterestsFeed")).commitNow();
         }
         childFragmentManager.beginTransaction().add(search_feed_holder_fl.getId(), new InterestsFeedFragment(), "InterestsFeed").commit();
@@ -234,7 +255,7 @@ public final class HolderFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 childFragmentManager.executePendingTransactions();
-                if(childFragmentManager.findFragmentByTag("InterestsFeed") != null){
+                if (childFragmentManager.findFragmentByTag("InterestsFeed") != null) {
                     childFragmentManager.beginTransaction().remove(childFragmentManager.findFragmentByTag("InterestsFeed")).commitNow();
                 }
                 back_iv.setOnClickListener(new View.OnClickListener() {
@@ -246,13 +267,14 @@ public final class HolderFragment extends Fragment {
                 plus_iv.setVisibility(View.VISIBLE);
                 search_v.setVisibility(View.VISIBLE);
                 search_tv.setVisibility(View.VISIBLE);
+                hideBackButton(0);
             }
         });
         OneFeedMain.getInstance().oneFeedBuilder.hasInterestFragmentOrientationChanged = false;
     }
 
-    private void executeOnBackClickInterface(){
-        if(OneFeedMain.getInstance().oneFeedBuilder.onBackClickInterface == null){
+    private void executeOnBackClickInterface() {
+        if (OneFeedMain.getInstance().oneFeedBuilder.onBackClickInterface == null) {
             OFLogger.log(OFLogger.ERROR, OFLogger.BackInterfaceIsNull);
             return;
         }

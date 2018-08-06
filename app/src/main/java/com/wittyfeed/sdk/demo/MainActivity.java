@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 viewPager.setAdapter(vpAdapter);
                 viewPager.setCurrentItem(0);
                 viewPager.setOffscreenPageLimit(3);
-
             }
 
             @Override
@@ -133,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         /*
          * below code is ***required*** for Initializing WittyFeed Android SDK API,
          */
+        OneFeedMain.setHideBackButtonFromMainFeed(false);
         OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, FCM_TOKEN);
 
         /*

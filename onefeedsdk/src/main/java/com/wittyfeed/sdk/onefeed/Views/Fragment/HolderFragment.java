@@ -121,6 +121,10 @@ public final class HolderFragment extends Fragment {
         isAttached = true;
 
         OFLogger.log(OFLogger.DEBUG, OFLogger.ChildFragmentManagerStackCount + getChildFragmentManager().getBackStackEntryCount());
+
+        if(getUserVisibleHint()){
+            OFAnalytics.getInstance().sendAnalytics(OFAnalytics.AnalyticsType.OneFeed, "OneFeed Opened");
+        }
     }
 
     @Override

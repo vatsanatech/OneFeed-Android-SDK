@@ -97,10 +97,10 @@ public final class OFAnalytics {
                 prepareOneFeedViewedTracking("OneFeed viewed", ApiClient.getInstance().getAppId());
                 break;
             case PowerIn:
-                prepareOneFeedPlugInOutTracking("OneFeed PlugIn", ApiClient.getInstance().getAppId());
+                prepareOneFeedViewedTracking("OneFeed PlugIn", ApiClient.getInstance().getAppId());
                 break;
             case PowerOut:
-                prepareOneFeedPlugInOutTracking("OneFeed PlugOut", ApiClient.getInstance().getAppId());
+                prepareOneFeedViewedTracking("OneFeed PlugOut", ApiClient.getInstance().getAppId());
                 break;
         }
     }
@@ -258,24 +258,6 @@ public final class OFAnalytics {
      * @param appId the App_ID as per registration on OneFeed Dashboard, will be used as Event Action on Google Analytics
      */
     private void prepareOneFeedViewedTracking(String eventType, String appId){
-        final Map<String, String> payload = new HashMap<>(mainPayload);
-        payload.put("etype", ""+ eventType);
-        payload.put("appid", ""+ appId);
-        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
-
-        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
-            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
-
-        sendRequest(payload);
-    }
-
-    /**
-     * prepares payload for OneFeed PlugInOut tracking in OneFeed
-     * @param eventType the event category to be passed to Google Analytics
-     * @param appId the App_ID as per registration on OneFeed Dashboard, will be used as Event Action on Google Analytics
-     */
-    private void prepareOneFeedPlugInOutTracking(String eventType, String appId){
         final Map<String, String> payload = new HashMap<>(mainPayload);
         payload.put("etype", ""+ eventType);
         payload.put("appid", ""+ appId);

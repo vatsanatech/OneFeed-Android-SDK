@@ -51,7 +51,7 @@ public class NativeCardsActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(activity);
         endless_feed_rv.setLayoutManager(linearLayoutManager);
 
-        OneFeedMain.getInstance().ofCardFetcher.loadInitData(3, new OFCardFetcher.OnInitialized() {
+        OneFeedMain.getInstance().ofCardFetcher.loadInitData(103, new OFCardFetcher.OnInitialized() {
             @Override
             public void onSuccess() {
                 endlessFeedAdapter = new EndlessFeedAdapter(NativeCardsActivity.this);
@@ -188,7 +188,7 @@ public class NativeCardsActivity extends AppCompatActivity {
                     OneFeedMain.getInstance().ofCardFetcher.setOfInterface(ofInterface);
 
                     // Third and Last Step is this
-                    OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(3, 0.7f, false, "#4286f4", true);
+                    OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(103, 0.7f, false, "#4286f4", true);
                     break;
 
             }

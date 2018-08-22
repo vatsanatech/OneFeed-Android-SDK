@@ -184,6 +184,7 @@ public final class HolderFragment extends Fragment {
             case MAIN_FEED:
                 hideBackButton(0);
                 updateUI(false);
+
                 break;
             case SEARCH_FEED:
                 hideBackButton(1);
@@ -202,6 +203,12 @@ public final class HolderFragment extends Fragment {
 
     private void showMainFragmentFeed() {
         getChildFragmentManager().executePendingTransactions();
+        if (childFragmentManager.findFragmentByTag("SearchFeed") != null) {
+            childFragmentManager.beginTransaction().remove(childFragmentManager.findFragmentByTag("SearchFeed")).commitNow();
+        }
+        if (childFragmentManager.findFragmentByTag("InterestsFeed") != null) {
+            childFragmentManager.beginTransaction().remove(childFragmentManager.findFragmentByTag("InterestsFeed")).commitNow();
+        }
         if (getChildFragmentManager().findFragmentByTag("MainFeed") != null) {
             getChildFragmentManager().beginTransaction().remove(childFragmentManager.findFragmentByTag("MainFeed")).commit();
         }

@@ -59,59 +59,63 @@ import java.util.List;
 public final class CardDataViewHolderBinder {
 
     public synchronized void bindSingleCardData(final MainAdapterBaseViewHolder baseViewHolder, final int itemViewType, final Card card, double textSizeRatio) {
-        switch (itemViewType){
-            case Constant.POSTER_SOLO_NUM:
-            case Constant.VIDEO_SOLO_NUM:
-                setStoryTitle(card.getStoryTitle(), baseViewHolder.story_title, textSizeRatio);
-                setStoryCoverImage(card.getCoverImage(), baseViewHolder.cover_image_iv, baseViewHolder.img_container_vg, textSizeRatio);
-                setShieldTv(card.getSheildText(), card.getSheildBg(), baseViewHolder.shield_tv, textSizeRatio);
-                setBadgeTv(card.getBadgeText(), baseViewHolder.badge_tv, textSizeRatio);
-                setPublisherImage(card.getPublisherIconUrl(), baseViewHolder.publisher_iv, textSizeRatio);
-                setPublisherNameTv(card.getPublisherName(), baseViewHolder.publisher_name_tv, textSizeRatio);
-                setPublisherMetaTv(card.getUserFullName(), card.getDoa(), baseViewHolder.publisher_meta_tv, textSizeRatio);
+       try {
+           switch (itemViewType) {
+               case Constant.POSTER_SOLO_NUM:
+               case Constant.VIDEO_SOLO_NUM:
+                   setStoryTitle(card.getStoryTitle(), baseViewHolder.story_title, textSizeRatio);
+                   setStoryCoverImage(card.getCoverImage(), baseViewHolder.cover_image_iv, baseViewHolder.img_container_vg, textSizeRatio);
+                   setShieldTv(card.getSheildText(), card.getSheildBg(), baseViewHolder.shield_tv, textSizeRatio);
+                   setBadgeTv(card.getBadgeText(), baseViewHolder.badge_tv, textSizeRatio);
+                   setPublisherImage(card.getPublisherIconUrl(), baseViewHolder.publisher_iv, textSizeRatio);
+                   setPublisherNameTv(card.getPublisherName(), baseViewHolder.publisher_name_tv, textSizeRatio);
+                   setPublisherMetaTv(card.getUserFullName(), card.getDoa(), baseViewHolder.publisher_meta_tv, textSizeRatio);
 
-                break;
-            case Constant.VIDEO_SMALL_SOLO_NUM:
-                setStoryTitle(card.getStoryTitle(), baseViewHolder.story_title, textSizeRatio);
-                setStoryCoverImage(card.getCoverImage(), baseViewHolder.cover_image_iv, baseViewHolder.img_container_vg, textSizeRatio);
-                setBadgeTv(card.getBadgeText(), baseViewHolder.badge_tv, textSizeRatio);
+                   break;
+               case Constant.VIDEO_SMALL_SOLO_NUM:
+                   setStoryTitle(card.getStoryTitle(), baseViewHolder.story_title, textSizeRatio);
+                   setStoryCoverImage(card.getCoverImage(), baseViewHolder.cover_image_iv, baseViewHolder.img_container_vg, textSizeRatio);
+                   setBadgeTv(card.getBadgeText(), baseViewHolder.badge_tv, textSizeRatio);
 
-                break;
-            case Constant.STORY_LIST_ITEM_NUM:
-                setStoryTitle(card.getStoryTitle(), baseViewHolder.story_title, textSizeRatio);
-                setStoryCoverImage(card.getCoverImage(), baseViewHolder.cover_image_iv, baseViewHolder.img_container_vg, textSizeRatio);
-                setShieldTv(card.getSheildText(), card.getSheildBg(), baseViewHolder.shield_tv, textSizeRatio);
-                setPublisherImage(card.getPublisherIconUrl(), baseViewHolder.publisher_iv, textSizeRatio);
-                setPublisherNameTv(card.getPublisherName(), baseViewHolder.publisher_name_tv, textSizeRatio);
-                setPublisherMetaTv(card.getUserFullName(), card.getDoa(), baseViewHolder.publisher_meta_tv, textSizeRatio);
+                   break;
+               case Constant.STORY_LIST_ITEM_NUM:
+                   setStoryTitle(card.getStoryTitle(), baseViewHolder.story_title, textSizeRatio);
+                   setStoryCoverImage(card.getCoverImage(), baseViewHolder.cover_image_iv, baseViewHolder.img_container_vg, textSizeRatio);
+                   setShieldTv(card.getSheildText(), card.getSheildBg(), baseViewHolder.shield_tv, textSizeRatio);
+                   setPublisherImage(card.getPublisherIconUrl(), baseViewHolder.publisher_iv, textSizeRatio);
+                   setPublisherNameTv(card.getPublisherName(), baseViewHolder.publisher_name_tv, textSizeRatio);
+                   setPublisherMetaTv(card.getUserFullName(), card.getDoa(), baseViewHolder.publisher_meta_tv, textSizeRatio);
 
-                break;
-            case Constant.COLLECTION_ITEM_NUM:
-                setStoryTitle(card.getStoryTitle(), baseViewHolder.story_title, textSizeRatio);
-                setStoryCoverImage(card.getCoverImage(), baseViewHolder.cover_image_iv, baseViewHolder.img_container_vg, textSizeRatio);
-                setShieldTv(card.getSheildText(), card.getSheildBg(), baseViewHolder.shield_tv, textSizeRatio);
+                   break;
+               case Constant.COLLECTION_ITEM_NUM:
+                   setStoryTitle(card.getStoryTitle(), baseViewHolder.story_title, textSizeRatio);
+                   setStoryCoverImage(card.getCoverImage(), baseViewHolder.cover_image_iv, baseViewHolder.img_container_vg, textSizeRatio);
+                   setShieldTv(card.getSheildText(), card.getSheildBg(), baseViewHolder.shield_tv, textSizeRatio);
 
-                break;
-            default:
+                   break;
+               default:
 
-                break;
-        }
+                   break;
+           }
 
-        baseViewHolder.root_vg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if( itemViewType != Constant.COLLECTION_ITEM_NUM ) {
-                    OFAnalytics.getInstance().sendAnalytics(
-                            OFAnalytics.AnalyticsType.Story,
-                            ""
-                                    + card.getId()
-                                    + ":"
-                                    + "onefeed"
-                    );
-                }
-                OneFeedMain.getInstance().getContentViewMaker(baseViewHolder.root_vg.getContext()).launch(baseViewHolder.root_vg.getContext(), card.getStoryUrl());
-            }
-        });
+           baseViewHolder.root_vg.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   if (itemViewType != Constant.COLLECTION_ITEM_NUM) {
+                       OFAnalytics.getInstance().sendAnalytics(
+                               OFAnalytics.AnalyticsType.Story,
+                               ""
+                                       + card.getId()
+                                       + ":"
+                                       + "onefeed"
+                       );
+                   }
+                   OneFeedMain.getInstance().getContentViewMaker(baseViewHolder.root_vg.getContext()).launch(baseViewHolder.root_vg.getContext(), card.getStoryUrl());
+               }
+           });
+       }catch (Exception ignore){
+
+       }
     }
 
     public synchronized void bindMultiCardsData(MainAdapterBaseViewHolder baseViewHolder, int itemViewType, List<Card> cardList, double textSizeRatio) {
@@ -141,12 +145,12 @@ public final class CardDataViewHolderBinder {
         }
     }
 
-    private void setStoryTitle(String arg, TextView tv, double textSizeRatio){
+    private void setStoryTitle(String arg, TextView tv, double textSizeRatio) throws Exception{
         tv.setText(arg);
         tv.setTextSize((float)textSizeRatio * 20);
     }
 
-    private void setStoryCoverImage(String urlArg, ImageView iv, View imgContainerView, double textSizeRatio){
+    private void setStoryCoverImage(String urlArg, ImageView iv, View imgContainerView, double textSizeRatio) throws Exception{
 
         ViewGroup.LayoutParams layoutParams = imgContainerView.getLayoutParams();
         layoutParams.height = (int) (layoutParams.height*textSizeRatio);
@@ -177,7 +181,7 @@ public final class CardDataViewHolderBinder {
                 .into(iv);
     }
 
-    private void setPublisherImage(final String urlArg, ImageView iv, double textSizeRatio){
+    private void setPublisherImage(final String urlArg, ImageView iv, double textSizeRatio) throws Exception{
         ViewGroup.LayoutParams layoutParams = iv.getLayoutParams();
         layoutParams.height = (int) (layoutParams.height*textSizeRatio);
         layoutParams.width = (int) (layoutParams.width*textSizeRatio);
@@ -205,7 +209,7 @@ public final class CardDataViewHolderBinder {
                 .into(iv);
     }
 
-    private void setBadgeTv(String arg, TextView tv, double textSizeRatio){
+    private void setBadgeTv(String arg, TextView tv, double textSizeRatio) throws Exception{
         if (!arg.isEmpty()) {
             tv.setText(arg);
             tv.setTextSize((float) (10*textSizeRatio));
@@ -213,7 +217,7 @@ public final class CardDataViewHolderBinder {
         tv.setVisibility(View.GONE);
     }
 
-    private void setShieldTv(String arg, String bgColorString, TextView tv, double textSizeRatio){
+    private void setShieldTv(String arg, String bgColorString, TextView tv, double textSizeRatio) throws Exception{
         if(arg.isEmpty()){
             tv.setVisibility(View.GONE);
         } else {
@@ -227,12 +231,12 @@ public final class CardDataViewHolderBinder {
         }
     }
 
-    private void setPublisherNameTv(String arg, TextView tv, double textSizeRatio){
+    private void setPublisherNameTv(String arg, TextView tv, double textSizeRatio) throws Exception{
         tv.setText(arg);
         tv.setTextSize((float) (14*textSizeRatio));
     }
 
-    private void setPublisherMetaTv(String authorName, String doa, TextView tv, double textSizeRatio){
+    private void setPublisherMetaTv(String authorName, String doa, TextView tv, double textSizeRatio) throws Exception{
         tv.setVisibility(View.INVISIBLE);
         if(!authorName.isEmpty() || !doa.isEmpty()){
             tv.setVisibility(View.VISIBLE);

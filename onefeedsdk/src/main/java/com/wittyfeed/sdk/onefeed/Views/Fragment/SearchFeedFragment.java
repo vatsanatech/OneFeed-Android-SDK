@@ -176,7 +176,7 @@ public final class SearchFeedFragment extends Fragment {
                         OFLogger.log(OFLogger.DEBUG, OFLogger.SearchFeedArraySize +
                                 OneFeedMain.getInstance().getInstanceDataStore().getSearchFeedDataBlockArr().size());
 
-                        OFAnalytics.getInstance().sendAnalytics(OFAnalytics.AnalyticsType.Search, stringToSearch);
+                        OFAnalytics.getInstance().sendAnalytics(getActivity(), OFAnalytics.AnalyticsType.Search, stringToSearch);
 
                         mainAdapter = new MainAdapter((ArrayList<Block>) OneFeedMain.getInstance().getInstanceDataStore().getSearchFeedDataBlockArr(), 2);
                         searchFeedRv.setAdapter(mainAdapter);

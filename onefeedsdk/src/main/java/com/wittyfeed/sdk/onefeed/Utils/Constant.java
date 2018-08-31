@@ -12,6 +12,8 @@ public final class Constant {
 
     public static String APP_ID = "";
 
+    public static String USER_ID = "USER_ID";
+
     public static final String ANALYTICS_TRACKING_ID = "UA-40875502-17";
 
     public static final String DEVICE_TYPE = "android";

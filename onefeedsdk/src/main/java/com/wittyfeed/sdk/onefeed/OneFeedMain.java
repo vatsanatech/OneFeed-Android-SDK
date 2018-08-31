@@ -96,7 +96,7 @@ public final class OneFeedMain {
 
         loadDataStore(applicationContext);
 
-        OFAnalytics.getInstance().sendAnalytics(OFAnalytics.AnalyticsType.SDK, "OneFeed Initialized");
+        OFAnalytics.getInstance().sendAnalytics(applicationContext, OFAnalytics.AnalyticsType.SDK, "OneFeed Initialized");
 
         Log.i("init", "ONEFEED INITIALIZED: ");
 

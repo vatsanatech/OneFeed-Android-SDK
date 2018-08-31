@@ -28,7 +28,7 @@ public final class CardCollection1_4List {
             CollectionItem collectionItem = new CollectionItem(mView);
 
             CardDataViewHolderBinder cardDataViewHolderBinder = new CardDataViewHolderBinder();
-            cardDataViewHolderBinder.bindSingleCardData(collectionItem, Constant.COLLECTION_ITEM_NUM, card, textSizeRatio);
+            cardDataViewHolderBinder.bindSingleCardData(baseViewHolder.root_vg.getContext(), collectionItem, Constant.COLLECTION_ITEM_NUM, card, textSizeRatio);
 
             ViewGroup.LayoutParams layoutParams = collectionItem.img_container_vg.getLayoutParams();
             layoutParams.height = layoutParams.width;

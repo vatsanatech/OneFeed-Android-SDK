@@ -56,4 +56,12 @@ public final class OFSharedPreference {
     public String getSDKVersion(){
         return mPref.getString(Constant.SAVED_ONE_FEED_VERSION,"");
     }
+
+    public void setUserId(String userid){
+        mEditor.putString(Constant.USER_ID, userid).commit();
+    }
+
+    public String getUserId(){
+        return mPref.getString(Constant.USER_ID,"");
+    }
 }

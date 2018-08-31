@@ -76,16 +76,18 @@ public class OFCardFetcher {
         layoutParams.rightMargin = (int) (layoutParams.rightMargin);
         title_tv.setLayoutParams(layoutParams);
 
+        //Added By Yogesh
+        sentCardViewedByUser(card.getId());
 
         inflatedView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OFAnalytics.getInstance().sendAnalytics(
+                OFAnalytics.getInstance().sendAnalytics(context,
                         OFAnalytics.AnalyticsType.Story,
                         ""
                                 + card.getId()
                                 + ":"
-                                + "onefeed"
+                                + "Card"
                 );
                 OneFeedMain.getInstance().getContentViewMaker(v.getContext()).launch(v.getContext(), card.getStoryUrl());
 
@@ -93,8 +95,17 @@ public class OFCardFetcher {
         });
 
         return inflatedView;
+    }
 
-
+    //Created sentCardViewedByUser() by Yogesh
+    private void sentCardViewedByUser(int cardId){
+        OFAnalytics.getInstance().sendAnalytics(context,
+                OFAnalytics.AnalyticsType.CARD,
+                ""
+                        + cardId
+                        + ":"
+                        + "Scrolling"
+        );
     }
 
     public void setDataStore(DataStore dataStore, Context context) {

@@ -1,5 +1,6 @@
 package com.wittyfeed.sdk.onefeed.Views.AdapterViewFactory;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +35,7 @@ public final class CardPosterRv {
 
         private final List<Card> cardList;
         private final double textSizeRatio;
+        private Context context;
 
         PosterRVAdapter(List<Card> cardList, double textSizeRatio) {
             this.cardList = cardList;
@@ -43,6 +45,7 @@ public final class CardPosterRv {
         @NonNull
         @Override
         public MainAdapterBaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            this.context = parent.getContext();
             CardViewHolderFactory cardViewHolderFactory = new CardViewHolderFactory();
             cardViewHolderFactory.setInflater(LayoutInflater.from(parent.getContext()));
             View mView = cardViewHolderFactory.getInflatedBlockViewHolder(Constant.POSTER_SOLO_NUM);
@@ -62,14 +65,14 @@ public final class CardPosterRv {
             temp_v2.setPadding(0, temp_v2.getPaddingTop(), temp_v2.getPaddingRight(), temp_v2.getPaddingBottom());
 
             CardDataViewHolderBinder cardDataViewHolderBinder = new CardDataViewHolderBinder();
-            cardDataViewHolderBinder.bindSingleCardData(holder, Constant.POSTER_SOLO_NUM, cardList.get(position), textSizeRatio);
+            cardDataViewHolderBinder.bindSingleCardData(context, holder, Constant.POSTER_SOLO_NUM, cardList.get(position), textSizeRatio);
 
             holder.sep_v.setVisibility(View.GONE);
         }
 
         @Override
         public int getItemCount() {
-            return cardList.size();
+            return cardList == null ? 0 : cardList.size();
         }
 
         private class PosterSoloVH extends MainAdapterBaseViewHolder {

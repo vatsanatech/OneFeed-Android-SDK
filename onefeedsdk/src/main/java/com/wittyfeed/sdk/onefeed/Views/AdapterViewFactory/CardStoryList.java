@@ -29,7 +29,7 @@ public final class CardStoryList {
             StoryListItemVH storyListItemVH = new StoryListItemVH(mView);
 
             CardDataViewHolderBinder cardDataViewHolderBinder = new CardDataViewHolderBinder();
-            cardDataViewHolderBinder.bindSingleCardData(storyListItemVH, Constant.STORY_LIST_ITEM_NUM, card, textSizeRatio);
+            cardDataViewHolderBinder.bindSingleCardData(vg.getContext(), storyListItemVH, Constant.STORY_LIST_ITEM_NUM, card, textSizeRatio);
 
             ViewGroup.LayoutParams layoutParams = storyListItemVH.img_container_vg.getLayoutParams();
             layoutParams.width = layoutParams.height;

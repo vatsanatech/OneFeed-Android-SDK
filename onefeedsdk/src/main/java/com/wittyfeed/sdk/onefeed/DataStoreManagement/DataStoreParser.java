@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wittyfeed.sdk.onefeed.Models.Block;
+import com.wittyfeed.sdk.onefeed.OneFeedMain;
 import com.wittyfeed.sdk.onefeed.Utils.OFLogger;
 import com.wittyfeed.sdk.onefeed.Models.MainDatum;
 
@@ -31,6 +32,9 @@ public final class DataStoreParser {
                 return null;
             } else {
                 temp_mainDatum = parseDataStr(jsonObject.optJSONObject("feed_data").toString());
+                if(temp_mainDatum != null){
+                    OneFeedMain.getInstance().ofSharedPreference.setUserId(temp_mainDatum.getConfig().getUser_id());
+                }
             }
         } catch (JSONException e) {
             OFLogger.log(OFLogger.ERROR, OFLogger.DataParseError);

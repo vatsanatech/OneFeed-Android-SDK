@@ -1,5 +1,6 @@
 package com.wittyfeed.sdk.onefeed.Views.AdapterViewFactory;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -58,7 +59,7 @@ import java.util.List;
 
 public final class CardDataViewHolderBinder {
 
-    public synchronized void bindSingleCardData(final MainAdapterBaseViewHolder baseViewHolder, final int itemViewType, final Card card, double textSizeRatio) {
+    public synchronized void bindSingleCardData(final Context context, final MainAdapterBaseViewHolder baseViewHolder, final int itemViewType, final Card card, double textSizeRatio) {
        try {
            switch (itemViewType) {
                case Constant.POSTER_SOLO_NUM:
@@ -102,12 +103,12 @@ public final class CardDataViewHolderBinder {
                @Override
                public void onClick(View view) {
                    if (itemViewType != Constant.COLLECTION_ITEM_NUM) {
-                       OFAnalytics.getInstance().sendAnalytics(
+                       OFAnalytics.getInstance().sendAnalytics(context,
                                OFAnalytics.AnalyticsType.Story,
                                ""
                                        + card.getId()
                                        + ":"
-                                       + "onefeed"
+                                       + "OneFeed"
                        );
                    }
                    OneFeedMain.getInstance().getContentViewMaker(baseViewHolder.root_vg.getContext()).launch(baseViewHolder.root_vg.getContext(), card.getStoryUrl());

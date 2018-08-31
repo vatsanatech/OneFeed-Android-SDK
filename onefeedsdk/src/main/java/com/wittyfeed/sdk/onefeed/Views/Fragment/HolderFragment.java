@@ -123,7 +123,7 @@ public final class HolderFragment extends Fragment {
         OFLogger.log(OFLogger.DEBUG, OFLogger.ChildFragmentManagerStackCount + getChildFragmentManager().getBackStackEntryCount());
 
         if(getUserVisibleHint()){
-            OFAnalytics.getInstance().sendAnalytics(OFAnalytics.AnalyticsType.OneFeed, "OneFeed Opened");
+            OFAnalytics.getInstance().sendAnalytics(getActivity(), OFAnalytics.AnalyticsType.OneFeed, "Click : 0");
         }
     }
 
@@ -131,7 +131,8 @@ public final class HolderFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isResumed()) {
-            OFAnalytics.getInstance().sendAnalytics(OFAnalytics.AnalyticsType.OneFeed, "OneFeed Opened");
+            //Changed by yogesh
+            OFAnalytics.getInstance().sendAnalytics(getActivity(), OFAnalytics.AnalyticsType.OneFeed, "Swipe: 0");
         }
     }
 

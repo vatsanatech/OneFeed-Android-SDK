@@ -1,5 +1,6 @@
 package com.wittyfeed.sdk.onefeed.Views.AdapterViewFactory;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,6 +43,7 @@ public final class CardVideoRv {
 
         private final List<Card> cardList;
         private final double textSizeRatio;
+        private Context context;
 
         VideoRVAdapter(List<Card> cardList, double textSizeRatio) {
             this.cardList = cardList;
@@ -51,6 +53,7 @@ public final class CardVideoRv {
         @NonNull
         @Override
         public MainAdapterBaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            this.context = parent.getContext();
             CardViewHolderFactory cardViewHolderFactory = new CardViewHolderFactory();
             cardViewHolderFactory.setInflater(LayoutInflater.from(parent.getContext()));
             View mView = cardViewHolderFactory.getInflatedBlockViewHolder(Constant.VIDEO_SMALL_SOLO_NUM);
@@ -64,14 +67,14 @@ public final class CardVideoRv {
             holder.root_vg.setLayoutParams(params);
 
             CardDataViewHolderBinder cardDataViewHolderBinder = new CardDataViewHolderBinder();
-            cardDataViewHolderBinder.bindSingleCardData(holder, Constant.VIDEO_SMALL_SOLO_NUM, cardList.get(position), textSizeRatio);
+            cardDataViewHolderBinder.bindSingleCardData(context, holder, Constant.VIDEO_SMALL_SOLO_NUM, cardList.get(position), textSizeRatio);
 
             holder.sep_v.setVisibility(View.GONE);
         }
 
         @Override
         public int getItemCount() {
-            return cardList.size();
+            return cardList == null ? 0 : cardList.size();
         }
 
         private class VideoSmallSoloVH extends MainAdapterBaseViewHolder {

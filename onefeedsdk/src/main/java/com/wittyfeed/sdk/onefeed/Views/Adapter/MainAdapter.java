@@ -1,5 +1,6 @@
 package com.wittyfeed.sdk.onefeed.Views.Adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -48,6 +49,7 @@ public class  MainAdapter extends RecyclerView.Adapter<MainAdapterBaseViewHolder
     private int fragment_type;
     private CardViewHolderFactory cardViewHolderFactory;
     private CardDataViewHolderBinder cardDataViewHolderBinder;
+    private Context context;
 
 
     public MainAdapter(ArrayList<Block> block_arr, int fragment_type) {
@@ -63,6 +65,7 @@ public class  MainAdapter extends RecyclerView.Adapter<MainAdapterBaseViewHolder
 
         OFLogger.log(OFLogger.DEBUG, OFLogger.InOnCreate);
 
+        this.context = viewGroup.getContext();
         cardViewHolderFactory.setInflater(LayoutInflater.from(viewGroup.getContext()));
 
         View view = null;
@@ -120,7 +123,7 @@ public class  MainAdapter extends RecyclerView.Adapter<MainAdapterBaseViewHolder
 
         switch (itemViewType){
             case Constant.POSTER_SOLO_NUM:
-                cardDataViewHolderBinder.bindSingleCardData(holder, itemViewType, cardList.get(0), Constant.TextSizeRatioLarge);
+                cardDataViewHolderBinder.bindSingleCardData(context, holder, itemViewType, cardList.get(0), Constant.TextSizeRatioLarge);
                 holder.root_vg.setPadding(0,0,0,0);
 
                 break;
@@ -129,7 +132,7 @@ public class  MainAdapter extends RecyclerView.Adapter<MainAdapterBaseViewHolder
 
                 break;
             case Constant.VIDEO_SOLO_NUM:
-                cardDataViewHolderBinder.bindSingleCardData(holder, itemViewType, cardList.get(0), Constant.TextSizeRatioLarge);
+                cardDataViewHolderBinder.bindSingleCardData(context, holder, itemViewType, cardList.get(0), Constant.TextSizeRatioLarge);
                 holder.root_vg.setPadding(0,0,0,0);
                 holder.sep_v.setVisibility(View.GONE);
 

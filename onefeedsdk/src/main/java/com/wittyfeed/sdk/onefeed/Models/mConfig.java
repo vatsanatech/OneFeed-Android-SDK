@@ -31,8 +31,7 @@ public final class mConfig implements Parcelable
             return (new mConfig[size]);
         }
 
-    }
-    ;
+    };
 
     protected mConfig(Parcel in) {
         this.appId = ((String) in.readValue((String.class.getClassLoader())));

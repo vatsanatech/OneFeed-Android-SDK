@@ -2,6 +2,7 @@ package com.wittyfeed.sdk.onefeed;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -61,10 +62,10 @@ public final class OFAnalytics {
 
         mainPayload = new HashMap<>();
         mainPayload.put("sdkvr", "" + Constant.ONE_FEED_VERSION);
-        mainPayload.put("lng", "" + Locale.getDefault().getISO3Language());
-        mainPayload.put("cc", "" + Locale.getDefault().getISO3Country());
+        //mainPayload.put("lng", "" + Locale.getDefault().getISO3Language());
+       // mainPayload.put("cc", "" + Locale.getDefault().getISO3Country());
         mainPayload.put("pckg", "" + Utils.getPackageName(applicationContext));
-        mainPayload.put("device_id", "" + ApiClient.getInstance().getDeviceId());
+        mainPayload.put("device_id", "" + Utils.getAndroidId(applicationContext));
         mainPayload.put("ntype", Utils.getNetworkConnectionType(applicationContext));
     }
 
@@ -131,8 +132,8 @@ public final class OFAnalytics {
             requestQueue = Volley.newRequestQueue(context);
             mainPayload = new HashMap<>();
             mainPayload.put("sdkvr", "" + Constant.ONE_FEED_VERSION);
-            mainPayload.put("lng", "" + Locale.getDefault().getISO3Language());
-            mainPayload.put("cc", "" + Locale.getDefault().getISO3Country());
+           // mainPayload.put("lng", "" + Locale.getDefault().getISO3Language());
+          //  mainPayload.put("cc", "" + Locale.getDefault().getISO3Country());
             mainPayload.put("pckg", "" + Utils.getPackageName(context));
             mainPayload.put("ntype", Utils.getNetworkConnectionType(context));
 
@@ -147,12 +148,18 @@ public final class OFAnalytics {
         String userId = preference.getUserId();
 
         String[] args = labelArg.split(":");
+        String noId= "0";
+        try{
+            noId  = args[1];
+        }catch (Exception e){
+            noId = "0";
+        }
         switch (categoryArg) {
             case NotificationOpened:
-                prepareNotificationOpenedTracking(context, "Notification Opened", "Notification Opened", args[0], args[1], appId, userId);
+                prepareNotificationOpenedTracking(context, "Notification Opened", "Notification Opened", args[0], noId, appId, userId);
                 break;
             case NotificationReceived:
-                prepareNotificationReceivedTracking(context, "Notification Received", args[0], args[1], appId, userId);
+                prepareNotificationReceivedTracking(context, "Notification Received", args[0], noId, appId, userId);
                 break;
             case Story:
                 //Change by Yogesh
@@ -212,11 +219,11 @@ public final class OFAnalytics {
     /**
      * prepares payload for SDK initialised tracking
      *
-     * @param sdk_initialised
-     * @param eventType       the event category to be passed to Google Analytics
-     * @param appId           the App_ID as per registration on OneFeed Dashboard, will be used as Event Action on Google Analytics
+     * @param eventType
+     * @param appId       the event category to be passed to Google Analytics
+     * @param userId           the App_ID as per registration on OneFeed Dashboard, will be used as Event Action on Google Analytics
      */
-    private void prepareSDKInitialisedTracking(String sdk_initialised, String eventType, String appId) {
+    private void prepareSDKInitialisedTracking(String eventType, String appId, String userId) {
         final Map<String, String> payload = new HashMap<>(mainPayload);
         payload.put("etype", "" + eventType);
         payload.put("appid", "" + appId);
@@ -224,8 +231,7 @@ public final class OFAnalytics {
 //        if(OneFeedMain.getInstance().getInstanceDataStore().getMainFeedData()!=null)
 //            payload.put("appuid",  "" + OneFeedMain.getInstance().getInstanceDataStore().getUserIdFromConfig());
 
-        payload.put("appuid", OneFeedMain.getInstance().ofSharedPreference.getUserId());
-
+        payload.put("appuid", userId);
         sendRequest(payload);
     }
 

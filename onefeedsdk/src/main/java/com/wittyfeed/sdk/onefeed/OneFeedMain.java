@@ -134,8 +134,9 @@ public final class OneFeedMain {
             @Override
             public void onSuccess() {
                 // when data did finish loading
-                OFLogger.log( OFLogger.DEBUG, "blocks count: " + OneFeedMain.getInstance().getInstanceDataStore().getMainFeedDataBlockArr().size() );
-                OFLogger.log( OFLogger.DEBUG, "default search blocks count: " + OneFeedMain.getInstance().getInstanceDataStore().getSearchDefaultDataBlockArr().size() );
+                //Changed by yogesh
+//                OFLogger.log( OFLogger.DEBUG, "blocks count: " + OneFeedMain.getInstance().getInstanceDataStore().getMainFeedDataBlockArr().size() );
+//                OFLogger.log( OFLogger.DEBUG, "default search blocks count: " + OneFeedMain.getInstance().getInstanceDataStore().getSearchDefaultDataBlockArr().size() );
                 callOnInitializedSuccess();
             }
 

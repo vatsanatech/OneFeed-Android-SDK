@@ -79,6 +79,7 @@ public class HomeFragment extends Fragment {
         Map<String, String> dummy_notiff_data = new HashMap<>();
         try {
             dummy_notiff_data.put("story_id", "60496");
+            dummy_notiff_data.put("noid", "10001");
             dummy_notiff_data.put("story_title", "10 Things Every Girl Should Put On Her List");
             dummy_notiff_data.put("cover_image", "https://cdn.wittyfeed.com/41441/ilik0kqmr2hpv1i4l8ya.jpeg?imwidth=960");
             dummy_notiff_data.put("story_url","https://www.wittyfeed.me/story/41441/things-every-girl-should-put-in-her-list?utm_hash=ArD51&nohead=1");

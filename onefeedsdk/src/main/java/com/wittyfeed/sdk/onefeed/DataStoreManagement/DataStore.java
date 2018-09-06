@@ -101,8 +101,16 @@ public final class DataStore {
      * Returns the main feed data list
      */
 
-    public List<Block> getMainFeedDataBlockArr(){
-        return mainFeedData.getBlocks();
+    public List<Block> getMainFeedDataBlockArr() {
+        //Changed by yogesh
+        try {
+            return mainFeedData.getBlocks();
+        }catch (Exception e){
+            List<Block> blocks = new ArrayList<>();
+            MainDatum mainDatum = new MainDatum();
+            mainDatum.setBlocks(blocks);
+            return blocks;
+        }
     }
 
     /**

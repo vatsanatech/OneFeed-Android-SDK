@@ -27,24 +27,23 @@ import com.wittyfeed.sdk.onefeed.Views.Adapter.MainAdapter;
 import java.util.ArrayList;
 
 /**
- *
  * Holds the MainFeed of OneFeed, and is managed by Holder Fragment
- *  Read about: HolderFragment, OneFeedBuilder
- *
+ * Read about: HolderFragment, OneFeedBuilder
+ * <p>
  * it has following responsibilities -
- *      1) prepare recycler view to populate the Model-Data from DataStore
- *          Read about: DataStore, DataStoreManager, OneFeedMain
- *      2) prepare MainAdapter to set with the recycler view
- *          Read about: MainAdapter
- *      3) prepare LinearLayoutManager to set with the recycler view
- *      4) use linearLayoutManager to track user scroll and set setFetchMoreToRecyclerView
- *          to implement endless feed,
- *          Read about: NetworkServiceManager
- *      5) implement and initialise swipe-to-refresh layout, to refresh MainFeed DataStore on
- *          pulling down gesture
- *          Read about: NetworkServiceManager
- *      6) notify OneFeedBuilder on screen-orientation change and other onPause() events
- *
+ * 1) prepare recycler view to populate the Model-Data from DataStore
+ * Read about: DataStore, DataStoreManager, OneFeedMain
+ * 2) prepare MainAdapter to set with the recycler view
+ * Read about: MainAdapter
+ * 3) prepare LinearLayoutManager to set with the recycler view
+ * 4) use linearLayoutManager to track user scroll and set setFetchMoreToRecyclerView
+ * to implement endless feed,
+ * Read about: NetworkServiceManager
+ * 5) implement and initialise swipe-to-refresh layout, to refresh MainFeed DataStore on
+ * pulling down gesture
+ * Read about: NetworkServiceManager
+ * 6) notify OneFeedBuilder on screen-orientation change and other onPause() events
+ * <p>
  * Read about: MainAdapter, OneFeedBuilder, HolderFragment
  */
 
@@ -59,7 +58,7 @@ public class MainFeedFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(OneFeedMain.getInstance().oneFeedBuilder!=null)
+        if (OneFeedMain.getInstance().oneFeedBuilder != null)
             OneFeedMain.getInstance().oneFeedBuilder.openedFragmentFeedType = OneFeedBuilder.FragmentFeedType.MAIN_FEED;
     }
 
@@ -75,18 +74,21 @@ public class MainFeedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         onefeed_rv = view.findViewById(R.id.onefeed_rv);
         mainFeed_srl = view.findViewById(R.id.mainFeed_srl);
+        try {
+            mainAdapter = new MainAdapter((ArrayList<Block>) OneFeedMain.getInstance()
+                    .getInstanceDataStore().getMainFeedDataBlockArr(), 1);
 
-        mainAdapter = new MainAdapter((ArrayList<Block>) OneFeedMain.getInstance().getInstanceDataStore().getMainFeedDataBlockArr(), 1);
-
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        onefeed_rv.setLayoutManager(linearLayoutManager);
-        onefeed_rv.setAdapter(mainAdapter);
-
-        setFetchMoreToRecyclerView();
+            linearLayoutManager = new LinearLayoutManager(getContext());
+            onefeed_rv.setLayoutManager(linearLayoutManager);
+            onefeed_rv.setAdapter(mainAdapter);
+            setFetchMoreToRecyclerView();
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
         setRefreshFeedToRecyclerView();
     }
 
-    private void setFetchMoreToRecyclerView(){
+    private void setFetchMoreToRecyclerView() {
         onefeed_rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -105,8 +107,8 @@ public class MainFeedFragment extends Fragment {
                 int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
 
                 if (!isFetchingData) {
-                    if(firstVisibleItemPosition + visibleItemCount > totalItemCount - 4){
-                        if(Utils.isConnected(getContext())){
+                    if (firstVisibleItemPosition + visibleItemCount > totalItemCount - 4) {
+                        if (Utils.isConnected(getContext())) {
 
                             isFetchingData = true;
 
@@ -115,7 +117,7 @@ public class MainFeedFragment extends Fragment {
                                     new NetworkServiceManager.OnNetworkServiceDidRespond() {
                                         @Override
                                         public void onSuccessResponse(String response) {
-                                            OneFeedMain.getInstance().getInstanceDataStore().appendInMainFeedDataArray( DataStoreParser.parseMainFeedString(response) );
+                                            OneFeedMain.getInstance().getInstanceDataStore().appendInMainFeedDataArray(DataStoreParser.parseMainFeedString(response));
 
                                             mainAdapter.notifyDataSetChanged();
                                             OneFeedMain.getInstance().getInstanceDataStore().incrementMainFeedDataOffset();
@@ -140,12 +142,12 @@ public class MainFeedFragment extends Fragment {
         });
     }
 
-    private void setRefreshFeedToRecyclerView(){
+    private void setRefreshFeedToRecyclerView() {
         mainFeed_srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mainFeed_srl.setRefreshing(true);
-                if(!Utils.isConnected(getContext())){
+                if (!Utils.isConnected(getContext())) {
                     mainFeed_srl.setRefreshing(false);
                     Snackbar.make(getActivity().findViewById(android.R.id.content), "No Internet, Please connect to a Network", Snackbar.LENGTH_LONG).show();
                     OFLogger.log(OFLogger.DEBUG, OFLogger.NoInternet);
@@ -159,7 +161,7 @@ public class MainFeedFragment extends Fragment {
                             @Override
                             public void onSuccessResponse(String response) {
                                 OneFeedMain.getInstance().getInstanceDataStore().clearMainFeedDataArray();
-                                OneFeedMain.getInstance().getInstanceDataStore().setMainFeedData( DataStoreParser.parseMainFeedString(response) );
+                                OneFeedMain.getInstance().getInstanceDataStore().setMainFeedData(DataStoreParser.parseMainFeedString(response));
                                 mainAdapter.setBlock_arr((ArrayList<Block>) OneFeedMain.getInstance().getInstanceDataStore().getMainFeedDataBlockArr());
                                 mainAdapter.notifyDataSetChanged();
                                 mainFeed_srl.setRefreshing(false);

@@ -60,6 +60,8 @@ public final class Constant {
      */
     public static final String SAVED_FCM_TOKEN = "wf_saved_fcm_token";
 
-    public static final String AnalyticsURL = "https://reqy4b30ec.execute-api.us-east-1.amazonaws.com/apptrack";
+    //public static final String AnalyticsURL = "https://reqy4b30ec.execute-api.us-east-1.amazonaws.com/apptrack";
+    //Changed URL 05-09-2018
+    public static final String AnalyticsURL = "https://apptrack.onefeed.ai/apptrack";
 
 }

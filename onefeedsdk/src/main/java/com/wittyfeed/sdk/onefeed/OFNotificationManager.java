@@ -107,7 +107,7 @@ public final class OFNotificationManager {
                                     ""
                                             + data.get("story_id")
                                             + ":"
-                                            + data.get("id")
+                                            + data.get("noid")
                             );
 
                         contentViewIntent.putExtra("is_loaded_notification", true);
@@ -118,6 +118,7 @@ public final class OFNotificationManager {
                         contentViewIntent.putExtra("story_title", data.get("story_title"));
                         contentViewIntent.putExtra("url_to_open", data.get("story_url"));
                         contentViewIntent.putExtra("id", data.get("id"));
+                        contentViewIntent.putExtra("noid", data.get("noid"));
 
                         String coverImgUrl = null;
                         if (data.get("cover_image") != null) {

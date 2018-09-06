@@ -111,7 +111,9 @@ public final class OFContentViewActivity extends AppCompatActivity {
                              + ""
                              + jsonObject.optString("story_id","")
                              + ":"
-                             + jsonObject.optString("notification_id","")
+                             //+ jsonObject.optString("notification_id","")
+                             + jsonObject.optString("noid","")
+
              );
 
 //            OFAnalytics.getInstance().sendAnalytics(
@@ -184,6 +186,7 @@ public final class OFContentViewActivity extends AppCompatActivity {
             jsonObject.putOpt("app_id",""+ bundle.getString("app_id",""));
             jsonObject.putOpt("story_id",""+ bundle.getString("story_id",""));
             jsonObject.putOpt("story_title",""+ bundle.getString("story_title",""));
+            jsonObject.putOpt("noid",""+ bundle.getString("noid",""));
 
             notificationId = bundle.containsKey("notification_id")? bundle.getString("notification_id") : bundle.getString("id", "");
             jsonObject.putOpt("notification_id",notificationId );

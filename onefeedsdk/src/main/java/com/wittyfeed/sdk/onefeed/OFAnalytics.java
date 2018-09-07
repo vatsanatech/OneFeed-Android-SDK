@@ -62,7 +62,7 @@ public final class OFAnalytics {
 
         mainPayload = new HashMap<>();
         mainPayload.put("sdkvr", "" + Constant.ONE_FEED_VERSION);
-        //mainPayload.put("lng", "" + Locale.getDefault().getISO3Language());
+        mainPayload.put("lng", "" + Locale.getDefault().getISO3Language());
        // mainPayload.put("cc", "" + Locale.getDefault().getISO3Country());
         mainPayload.put("pckg", "" + Utils.getPackageName(applicationContext));
         mainPayload.put("device_id", "" + Utils.getAndroidId(applicationContext));
@@ -93,7 +93,7 @@ public final class OFAnalytics {
                 prepareNotificationReceivedTracking(context, "Notification Received", args[0], args[1], ApiClient.getInstance().getAppId(), userId);
                 break;
             case NotificationOpened:
-                prepareNotificationOpenedTracking(context, "Notification Opened", args[0], args[1], ApiClient.getInstance().getAppId(), userId, userId);
+                prepareNotificationOpenedTracking(context, "Story Opened", args[0], args[1], ApiClient.getInstance().getAppId(), userId, userId);
                 break;
             case Story:
                 prepareStoryOpenedTracking(context, "Story Opened", args[0], args[1], ApiClient.getInstance().getAppId(), userId);
@@ -132,7 +132,7 @@ public final class OFAnalytics {
             requestQueue = Volley.newRequestQueue(context);
             mainPayload = new HashMap<>();
             mainPayload.put("sdkvr", "" + Constant.ONE_FEED_VERSION);
-           // mainPayload.put("lng", "" + Locale.getDefault().getISO3Language());
+            mainPayload.put("lng", "" + Locale.getDefault().getISO3Language());
           //  mainPayload.put("cc", "" + Locale.getDefault().getISO3Country());
             mainPayload.put("pckg", "" + Utils.getPackageName(context));
             mainPayload.put("ntype", Utils.getNetworkConnectionType(context));
@@ -156,7 +156,7 @@ public final class OFAnalytics {
         }
         switch (categoryArg) {
             case NotificationOpened:
-                prepareNotificationOpenedTracking(context, "Notification Opened", "Notification Opened", args[0], noId, appId, userId);
+                prepareNotificationOpenedTracking(context, "Notification Opened", "Story Opened", args[0], noId, appId, userId);
                 break;
             case NotificationReceived:
                 prepareNotificationReceivedTracking(context, "Notification Received", args[0], noId, appId, userId);

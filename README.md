@@ -58,33 +58,12 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 	}
 ```
 
-4. Add the following library dependency to your project
-  
-  ```gradle
-    compile 'com.android.support:appcompat-v7:27.1.0'
-    compile 'com.android.support:support-v4:27.1.0'
-    compile 'com.android.support:design:27.1.0'
-    compile 'com.android.support:cardview-v7:27.1.0'
-    compile 'com.android.support:recyclerview-v7:27.1.0'
-    
-    compile 'com.github.bumptech.glide:glide:4.3.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.android.volley:volley:1.0.0'
-    compile 'com.android.support:customtabs:27.1.0'
- ```
-
 > ## Notice
 > We encourage developers to always check for latest SDK version and refer to its updated documentation to use it.
 
-### 1.3. Initializing the SDK
+### 1.3 Initializing the SDK
 
 ```java
-
-    //For Notifications
-
-     String topicName = "OneFeed_" + APP_ID + "_" + Constant.ONE_FEED_VERSION;
-     FirebaseMessaging.getInstance().subscribeToTopic(topicName);
 
     // OPTIONAL to provide basic user_meta.
     // By providing basic user_meta your app can receive targeted content which has an higher CPM then regular content.
@@ -97,7 +76,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
     // user Interests. String with a max_length = 100
     // SAMPLE CODE BELOW, DO ADD YOUR OWN CATEOGORIES OF INTERESTS
     // OPTIONAL
-    mUserMeta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); // string max_length = 100
+    mUserMeta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); //              	string max_length = 100
 
     // Passing 'mUserMeta'  IS OPTIONAL
     ApiClient.getInstance().appendCustomUserMetaToUserMeta(mUserMeta);
@@ -121,19 +100,63 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
     OneFeedMain.setHideBackButtonFromMainFeed(true);
 
+    //If user use FCM for sending push notification. Follow below code
+    FCM_TOKEN = FirebaseInstanceId.getInstance().getToken();
+    if (FCM_TOKEN == null) {
+	FCM_TOKEN = "";
+    }
+    Log.e("FCM Token:", FCM_TOKEN);
+
+    String topicName = "OneFeed_" + APP_ID + "_" + Constant.ONE_FEED_VERSION;
+    FirebaseMessaging.getInstance().subscribeToTopic(topicName);
+
     // initializing SDK here (mandatory)
     OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, FCM_TOKEN);
-    
-    // Below code is required for consistent unsubscription from FCM topics and token update on onefeed sdk version change
-    
-    if(!(OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(""))){
-            if(!OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(Constant.ONE_FEED_VERSION)){
-                OneFeedMain.getInstance().fcmTokenManager.updateTokenForVersionChange();
-                String oldTopic = "OneFeed_" + APP_ID + "_" + OneFeedMain.getInstance().ofSharedPreference.getSDKVersion();
-                FirebaseMessaging.getInstance().unsubscribeFromTopic(oldTopic);
-            }
-        }
+
+    /*
+     * Below code is ***required*** for consistent unsubscription and token update on sdk version change
+     */
+    if (!(OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(""))) {
+	if (!OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(Constant.ONE_FEED_VERSION)) {
+	    OneFeedMain.getInstance().fcmTokenManager.updateTokenForVersionChange();
+	    String oldTopic = "OneFeed_" + APP_ID + "_" + OneFeedMain.getInstance().ofSharedPreference.getSDKVersion();
+	    FirebaseMessaging.getInstance().unsubscribeFromTopic(oldTopic);
+	}
+    }
     OneFeedMain.getInstance().ofSharedPreference.setSDKVersion(Constant.ONE_FEED_VERSION);
+   
+    //If user use OneSignal for sending push notification. Follow below code
+    OneSignal.getTags(new OneSignal.GetTagsHandler() {
+	@Override
+	public void tagsAvailable(JSONObject tags) {
+	    if (tags != null) {
+		try {
+		    String tag = tags.getString("onefeed");
+		    if (!tag.equalsIgnoreCase("app_id_" + Constant.ONE_FEED_VERSION)) {
+			OneSignal.sendTag("onefeed", "app_id_" + Constant.ONE_FEED_VERSION);
+		    }
+		} catch (JSONException e) {
+		    e.printStackTrace();
+		}
+	    }else{
+		OneSignal.sendTag("onefeed", "app_id_" + Constant.ONE_FEED_VERSION);
+	    }
+	}
+    });
+
+    OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+	@Override
+	public void idsAvailable(String userId, String registrationId) {
+	    Log.e("debug", "User:" + userId);
+	    
+	    // initializing SDK here (mandatory)
+	    OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, userId);
+
+
+	    if (registrationId != null)
+		Log.e("debug", "registrationId:" + registrationId);
+	}
+    });
     
     // OPTIONAL: Set Intent of the Activity you want to open on Back press from Story that opens from Notification
     OFNotificationManager.getInstance().setHomeScreenIntent(this, new Intent(this.getApplicationContext(),MainActivity.class));
@@ -222,7 +245,7 @@ Step 4:
 		                     
 ```
 
-### 1.7. For Notifications Service of OneFeed
+### 1.7.1 For FCM Notifications Service of OneFeed
 
 In your class which extends FirebaseInstanceIDService, update with the code below
 ```java
@@ -230,12 +253,9 @@ In your class which extends FirebaseInstanceIDService, update with the code belo
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d("FCM_CUSTOM", "Refreshed token:- " + refreshedToken);
 
-        //
-        // * Mandatory for Using Notification Service by OneFeed*
+	// * Mandatory for Using Notification Service by OneFeed*
         // To notify OneFeed SDK about your updated fcm_token
-        //
         if(OneFeedMain.getInstance().getFcmTokenManager()!=null)
             OneFeedMain.getInstance().getFcmTokenManager().refreshToken(refreshedToken);
     }
@@ -269,6 +289,40 @@ In your class which extends FirebaseMessagingService, update with the code below
                 YOUR_APP_ID
         );
     }
+```
+### 1.7.2 For OneSignal Notifications Service of OneFeed
+
+In your class which extends Application, update with the code below
+```java
+    @Override
+    public void onCreate() {
+	super.onCreate();	
+	OneSignal.startInit(this)
+		    .setNotificationReceivedHandler(new ExampleNotificationReceivedHandler())
+		    .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+		    .unsubscribeWhenNotificationsAreDisabled(true)
+		    .init();
+     }
+
+     private class ExampleNotificationReceivedHandler implements OneSignal.NotificationReceivedHandler {
+        @Override
+        public void notificationReceived(OSNotification notification) {
+            String notificationID = notification.payload.notificationID;
+
+            String agent = notification.payload.additionalData.optString("notiff_agent", null);
+
+     	   // NOTE: optionally you can check that notification has arrived from WittyFeed by below line -
+            if(!TextUtils.isEmpty(agent) && agent.equalsIgnoreCase("wittyfeed_sdk")) {
+                OFNotificationManager
+                        .getInstance()
+                        .handleOneSignalNotification(Root.this, "",
+                                notification.payload.additionalData, R.mipmap.ic_launcher, YOUR_APP_ID);
+            }else {
+                // Handle by user
+            }
+        }
+    }
+
 ```
 
 ### 1.8. OneFeed is built for Portrait

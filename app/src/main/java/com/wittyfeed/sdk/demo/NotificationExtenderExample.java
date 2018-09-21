@@ -31,12 +31,6 @@ public class NotificationExtenderExample extends NotificationExtenderService {
         };
 
         OSNotificationDisplayedResult displayedResult = displayNotification(overrideSettings);
-        try {
-            Log.d("OneSignalExample", "Notification displayed with id: " +
-                    notification.payload.additionalData.getJSONObject("custom").getJSONObject("a").get("H"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         // Return true to stop the notification from displaying
         return true;

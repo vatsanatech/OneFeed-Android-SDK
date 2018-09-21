@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_fl"
     style="@style/WFSDKTheme.NoActionBar"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/fl_contentView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <WebView
             android:id="@+id/wv_data"
@@ -18,14 +19,13 @@
 
         <ProgressBar
             android:id="@+id/determinateBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_marginTop="-6dp"
             android:progress="80"
             android:progressTint="@color/colorAccent"
-            android:layout_marginTop="-6dp"
-            android:visibility="visible"
-            />
+            android:visibility="visible" />
 
     </FrameLayout>
 
@@ -36,19 +36,19 @@
 
         <ImageView
             android:id="@+id/loader_iv"
-            android:layout_centerInParent="true"
             android:layout_width="200dp"
-            android:layout_height="192dp" />
+            android:layout_height="192dp"
+            android:layout_centerInParent="true" />
 
         <TextView
             android:id="@+id/loader_tv"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/loader_iv"
-            android:text="generating personalised feed for you"
             android:layout_centerInParent="true"
-            android:textColor="@color/colorPrimary"/>
+            android:text="generating personalised feed for you"
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone" />
 
     </RelativeLayout>
 </FrameLayout>

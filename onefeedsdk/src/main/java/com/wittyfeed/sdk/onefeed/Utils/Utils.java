@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import org.json.JSONObject;
@@ -147,33 +148,37 @@ public final class Utils {
         TelephonyManager telephonyManager = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
 
         String networkType = "Unknown";
-        switch (telephonyManager.getNetworkType()) {
-            case TelephonyManager.NETWORK_TYPE_GPRS:
-            case TelephonyManager.NETWORK_TYPE_EDGE:
-            case TelephonyManager.NETWORK_TYPE_CDMA:
-            case TelephonyManager.NETWORK_TYPE_1xRTT:
-            case TelephonyManager.NETWORK_TYPE_IDEN:
-                networkType = "2G";
-                break;
-            case TelephonyManager.NETWORK_TYPE_UMTS:
-            case TelephonyManager.NETWORK_TYPE_EVDO_0:
-            case TelephonyManager.NETWORK_TYPE_EVDO_A:
-            case TelephonyManager.NETWORK_TYPE_HSDPA:
-            case TelephonyManager.NETWORK_TYPE_HSUPA:
-            case TelephonyManager.NETWORK_TYPE_HSPA:
-            case TelephonyManager.NETWORK_TYPE_EVDO_B:
-            case TelephonyManager.NETWORK_TYPE_EHRPD:
-            case TelephonyManager.NETWORK_TYPE_HSPAP:
-                networkType = "3G";
-                break;
-            case TelephonyManager.NETWORK_TYPE_LTE:
-                networkType = "4G";
-                break;
+        try {
+            switch (telephonyManager.getNetworkType()) {
+                case TelephonyManager.NETWORK_TYPE_GPRS:
+                case TelephonyManager.NETWORK_TYPE_EDGE:
+                case TelephonyManager.NETWORK_TYPE_CDMA:
+                case TelephonyManager.NETWORK_TYPE_1xRTT:
+                case TelephonyManager.NETWORK_TYPE_IDEN:
+                    networkType = "2G";
+                    break;
+                case TelephonyManager.NETWORK_TYPE_UMTS:
+                case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                case TelephonyManager.NETWORK_TYPE_HSDPA:
+                case TelephonyManager.NETWORK_TYPE_HSUPA:
+                case TelephonyManager.NETWORK_TYPE_HSPA:
+                case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                case TelephonyManager.NETWORK_TYPE_EHRPD:
+                case TelephonyManager.NETWORK_TYPE_HSPAP:
+                    networkType = "3G";
+                    break;
+                case TelephonyManager.NETWORK_TYPE_LTE:
+                    networkType = "4G";
+                    break;
+            }
+        }catch (Exception e){
+            Log.e("Util", e.getMessage());
         }
 
-        if(networkInfo.isConnected()){
+        if(networkInfo!= null && networkInfo.isConnected()){
             return networkType;
-        }else if(networkInfo2.isConnected()){
+        }else if(networkInfo2!= null && networkInfo2.isConnected()){
             return "WIFI";
         }else {
             return "Unknown";

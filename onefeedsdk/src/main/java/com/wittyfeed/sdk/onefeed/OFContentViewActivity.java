@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -29,9 +31,9 @@ import org.json.JSONObject;
  */
 
 /**
- <p><span style="font-size: 13pt;"><strong>FallBack class which uses WebView incase Chrome is not installed or disabled</strong></span></p>
- <p>Checks for the availability of chrome</p>
- <p>Creates and Configures webview and loads it</p>
+ * <p><span style="font-size: 13pt;"><strong>FallBack class which uses WebView incase Chrome is not installed or disabled</strong></span></p>
+ * <p>Checks for the availability of chrome</p>
+ * <p>Creates and Configures webview and loads it</p>
  */
 public final class OFContentViewActivity extends AppCompatActivity {
 
@@ -48,9 +50,10 @@ public final class OFContentViewActivity extends AppCompatActivity {
     private ChromeInstallationStatus chromeStatus;
     private JSONObject jsonObject;
 
+
     @Override
     protected void onResume() {
-        if(did_load){
+        if (did_load) {
             onBackFromOFWebViewInterface.performBack();
             Constant.hasChromeCustomTabLoaded = false;
         }
@@ -66,41 +69,49 @@ public final class OFContentViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_content_view_wfsdk);
         Bundle bundle = getIntent().getExtras();
         init(bundle);
-     }
+    }
 
-     private void init(Bundle bundle){
+    private void init(Bundle bundle) {
 
 
-         if (bundle != null && bundle.containsKey("is_loaded_notification")) {
-             isFromNotification = true;
-         }
+        if (bundle != null && bundle.containsKey("is_loaded_notification")) {
+            isFromNotification = true;
+        }
 
-         try {
-             this.getActionBar().hide();
-         } catch (Exception e) {
-             // do nothing
-         }
-         try {
-             this.getSupportActionBar().hide();
-         } catch (Exception e) {
-             // do nothing
-         }
+        try {
+            this.getActionBar().hide();
+        } catch (Exception e) {
+            // do nothing
+        }
+        try {
+            this.getSupportActionBar().hide();
+        } catch (Exception e) {
+            // do nothing
+        }
 
-         web_view = findViewById(R.id.wv_data);
-         determinateBar = findViewById(R.id.determinateBar);
-         loaderView_rl = findViewById(R.id.loaderView_rl);
-         loader_iv = findViewById(R.id.loader_iv);
+        web_view = findViewById(R.id.wv_data);
+        determinateBar = findViewById(R.id.determinateBar);
+        loaderView_rl = findViewById(R.id.loaderView_rl);
+        loader_iv = findViewById(R.id.loader_iv);
+        web_view.setWebViewClient(new WebViewClient() {
+            public boolean shouldOverrideUrlLoading(WebView view, String url){
+                // do your handling codes here, which url is the requested url
+                // probably you need to open that url rather than redirect:
+                view.loadUrl(url);
+                return false; // then it is not handled by default action
+            }
+        });
 
-         getValuesFromExtras();
+        getValuesFromExtras();
 
-         checkGoogleChromeStatus(this);
+        checkGoogleChromeStatus(this);
 
-         setOnBackFromOFWebViewInterface(new OnBackFromOFWebViewInterface() {
-             @Override
-             public void performBack() {
-                 customFinishApp();
-             }
-         });
+        setOnBackFromOFWebViewInterface(new OnBackFromOFWebViewInterface() {
+            @Override
+            public void performBack() {
+                customFinishApp();
+            }
+        });
 
          if(isFromNotification){
              OFAnalytics.getInstance().sendAnalytics(
@@ -125,33 +136,33 @@ public final class OFContentViewActivity extends AppCompatActivity {
 //                            + ":"
 //                            + "notification"
 //            );
-         }
+        }
 
-         if(chromeStatus == ChromeInstallationStatus.ACTIVE){
-             try{
-                 OneFeedMain.getInstance().getContentViewMaker(this.getApplicationContext()).launch(this, urlToOpen );
-                 Constant.hasChromeCustomTabLoaded = true;
-             }catch (Exception e){
-                 isBeingLoadedInWebview = true;
-                 initLoaderView(this);
-                 initWebViewContent();
-             }
-         }else {
-             isBeingLoadedInWebview = true;
-             initLoaderView(this);
-             initWebViewContent();
-         }
-     }
+        if (chromeStatus == ChromeInstallationStatus.ACTIVE) {
+            try {
+                OneFeedMain.getInstance().getContentViewMaker(this.getApplicationContext()).launch(this, urlToOpen);
+                Constant.hasChromeCustomTabLoaded = true;
+            } catch (Exception e) {
+                isBeingLoadedInWebview = true;
+                initLoaderView(this);
+                initWebViewContent();
+            }
+        } else {
+            isBeingLoadedInWebview = true;
+            initLoaderView(this);
+            initWebViewContent();
+        }
+    }
 
     /**
      * Checks if chrome is disabled
      */
 
     private void checkGoogleChromeStatus(Context context) {
-        if(isPackageInstalled(context.getPackageManager())){
+        if (isPackageInstalled(context.getPackageManager())) {
             try {
-                ApplicationInfo ai = context.getPackageManager().getApplicationInfo(Constant.CHROME_PACKAGE_NAME,0);
-                if(ai.enabled){
+                ApplicationInfo ai = context.getPackageManager().getApplicationInfo(Constant.CHROME_PACKAGE_NAME, 0);
+                if (ai.enabled) {
                     chromeStatus = ChromeInstallationStatus.ACTIVE;
                 } else {
                     chromeStatus = ChromeInstallationStatus.DISABLED;
@@ -166,6 +177,7 @@ public final class OFContentViewActivity extends AppCompatActivity {
 
     /**
      * Checks if chrome is installed in the device
+     *
      * @param packageManager Object of class PackageManager used for retrieving various kinds of information related to the application packages that are currently installed on the device
      */
 
@@ -178,27 +190,27 @@ public final class OFContentViewActivity extends AppCompatActivity {
         }
     }
 
-    private void getValuesFromExtras(){
+    private void getValuesFromExtras() {
 
         Bundle bundle = getIntent().getExtras();
         jsonObject = new JSONObject();
         try {
-            jsonObject.putOpt("app_id",""+ bundle.getString("app_id",""));
-            jsonObject.putOpt("story_id",""+ bundle.getString("story_id",""));
-            jsonObject.putOpt("story_title",""+ bundle.getString("story_title",""));
-            jsonObject.putOpt("noid",""+ bundle.getString("noid",""));
+            jsonObject.putOpt("app_id", "" + bundle.getString("app_id", ""));
+            jsonObject.putOpt("story_id", "" + bundle.getString("story_id", ""));
+            jsonObject.putOpt("story_title", "" + bundle.getString("story_title", ""));
+            jsonObject.putOpt("noid", "" + bundle.getString("noid", ""));
 
-            notificationId = bundle.containsKey("notification_id")? bundle.getString("notification_id") : bundle.getString("id", "");
-            jsonObject.putOpt("notification_id",notificationId );
+            notificationId = bundle.containsKey("notification_id") ? bundle.getString("notification_id") : bundle.getString("id", "");
+            jsonObject.putOpt("notification_id", notificationId);
 
-            urlToOpen = bundle.containsKey("url_to_open")? bundle.getString("url_to_open") : bundle.getString("story_url", "");
-            jsonObject.putOpt("url_to_open",urlToOpen);
+            urlToOpen = bundle.containsKey("url_to_open") ? bundle.getString("url_to_open") : bundle.getString("story_url", "");
+            jsonObject.putOpt("url_to_open", urlToOpen);
 
         } catch (JSONException e) {
 
             //Changed by Yogesh
             //e.printStackTrace();
-            OFLogger.log(OFLogger.ERROR ,e.getMessage(), e);
+            OFLogger.log(OFLogger.ERROR, e.getMessage(), e);
         }
     }
 
@@ -210,15 +222,15 @@ public final class OFContentViewActivity extends AppCompatActivity {
                 .into(loader_iv);
     }
 
-    private void customFinishApp(){
-        if(OFNotificationManager.getInstance().getHomeScreenIntent() != null) {
+    private void customFinishApp() {
+        if (OFNotificationManager.getInstance().getHomeScreenIntent() != null) {
             this.finish();
             isFromNotification = false;
             this.startActivity(OFNotificationManager.getInstance().getHomeScreenIntent());
-        }else {
-            if(!PreferenceManager.getDefaultSharedPreferences(this).getString(Constant.SAVED_HOME_SCREEN_CLASS,"").isEmpty()){
+        } else {
+            if (!PreferenceManager.getDefaultSharedPreferences(this).getString(Constant.SAVED_HOME_SCREEN_CLASS, "").isEmpty()) {
                 try {
-                    Class<?> classNameToOpen = Class.forName(PreferenceManager.getDefaultSharedPreferences(this).getString(Constant.SAVED_HOME_SCREEN_CLASS,""));
+                    Class<?> classNameToOpen = Class.forName(PreferenceManager.getDefaultSharedPreferences(this).getString(Constant.SAVED_HOME_SCREEN_CLASS, ""));
                     this.startActivity(new Intent(this, classNameToOpen));
                     finish();
                 } catch (ClassNotFoundException e) {
@@ -230,22 +242,22 @@ public final class OFContentViewActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    void initWebViewContent(){
+    void initWebViewContent() {
 
         web_view.setWebChromeClient(new WebChromeClient() {
+
             @Override
-            public void onProgressChanged(WebView view, int progress)
-            {
+            public void onProgressChanged(WebView view, int progress) {
                 super.onProgressChanged(view, progress);
-                OFLogger.log(OFLogger.VERBOSE, "WebView Progress: "+progress);
+                OFLogger.log(OFLogger.VERBOSE, "WebView Progress: " + progress);
                 determinateBar.setProgress(progress);
 
-                if(progress >= 100){
+                if (progress >= 100) {
                     determinateBar.setVisibility(View.GONE);
                 }
 
                 if (!isLoadedOnce) {
-                    if(progress >= Constant.loaderThresholdInt){
+                    if (progress >= Constant.loaderThresholdInt) {
                         web_view.setVisibility(View.VISIBLE);
                         loaderView_rl.setVisibility(View.GONE);
                         isLoadedOnce = true;
@@ -267,15 +279,14 @@ public final class OFContentViewActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(isFromNotification && isBeingLoadedInWebview){
+        if (isFromNotification && isBeingLoadedInWebview) {
             onBackFromOFWebViewInterface.performBack();
-        }
-        else{
+        } else {
             super.onBackPressed();
         }
     }
 
-    private enum ChromeInstallationStatus{
+    private enum ChromeInstallationStatus {
         UNAVAILABLE,
         ACTIVE,
         DISABLED

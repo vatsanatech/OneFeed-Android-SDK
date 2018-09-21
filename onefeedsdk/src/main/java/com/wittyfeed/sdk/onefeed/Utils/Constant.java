@@ -8,7 +8,7 @@ package com.wittyfeed.sdk.onefeed.Utils;
 
 public final class Constant {
 
-    public static final String ONE_FEED_VERSION = "2.1.15";
+    public static final String ONE_FEED_VERSION = "2.2.0";
 
     public static String APP_ID = "";
 

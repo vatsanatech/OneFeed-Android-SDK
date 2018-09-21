@@ -21,6 +21,9 @@ import com.wittyfeed.sdk.onefeed.Utils.Constant;
 import com.wittyfeed.sdk.onefeed.Utils.OneFeedBuilder;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,19 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         activity = this;
-        FCM_TOKEN = FirebaseInstanceId.getInstance().getToken();
         viewPager = findViewById(R.id.viewPager);
-
-        if (FCM_TOKEN == null) {
-            FCM_TOKEN = "";
-        }
-
-
-        String topicName = "OneFeed_" + APP_ID + "_" + Constant.ONE_FEED_VERSION;
-
-        FirebaseMessaging.getInstance().subscribeToTopic(topicName);
-
-        //System.out.println("FCM Token: " + FCM_TOKEN);
 
 
         // ====================
@@ -134,24 +125,70 @@ public class MainActivity extends AppCompatActivity {
          * below code is ***required*** for Initializing WittyFeed Android SDK API,
          */
         OneFeedMain.setHideBackButtonFromMainFeed(false);
-        OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, FCM_TOKEN);
 
-        /*
-         * Below code is ***required*** for consistent unsubscription and token update on sdk version change
-         */
-        if(!(OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(""))){
-            if(!OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(Constant.ONE_FEED_VERSION)){
-                OneFeedMain.getInstance().fcmTokenManager.updateTokenForVersionChange();
-                String oldTopic = "OneFeed_" + APP_ID + "_" + OneFeedMain.getInstance().ofSharedPreference.getSDKVersion();
-                FirebaseMessaging.getInstance().unsubscribeFromTopic(oldTopic);
+        if(Root.notificationProvider.equalsIgnoreCase("F")){
+            FCM_TOKEN = FirebaseInstanceId.getInstance().getToken();
+            if (FCM_TOKEN == null) {
+                FCM_TOKEN = "";
             }
+            Log.e("FCM Token:", FCM_TOKEN);
+
+            String topicName = "OneFeed_" + APP_ID + "_" + Constant.ONE_FEED_VERSION;
+            FirebaseMessaging.getInstance().subscribeToTopic(topicName);
+
+            OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, FCM_TOKEN);
+
+            /*
+             * Below code is ***required*** for consistent unsubscription and token update on sdk version change
+             */
+            if (!(OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(""))) {
+                if (!OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(Constant.ONE_FEED_VERSION)) {
+                    OneFeedMain.getInstance().fcmTokenManager.updateTokenForVersionChange();
+                    String oldTopic = "OneFeed_" + APP_ID + "_" + OneFeedMain.getInstance().ofSharedPreference.getSDKVersion();
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(oldTopic);
+                }
+            }
+            OneFeedMain.getInstance().ofSharedPreference.setSDKVersion(Constant.ONE_FEED_VERSION);
+        }else{
+
+            OneSignal.getTags(new OneSignal.GetTagsHandler() {
+                @Override
+                public void tagsAvailable(JSONObject tags) {
+                    if (tags != null) {
+                        try {
+                            String tag = tags.getString("onefeed");
+                            if (!tag.equalsIgnoreCase("app_id_" + Constant.ONE_FEED_VERSION)) {
+                                OneSignal.sendTag("onefeed", "app_id_" + Constant.ONE_FEED_VERSION);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        OneSignal.sendTag("onefeed", "app_id_" + Constant.ONE_FEED_VERSION);
+                    }
+                }
+            });
+
+            OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+                @Override
+                public void idsAvailable(String userId, String registrationId) {
+                    Log.e("debug", "User:" + userId);
+                    OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, userId);
+
+
+                    if (registrationId != null)
+                        Log.e("debug", "registrationId:" + registrationId);
+
+                }
+            });
         }
-        OneFeedMain.getInstance().ofSharedPreference.setSDKVersion(Constant.ONE_FEED_VERSION);
+
+
 
         /*
          * Set Intent of the Activity you want to open on Back press from Story opens from Notification
          */
-        OFNotificationManager.getInstance().setHomeScreenIntent(this, new Intent(this.getApplicationContext(),MainActivity.class));
+        OFNotificationManager.getInstance().setHomeScreenIntent(this, new Intent(this.getApplicationContext(), MainActivity.class));
 
 
         // ==================

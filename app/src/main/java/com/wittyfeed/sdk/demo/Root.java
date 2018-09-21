@@ -1,12 +1,15 @@
 package com.wittyfeed.sdk.demo;
 
 import android.app.Application;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.onesignal.OSNotification;
 import com.onesignal.OneSignal;
+import com.wittyfeed.sdk.onefeed.OFNotificationManager;
 
-import org.json.JSONObject;
+import org.w3c.dom.Text;
+
 
 /**
  * Created by Yogesh Soni.
@@ -16,43 +19,36 @@ import org.json.JSONObject;
  */
 public class Root extends Application {
 
+    public static final String notificationProvider = "E";
+
     @Override
     public void onCreate() {
         super.onCreate();
         // OneSignal Initialization
-        OneSignal.startInit(this)
-                .setNotificationReceivedHandler(new ExampleNotificationReceivedHandler())
-                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
-                .unsubscribeWhenNotificationsAreDisabled(true)
-                .init();
+        if(notificationProvider.equalsIgnoreCase("E")) {
+            OneSignal.startInit(this)
+                    .setNotificationReceivedHandler(new ExampleNotificationReceivedHandler())
+                    .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                    .unsubscribeWhenNotificationsAreDisabled(true)
+                    .init();
+        }
     }
 
     private class ExampleNotificationReceivedHandler implements OneSignal.NotificationReceivedHandler {
         @Override
         public void notificationReceived(OSNotification notification) {
-            JSONObject data = notification.payload.additionalData;
             String notificationID = notification.payload.notificationID;
-            String title = notification.payload.title;
-            String body = notification.payload.body;
-            String smallIcon = notification.payload.smallIcon;
-            String largeIcon = notification.payload.largeIcon;
-            String bigPicture = notification.payload.bigPicture;
-            String smallIconAccentColor = notification.payload.smallIconAccentColor;
-            String sound = notification.payload.sound;
-            String ledColor = notification.payload.ledColor;
-            int lockScreenVisibility = notification.payload.lockScreenVisibility;
-            String groupKey = notification.payload.groupKey;
-            String groupMessage = notification.payload.groupMessage;
-            String fromProjectNumber = notification.payload.fromProjectNumber;
-            String rawPayload = notification.payload.rawPayload;
 
-            String customKey;
             Log.i("OneSignalExample", "NotificationID received: " + notificationID);
+            String agent = notification.payload.additionalData.optString("notiff_agent", null);
 
-            if (data != null) {
-                customKey = data.optString("customkey", null);
-                if (customKey != null)
-                    Log.i("OneSignalExample", "customkey set with value: " + customKey);
+            if(!TextUtils.isEmpty(agent) && agent.equalsIgnoreCase("wittyfeed_sdk")) {
+                OFNotificationManager
+                        .getInstance()
+                        .handleOneSignalNotification(Root.this, "",
+                                notification.payload.additionalData, R.mipmap.ic_launcher, "108");
+            }else {
+                // Handle by user
             }
         }
     }

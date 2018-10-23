@@ -62,7 +62,7 @@ public class MainFeedFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = LayoutInflater.from(container.getContext())
-                .inflate(R.layout.fragment_main_feed, container, false);
+                .inflate(R.layout.onefeed_fragment_main_feed, container, false);
 
         return view;
     }

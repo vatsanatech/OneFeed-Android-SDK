@@ -37,7 +37,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_category_row, parent, false);
+                .inflate(R.layout.onefeed_adapter_category_row, parent, false);
         return new ViewHolder(view);
     }
 

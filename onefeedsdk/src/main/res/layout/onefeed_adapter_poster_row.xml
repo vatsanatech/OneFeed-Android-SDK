@@ -1,73 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
-    android:id="@+id/layout_story_row">
+    android:id="@+id/layout_poster_row"
+    android:orientation="vertical">
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:visibility="gone"/>
+    <Space
+        android:id="@+id/space2"
+        android:layout_toRightOf="@+id/card_view"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:visibility="gone"/>
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+       android:layout_toRightOf="@id/space"
         android:id="@+id/card_view"
-        android:layout_width="130dp"
-        android:layout_height="80dp"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:layout_toRightOf="@id/space"
         android:paddingBottom="0dp"
         card_view:cardCornerRadius="8dp">
 
-        <ImageView
-            android:id="@+id/image_poster"
+        <FrameLayout
+            android:id="@+id/frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:layout_height="116dp">
 
-        <include layout="@layout/layout_tran"/>
+            <ImageView
+                android:id="@+id/image_poster"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <include layout="@layout/onefeed_layout_tran"/>
+
+            <TextView
+                android:id="@+id/view_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:background="@drawable/round_corner"
+                android:fontFamily="@font/cabin"
+                android:padding="5dp"
+                android:text="Category"
+                android:textColor="@color/white"
+                android:textSize="8sp" />
+
+        </FrameLayout>
 
     </android.support.v7.widget.CardView>
 
     <TextView
-        android:layout_toRightOf="@+id/card_view"
-        android:id="@+id/view_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="5dp"
-        android:background="@drawable/round_corner"
-        android:fontFamily="@font/cabin"
-        android:padding="5dp"
-        android:text="Category"
-        android:textColor="@color/white"
-        android:textSize="8sp"
-        android:visibility="gone"/>
-
-    <TextView
+        android:layout_toRightOf="@id/space"
         android:id="@+id/view_title"
-        android:layout_width="match_parent"
+        android:layout_width="190dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/view_category"
-        android:layout_toRightOf="@id/card_view"
+        android:layout_below="@+id/card_view"
         android:fontFamily="@font/cabin_bold"
-        android:ellipsize="end"
         android:maxLines="2"
-        android:minLines="2"
         android:padding="5dp"
         android:text="Attitude is my life."
         android:textColor="@color/black"
         android:textSize="16sp" />
 
     <ImageView
+        android:layout_toRightOf="@id/space"
         android:id="@+id/image_publisher"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_below="@+id/view_title"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/card_view"
         android:src="@drawable/round_corner" />
 
 

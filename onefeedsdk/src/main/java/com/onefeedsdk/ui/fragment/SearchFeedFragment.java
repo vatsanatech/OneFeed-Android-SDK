@@ -1,9 +1,6 @@
 package com.onefeedsdk.ui.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,9 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -72,7 +67,7 @@ public class SearchFeedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(container.getContext())
-                .inflate(R.layout.fragment_search_feed, container, false);
+                .inflate(R.layout.onefeed_fragment_search_feed, container, false);
 
         progressBar = view.findViewById(R.id.progress_bar);
         errorView = view.findViewById(R.id.error_msg);

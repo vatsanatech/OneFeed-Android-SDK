@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"/>
 
-       <include layout="@layout/layout_tran"/>
+       <include layout="@layout/onefeed_layout_tran"/>
 
         <TextView
             android:id="@+id/view_category_name"

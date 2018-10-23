@@ -46,7 +46,7 @@ public class PosterFeedAdapter extends RecyclerView.Adapter<PosterFeedAdapter.Vi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_poster_row, parent, false);
+                .inflate(R.layout.onefeed_adapter_poster_row, parent, false);
         return new ViewHolder(view);
     }
 

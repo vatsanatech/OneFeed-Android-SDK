@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Space;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -46,7 +45,7 @@ public class StoryFeedAdapter extends RecyclerView.Adapter<StoryFeedAdapter.View
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_story_row, parent, false);
+                .inflate(R.layout.onefeed_adapter_story_row, parent, false);
         return new ViewHolder(view);
     }
 

@@ -97,11 +97,11 @@ public class MainFeedAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder viewHolder;
         if (viewType == VIEW_PROG) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.progressbar, parent, false);
+                    .inflate(R.layout.onefeed_progressbar, parent, false);
             viewHolder = new ProgressHolder(view);
         } else {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.adapter_main_feed, parent, false);
+                    .inflate(R.layout.onefeed_adapter_main_feed, parent, false);
             viewHolder = new ViewHolder(view);
         }
 
@@ -318,7 +318,7 @@ public class MainFeedAdapter extends RecyclerView.Adapter {
 
                                 }
 
-                                Util.changedBackgroundColorToRes(holder.videoCategoryView, textSwatch.getRgb());
+                                Util.changedBackgroundColorToRes(holder.videoCategoryView,  toolbarColor[0]);
                             }
                         });
 

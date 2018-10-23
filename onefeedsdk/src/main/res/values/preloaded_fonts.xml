@@ -3,6 +3,7 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/cabin</item>
         <item>@font/cabin_bold</item>
+        <item>@font/cabin_condensed_regular</item>
         <item>@font/cabin_medium</item>
     </array>
 </resources>

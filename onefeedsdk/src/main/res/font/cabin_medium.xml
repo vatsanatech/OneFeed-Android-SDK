@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<font-family xmlns:onefeed="http://schemas.android.com/apk/res-auto"
-        onefeed:fontProviderAuthority="com.google.android.gms.fonts"
-        onefeed:fontProviderPackage="com.google.android.gms"
-        onefeed:fontProviderQuery="name=Cabin&amp;weight=500"
-        onefeed:fontProviderCerts="@array/com_google_android_gms_fonts_certs">
-</font-family>

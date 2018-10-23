@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/layout_video_row"
+    android:orientation="vertical">
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:visibility="gone"/>
+    <Space
+        android:id="@+id/space2"
+        android:layout_toRightOf="@+id/card_view"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:visibility="gone"/>
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+       android:layout_toRightOf="@id/space"
+        android:id="@+id/card_view"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:paddingBottom="0dp"
+        card_view:cardCornerRadius="8dp">
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_poster"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop" />
+
+            <!--<TextView
+                android:id="@+id/view_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:background="@drawable/round_corner"
+                android:fontFamily="@font/cabin"
+                android:padding="5dp"
+                android:text="Category"
+                android:textColor="@color/white"
+                android:textSize="8sp" />-->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="#4d000000"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_play_circle_filled_black_24dp"/>
+
+        </FrameLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_toRightOf="@id/space"
+        android:id="@+id/view_title"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card_view"
+        android:fontFamily="@font/cabin_bold"
+        android:maxLines="2"
+        android:padding="5dp"
+        android:text="Attitude is my life."
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:layout_toRightOf="@id/space"
+        android:id="@+id/image_publisher"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/view_title"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/round_corner"
+        android:visibility="gone" />
+
+
+    <!--<TextView
+        android:id="@+id/view_publisher_name"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_title"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@+id/image_publisher"
+        android:fontFamily="@font/cabin_medium"
+        android:maxLines="1"
+        android:text="Writer Name"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/view_writer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_publisher_name"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/image_publisher"
+        android:fontFamily="@font/cabin_condensed_regular"
+        android:maxLines="1"
+        android:text="Yogesh | 1 hours ago"
+        android:textSize="10sp"
+        android:visibility="gone" />-->
+
+</RelativeLayout>

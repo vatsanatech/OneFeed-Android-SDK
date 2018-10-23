@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="10dp"
+    android:id="@+id/layout_video"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:paddingBottom="0dp"
+        card_view:cardCornerRadius="8dp">
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="150dp">
+
+            <ImageView
+                android:id="@+id/image_video_solo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/cardview_dark_background" />
+
+            <include layout="@layout/layout_tran"/>
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_play_circle_filled_black_24dp" />
+
+            <TextView
+                android:id="@+id/view_video_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="20dp"
+                android:background="@drawable/round_corner"
+                android:fontFamily="@font/cabin"
+                android:padding="5dp"
+                android:text="Category"
+                android:textColor="@color/white" />
+
+
+        </FrameLayout>
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/view_video_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card_view"
+        android:fontFamily="@font/cabin_bold"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:text="Attitude is my life."
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/image_video_publisher"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_below="@+id/view_video_title"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:src="@drawable/round_corner" />
+
+    <TextView
+        android:id="@+id/view_video_publisher_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_video_title"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/image_video_publisher"
+        android:fontFamily="@font/cabin_medium"
+        android:maxLines="1"
+        android:text="Writer Name"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/view_video_writer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_video_publisher_name"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/image_video_publisher"
+        android:fontFamily="@font/cabin_condensed_regular"
+        android:maxLines="1"
+        android:text="Yogesh | 1 hours ago"
+        android:textSize="12sp" />
+
+</RelativeLayout>

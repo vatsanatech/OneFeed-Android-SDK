@@ -1,3 +1,4 @@
 <resources>
-
+    <string name="app_name">OneFeedSdk</string>
+    <string name="error_network_msg">Check your network connection.</string>
 </resources>

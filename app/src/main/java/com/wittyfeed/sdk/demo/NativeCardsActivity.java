@@ -188,7 +188,7 @@ public class NativeCardsActivity extends AppCompatActivity {
                     OneFeedMain.getInstance().ofCardFetcher.setOfInterface(ofInterface);
 
                     // Third and Last Step is this
-                    OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(103, 0.7f, false, "#4286f4", true);
+                    OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(103, 0.7f, false, "#4286f4", false);
                     break;
 
             }

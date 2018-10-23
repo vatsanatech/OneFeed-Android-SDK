@@ -19,13 +19,13 @@ import org.w3c.dom.Text;
  */
 public class Root extends Application {
 
-    public static final String notificationProvider = "E";
+    public static final String notificationProvider = "F";
 
     @Override
     public void onCreate() {
         super.onCreate();
         // OneSignal Initialization
-        if(notificationProvider.equalsIgnoreCase("E")) {
+        if(!notificationProvider.equalsIgnoreCase("F")) {
             OneSignal.startInit(this)
                     .setNotificationReceivedHandler(new ExampleNotificationReceivedHandler())
                     .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)

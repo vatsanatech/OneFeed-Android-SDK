@@ -80,12 +80,12 @@ public class HomeFragment extends Fragment {
         try {
             dummy_notiff_data.put("story_id", "60496");
             dummy_notiff_data.put("noid", "10001");
-            dummy_notiff_data.put("story_title", "10 Things Every Girl Should Put On Her List");
-            dummy_notiff_data.put("cover_image", "https://cdn.wittyfeed.com/41441/ilik0kqmr2hpv1i4l8ya.jpeg?imwidth=960");
-            dummy_notiff_data.put("story_url","https://www.wittyfeed.me/story/41441/things-every-girl-should-put-in-her-list?utm_hash=ArD51&nohead=1");
+            dummy_notiff_data.put("story_title", "15 Times Akshay Kumar Was Better Than Any Other Actor In The World");
+            dummy_notiff_data.put("cover_image", "https://cdn.innervoice.ai/69614/15-Times-Akshay-Kumar-Was-Better-Than-Any-Other-Actor-In-The-World-50.jpeg?impolicy=pqhigh&imwidth=960");
+            dummy_notiff_data.put("story_url","https://www.innervoice.ai/best-akshay-kumar-movies-69614?utm_source=SDK&utm_medium=noti&utm_campaign=66985-campaign&utm_hash=108_69614&aid=108&c=1&devid=982ad233c26eed88");
 
             dummy_notiff_data.put("id", "400");
-            dummy_notiff_data.put("body", "Hey, Here's a new amazing story for you!");
+            dummy_notiff_data.put("body", "15 Times Akshay Kumar Was Better Than Any Other Actor In The World");
             dummy_notiff_data.put("title", "10 Things Every Girl Should Put On Her List");
             dummy_notiff_data.put("notiff_agent", "wittyfeed_sdk");
             dummy_notiff_data.put("app_id" , "108");

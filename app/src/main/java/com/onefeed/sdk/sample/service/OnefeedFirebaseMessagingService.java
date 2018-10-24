@@ -20,7 +20,11 @@ public class OnefeedFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        NotificationHelper.sendNotification(getApplicationContext(), FeedActivity.class, remoteMessage.getData());
+        if(remoteMessage.getData().get("notiff_agent").equalsIgnoreCase("wittyfeed_sdk")) {
+            NotificationHelper.sendNotification(getApplicationContext(), FeedActivity.class, remoteMessage.getData());
+        } else {
+            //Handle by user
+        }
     }
 
     @Override

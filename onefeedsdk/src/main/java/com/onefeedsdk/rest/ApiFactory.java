@@ -1,5 +1,6 @@
 package com.onefeedsdk.rest;
 
+import com.onefeedsdk.BuildConfig;
 import com.onefeedsdk.app.Constant;
 import com.onefeedsdk.rest.api.Api;
 
@@ -37,7 +38,7 @@ public class ApiFactory {
 
         // set your desired log level
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        logging.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
 
         //okHttpClient
         okHttpClient = new OkHttpClient.Builder()

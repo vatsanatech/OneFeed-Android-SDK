@@ -2,10 +2,10 @@
 
 > # Note
 > WittyFeed SDK API is now `OneFeed Android SDK`,
-> New v2.2.0 made live on 21 Sep' 2018
+> New v2.3.2 made live on 24-Oct-2018
 
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](#)
-[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.2.0)
+[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.3.2)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/OneFeed-Android-SDK/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -28,13 +28,13 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ## 1. Getting Started
 
-### 1.1. Minimum requirements
+### 1.1 Minimum requirements
 
 * Android version 4.1  (```android:minSdkVersion="16"```)
 
 ### 1.2. Incorporating the SDK
 
-1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.2.0)
+1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.3.2)
 
 2. SignUp at [OneFeed](http://www.onefeed.ai/) and create a new application to integrate with
 
@@ -51,10 +51,10 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 		}
 	}
 ```
-* add OneFeed-Android-SDK:2.2.0 in your app level build.gradle
+* add OneFeed-Android-SDK:2.3.2 in your app level build.gradle
 ```gradle
     dependencies {
-	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.2.0'
+	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.3.2'
 	}
 ```
 
@@ -62,235 +62,212 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 > We encourage developers to always check for latest SDK version and refer to its updated documentation to use it.
 
 ### 1.3 Initializing the SDK
+   
+* Add this code in your String.xml    
+```xml
+    <string name="onefeed_app_id">YOUR APP ID</string>
+    <string name="onefeed_api_key">YOUR API KEY</string>
+    
+    <!--Optional if you are using Repeating Card-->
+    <string name="onefeed_card_id">YOUR CARD ID</string>
+```
+   * Add this code in your Manifests.xml
 
+```xml
+        <meta-data android:name="com.onefeed.sdk.ApiKey"
+            android:value="@string/onefeed_api_key"/>
+
+        <meta-data android:name="com.onefeed.sdk.AppId"
+            android:value="@string/onefeed_app_id"/>
+
+        <!--Optional if you are using Repeating Card-->
+        <meta-data android:name="com.onefeed.sdk.CardId"
+            android:value="@string/onefeed_card_id"/>
+```
+* Add this code in your Application class
 ```java
 
-    // OPTIONAL to provide basic user_meta.
-    // By providing basic user_meta your app can receive targeted content which has an higher CPM then regular content.
-    HashMap<String, String> mUserMeta = new HashMap<>();
+    public class Root extends Application {
+    
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            //Initialize OneFeedSdk
+            OneFeedSdk.getInstance().init(getApplicationContext());
+            
+            //Optional Initialize Repeating card if you are using
+            OneFeedSdk.getInstance().initNativeCard();
+        }
+    }
+    
+```
 
-    // Send Gender of User:- "M" for Male, "F" for Female, "O" for Other, "N" for None
-       
-    mUserMeta.put("client_gender", "M");
+* Add this code in your MainActivity class if you are using FCM
+```java
+    
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    // user Interests. String with a max_length = 100
-    // SAMPLE CODE BELOW, DO ADD YOUR OWN CATEOGORIES OF INTERESTS
-    // OPTIONAL
-    mUserMeta.put("client_interests", "love, funny, sad, politics, food, technology, DIY, friendship, hollywood, bollywood, NSFW"); //              	string max_length = 100
+        // Get FCM token
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("Token", "getInstanceId failed", task.getException());
+                            return;
+                        }
+                        try {
+                            // Get new Instance ID token
+                            String token = task.getResult().getToken();
+                            //set Token
+                            OneFeedSdk.getInstance().setToken(token);
+                        }catch (NullPointerException e){
+                            Log.e("Exception", e.getMessage());
+                        }
+                    }
+                });
 
-    // Passing 'mUserMeta'  IS OPTIONAL
-    ApiClient.getInstance().appendCustomUserMetaToUserMeta(mUserMeta);
+        topicSubscription();
+    }
+    
+    //FCM Topic Subscription and Unsubscription
+    private void topicSubscription() {
+       //Topic Subscribe
+       FirebaseMessaging.getInstance().subscribeToTopic(OneFeedSdk.getInstance().getSubscribeTopic());
+    
+       if (TextUtils.isEmpty(OneFeedSdk.getInstance().getOldTopicSubscribe())) {
+           OneFeedSdk.getInstance().setTopicSubscription();
+       } else if (OneFeedSdk.getInstance().getSubscribeTopic() != OneFeedSdk.getInstance().getOldTopicSubscribe()) {
+           FirebaseMessaging.getInstance().unsubscribeFromTopic(OneFeedSdk.getInstance().getOldTopicSubscribe());
+           OneFeedSdk.getInstance().setTopicSubscription();
+       }
+   }
+```
 
-    // Create and set this interface callback to do operations when SDK finished loading
-    OneFeedMain.getInstance().setOneFeedDidInitialisedCallback(new OneFeedMain.OnInitialized() {
+* Add this code in your MainActivity class if you are using OneSignal
+```java
+
+      @Override
+         protected void onCreate(@Nullable Bundle savedInstanceState) {
+             super.onCreate(savedInstanceState);
+             
+         OneSignal.getTags(new OneSignal.GetTagsHandler() {
             @Override
-            public void onSuccess() {
-                // OneFeed sdk did loaded completely successfully
-                Log.d("Main App", "witty sdk did load successfully");
+            public void tagsAvailable(JSONObject tags) {
+                if (tags != null) {
+                try {
+                    String tag = tags.getString("onefeed");
+                    if (!tag.equalsIgnoreCase("Your App ID" + "_" + OneFeedSdk.VERSION)) {
+                    OneSignal.sendTag("onefeed", "Your App ID" + "_" + OneFeedSdk.VERSION);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                }else{
+                OneSignal.sendTag("onefeed", "Your App ID" + "_" + OneFeedSdk.VERSION);
+                }
             }
-
+         });
+        
+        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
             @Override
-            public void onError() {
-                // if unexpected error
+            public void idsAvailable(String userId, String registrationId) {
+                Log.e("debug", "User:" + userId);
+                
+                //set User id
+                OneFeedSdk.getInstance().setToken(userId);
             }
         });
-
-    //For Hiding back button from MainFeed Fragment
-    //Pass parameter true for hiding back button and false for showing back button
-
-    OneFeedMain.setHideBackButtonFromMainFeed(true);
-
-    //If user use FCM for sending push notification. Follow below code
-    FCM_TOKEN = FirebaseInstanceId.getInstance().getToken();
-    if (FCM_TOKEN == null) {
-	FCM_TOKEN = "";
     }
-    Log.e("FCM Token:", FCM_TOKEN);
 
-    String topicName = "OneFeed_" + APP_ID + "_" + Constant.ONE_FEED_VERSION;
-    FirebaseMessaging.getInstance().subscribeToTopic(topicName);
-
-    // initializing SDK here (mandatory)
-    OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, FCM_TOKEN);
-
-    /*
-     * Below code is ***required*** for consistent unsubscription and token update on sdk version change
-     */
-    if (!(OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(""))) {
-	if (!OneFeedMain.getInstance().ofSharedPreference.getSDKVersion().equals(Constant.ONE_FEED_VERSION)) {
-	    OneFeedMain.getInstance().fcmTokenManager.updateTokenForVersionChange();
-	    String oldTopic = "OneFeed_" + APP_ID + "_" + OneFeedMain.getInstance().ofSharedPreference.getSDKVersion();
-	    FirebaseMessaging.getInstance().unsubscribeFromTopic(oldTopic);
-	}
-    }
-    OneFeedMain.getInstance().ofSharedPreference.setSDKVersion(Constant.ONE_FEED_VERSION);
-   
-    //If user use OneSignal for sending push notification. Follow below code
-    OneSignal.getTags(new OneSignal.GetTagsHandler() {
-	@Override
-	public void tagsAvailable(JSONObject tags) {
-	    if (tags != null) {
-		try {
-		    String tag = tags.getString("onefeed");
-		    if (!tag.equalsIgnoreCase("app_id_" + Constant.ONE_FEED_VERSION)) {
-			OneSignal.sendTag("onefeed", "app_id_" + Constant.ONE_FEED_VERSION);
-		    }
-		} catch (JSONException e) {
-		    e.printStackTrace();
-		}
-	    }else{
-		OneSignal.sendTag("onefeed", "app_id_" + Constant.ONE_FEED_VERSION);
-	    }
-	}
-    });
-
-    OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
-	@Override
-	public void idsAvailable(String userId, String registrationId) {
-	    Log.e("debug", "User:" + userId);
-	    
-	    // initializing SDK here (mandatory)
-	    OneFeedMain.getInstance().init(getBaseContext(), APP_ID, API_KEY, userId);
-
-
-	    if (registrationId != null)
-		Log.e("debug", "registrationId:" + registrationId);
-	}
-    });
-    
-    // OPTIONAL: Set Intent of the Activity you want to open on Back press from Story that opens from Notification
-    OFNotificationManager.getInstance().setHomeScreenIntent(this, new Intent(this.getApplicationContext(),MainActivity.class));
-    
-    
 ```
 
-### 1.4. For OneFeed ready-to-deploy feed layout
+### 1.4 For OneFeed ready-to-deploy feed layout
 
 ```java
-    // initializing OneFeed Support Fragment. Note- Make sure you have initialized the SDK in previous steps
-    Fragment oneFeedFragment = OneFeedMain.getInstance().getOneFeedFragment()
-
-    // using our oneFeedFragment, replace <ID_OF_YOUR_VIEWGROUP_IN_WHICH_OneFeed_FRAGMENT_WILL_BE_PLACED> with your
-    // viewgroup's ID (i.e. LinearLayout, RelativeLayout etc)
+        
+    Fragment oneFeedFragment = new OneFeedFragment();
     
-    getSupportFragmentManager().beginTransaction().add(<ID_OF_YOUR_VIEWGROUP_IN_WHICH_OneFeed_FRAGMENT_WILL_BE_PLACED>, fragment, "OneFeed").commit();
+    //Replaced your id name to "XXXXX" 
+    getSupportFragmentManager().beginTransaction().replace(R.id."XXXXX", oneFeedFragment, "OneFeed").commit();
 ```
 
-### 1.5. Handle back-button of onefeed for custom callback
-
-```java
-    // create and set the function like below, so that when user taps on back button of onefeed, onBackClick() function of interface will call
-    OneFeedMain.getInstance().oneFeedBuilder.setOnBackClickInterface(new OneFeedBuilder.OnBackClickInterface() {
-                    @Override
-                    public void onBackClick() {
-                        finish();
-                    }
-                })
-```
-
-### 1.6. Fetch a Modular Native Card
+### 1.5. Fetch a Modular Native Card
 
 Step 1:
 In dashboard(https://onefeed.ai), Go to your added app section and Make a card according to your requirements and note the card id.
 
-Step 2:
-In activity/Fragment you intend to place native cards, update this line of code in OnCreate/OnCreateView
+Step 2:  Set this tag in your View (Tag is mandatory):
 
-```java
-        OneFeedMain.getInstance().ofCardFetcher.loadInitData(CARD_ID, new OFCardFetcher.OnInitialized() {
-            @Override
-            public void onSuccess() {
-                // Initialize your view when repeating card load successfully
-            }
-
-            @Override
-            public void onError() {
-		// if unexpected error
-            }
-        });
+```xml
+    <ImageView
+        android:id="@+id/image_story"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:tag="native_card_image"/>
+  
+    <TextView
+        android:id="@+id/view_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:tag="native_card_title"
+        android:layout_gravity="bottom"
+        android:textSize="18sp"
+        android:textColor="@color/white"/>
 ```
 
-Step 3:
-```java
-    // Create a OfInterface to receive the card in view form in callback method OnSuccess.
-    // Also set the interface using setOfInterface().
-    
-    OFInterface ofInterface = new OFInterface() {
+Step 3: Add this code in your adapter class:
 
-                        @Override
-                        public void OnSuccess(View view, String categoryName, String storyTitle) {
-                            //Use this veiw to drop in a holder layout
-
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            // handle unexpected happens here
-                        }
-                    };
-		   
-		   
-    OneFeedMain.getInstance().ofCardFetcher.setOfInterface(ofInterface);
-                    
-```
-
-Step 4:
-```java
-    // Finally call the below method to fetch a card (If you want same set of cards on every app launch)
-    // Give text size ratio between 0.1f to 1f.
-    // Hide Category title
-    // Pass parameter true for vertical image and false for horizontal image
-    
-    OneFeedMain.getInstance().ofCardFetcher.fetch_repeating_card(CARD_ID, TEXT_SIZE_RATIO, HIDE_CATEGORY, TEXT_COLOR, VERTICAL_IMAGE);
-		                     
-```
-
-### 1.7.1 For FCM Notifications Service of OneFeed
-
-In your class which extends FirebaseInstanceIDService, update with the code below
 ```java
     @Override
-    public void onTokenRefresh() {
-        // Get updated InstanceID token.
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-
-	// * Mandatory for Using Notification Service by OneFeed*
-        // To notify OneFeed SDK about your updated fcm_token
-        if(OneFeedMain.getInstance().getFcmTokenManager()!=null)
-            OneFeedMain.getInstance().getFcmTokenManager().refreshToken(refreshedToken);
-    }
-```
-
-
-In your class which extends FirebaseMessagingService, update with the code below
-```java
-
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-      //
-      // Check if message contains a data payload.
-      //
-      if (remoteMessage.getData() != null) {
-            if (remoteMessage.getData().size() > 0) {
-                Log.d(FCM_TAG, "Message data payload: " + remoteMessage.getData());
-            }
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
+        
+        //Repeating card view
+        if(holder instanceof YourViewHolder){
+    
+            YourViewHolder holder1 = (YourViewHolder) holder;
+            
+            OneFeedNativeCard.showCard(RepeatingCardActivity.this, holder1.linearLayout,
+        (Add reference Which type of layout manager you are using) OneFeedSdk.V_List, true);
+                
+        }else{
+            //Handle by user
         }
-
-      //
-      // this 2 lines below handle the notifications
-      // NOTE: optionally you can check that notification has arrived from WittyFeed by below line -
-      // if(remoteMessage.getData().get("notiff_agent").equals("wittyfeed_sdk")
-      
-      int your_preferred_icon_for_notifications = R.mipmap.ic_launcher; // <YOUR_PREFERRED_ICON_FOR_NOTIFICATION>
-        OFNotificationManager.getInstance().handleNotification(
-                getApplicationContext(),
-                FirebaseInstanceId.getInstance().getToken(),
-                remoteMessage.getData(),
-                your_preferred_icon_for_notifications,
-                YOUR_APP_ID
-        );
     }
 ```
-### 1.7.2 For OneSignal Notifications Service of OneFeed
+	                    
+### 1.6.1 For FCM Notifications Service of OneFeed
+
+* Add this code in your class which extends FirebaseMessagingService:
+```java
+    public class YourFirebaseMessagingService extends FirebaseMessagingService {
+    
+             @Override
+             public void onMessageReceived(RemoteMessage remoteMessage) {
+             super.onMessageReceived(remoteMessage);
+            
+            //OneFeed notification
+             if(remoteMessage.getData().get("notiff_agent").equalsIgnoreCase("wittyfeed_sdk")) {
+                 NotificationHelper.sendNotification(getApplicationContext(), FeedActivity.class, remoteMessage.getData());
+             } else {
+                 //Handle by user
+                 }
+             }
+    
+             @Override
+             public void onNewToken(String s) {
+             super.onNewToken(s);
+    
+             //Update Token
+             OneFeedSdk.getInstance().setToken(s);
+             Log.e("Token", s);
+             }
+        }
+```
+### 1.6.2 For OneSignal Notifications Service of OneFeed
 
 In your class which extends Application, update with the code below
 ```java
@@ -325,7 +302,7 @@ In your class which extends Application, update with the code below
 
 ```
 
-### 1.8. OneFeed is built for Portrait
+### 1.7 OneFeed is built for Portrait
 OneFeed works best in the world's default mode i.e Potrait, So don't forget to add the below line in Manifest.
 
 ```java

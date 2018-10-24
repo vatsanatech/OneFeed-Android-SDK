@@ -60,7 +60,7 @@ public class RepeatingCardActivity extends AppCompatActivity{
 
                 CardViewHolder holder1 = (CardViewHolder) holder;
                 OneFeedNativeCard.showCard(RepeatingCardActivity.this, holder1.linearLayout,
-                        OneFeedSdk.V_List, true);
+                        OneFeedSdk.V_List, false);
             }else{
                 ViewHolder holder1 = (ViewHolder) holder;
                 holder1.titleView.setText(R.string.string_dummy);

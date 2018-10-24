@@ -37,13 +37,13 @@ import java.util.List;
 public class OneFeedSdk {
 
     private static final String PREF_DEFAULT = "share-app-pref";
-    public static final String VERSION = "2.3.1";
+    public static final String VERSION = "2.3.2";
     public static final String WATER_FALL = "Waterfall";
     public static final String H_List = "H-List";
     public static final String V_List = "V-List";
     public static final String CUSTOM = "Custom";
     public static final String GRID = "Grid";
-
+    private String customTopicParameter = "";
 
     //Logger
     private static LogFactory.Log log = LogFactory.getLog(OneFeedSdk.class);
@@ -146,7 +146,6 @@ public class OneFeedSdk {
         jobManager = new JobManager(configuration);
     }
 
-
     private void initRuntimeStore() {
         //Runtime Storage Initialise
         RuntimeStore.init();
@@ -210,9 +209,8 @@ public class OneFeedSdk {
         Util.setPrefValue(Constant.TOKEN, newToken);
     }
 
-
     public String getSubscribeTopic() {
-        return "OneFeed_" + appId + "_" + VERSION;
+        return "OneFeed_" + appId + "_" + getCustomTopic() + VERSION;
     }
 
     public void setTopicSubscription() {
@@ -221,6 +219,14 @@ public class OneFeedSdk {
 
     public String getOldTopicSubscribe() {
         return OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.TOPIC, "");
+    }
+
+    public String getCustomTopic() {
+        return customTopicParameter;
+    }
+
+    public void setCustomTopic(String customTopic) {
+        this.customTopicParameter = customTopic;
     }
 
     private void startService() {

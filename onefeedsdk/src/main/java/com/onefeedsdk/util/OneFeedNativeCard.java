@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.graphics.Palette;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ public class OneFeedNativeCard {
     private static int OFFSET_CARD = 1;
     private static boolean HIT_API = true;
 
-    public static synchronized void showCard(final Context context, final View view, String reference){
+    public static synchronized void showCard(final Context context, final View view, String reference, boolean isVerticalImage){
 
         try {
             RepeatingCardModel feed = (RepeatingCardModel) RuntimeStore.getInstance().getValueFor(Constant.NATIVE_CARD);
@@ -58,9 +59,14 @@ public class OneFeedNativeCard {
 
                 final ImageView imageView = view.getRootView().findViewWithTag("native_card_image");
                 imageView.setImageBitmap(null);
+                String url = card.getCoverImage();
+                if(isVerticalImage && !TextUtils.isEmpty(card.getSquareImage())){
+                    url = card.getSquareImage();
+                }
+
                 Glide.with(context)
                         .asBitmap()
-                        .load(card.getCoverImage())
+                        .load(url)
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {

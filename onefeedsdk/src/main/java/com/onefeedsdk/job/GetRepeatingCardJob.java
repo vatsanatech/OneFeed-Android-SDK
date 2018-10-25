@@ -8,8 +8,8 @@ import com.birbit.android.jobqueue.RetryConstraint;
 import com.onefeedsdk.app.Constant;
 import com.onefeedsdk.app.OneFeedSdk;
 import com.onefeedsdk.app.RuntimeStore;
-import com.onefeedsdk.event.Event;
-import com.onefeedsdk.model.FeedModel;
+import com.onefeedsdk.listener.AddResponseListener;
+import com.onefeedsdk.listener.CallBackListener;
 import com.onefeedsdk.model.RepeatingCardModel;
 import com.onefeedsdk.util.LogFactory;
 import com.onefeedsdk.util.Util;
@@ -31,15 +31,17 @@ public class GetRepeatingCardJob extends BaseJob {
 
     private boolean isLoadMoreFeed = false;
     private int offset = 0;
+    private int cardId = 0;
 
     public void setListener(CallBackListener listener) {
         this.listener = listener;
     }
 
-    public GetRepeatingCardJob(int offset) {
+    public GetRepeatingCardJob(int offset, int cardId) {
         super(new Params(Priority.HIGH).groupBy("home-feed"));
         this.isLoadMoreFeed = isLoadMoreFeed;
         this.offset = offset;
+        this.cardId = cardId;
     }
 
     @Override
@@ -55,15 +57,15 @@ public class GetRepeatingCardJob extends BaseJob {
                     .initOneFeedRepeatingCard(OneFeedSdk.getInstance().getAppId(),
                             OneFeedSdk.getInstance().getAppKey(),
                             OneFeedSdk.getInstance().getContext().getPackageName(), offset, "", 1
-                            , OneFeedSdk.getInstance().getCardId(), Util.getAndroidUniqueId(), OneFeedSdk.VERSION);
+                            , cardId, Util.getAndroidUniqueId(), OneFeedSdk.VERSION);
             RepeatingCardModel newFeed = call.execute().body();
 
             RepeatingCardModel feedRepeatingCard = (RepeatingCardModel) RuntimeStore.getInstance().getValueFor(Constant.NATIVE_CARD);
             if(feedRepeatingCard != null){
                 feedRepeatingCard.getRepeatingCard().getCardList().addAll(newFeed.getRepeatingCard().getCardList());
-                RuntimeStore.getInstance().putKeyValues(Constant.NATIVE_CARD, feedRepeatingCard);
+                RuntimeStore.getInstance().putKeyValues(String.valueOf(cardId), feedRepeatingCard);
             }else{
-                RuntimeStore.getInstance().putKeyValues(Constant.NATIVE_CARD, newFeed);
+                RuntimeStore.getInstance().putKeyValues(String.valueOf(cardId), newFeed);
             }
             if(listener != null) {
                 listener.success();
@@ -88,8 +90,4 @@ public class GetRepeatingCardJob extends BaseJob {
         return null;
     }
 
-    public interface CallBackListener{
-        void success();
-        void error();
-    }
 }

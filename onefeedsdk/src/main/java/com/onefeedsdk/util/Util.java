@@ -79,15 +79,15 @@ public class Util {
 
     private static void openCustomTab(Context context, int color, String title, String url, String storyId) {
         if (isAppInstalled(context, "com.android.chrome")) {
-            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder().enableUrlBarHiding()
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder()
                     .addDefaultShareMenuItem()
                     .setToolbarColor(color)
                     .setShowTitle(true)
-                    .addMenuItem(title, null)
                     // Setting a custom back button
                     .setCloseButtonIcon(BitmapFactory.decodeResource(
-                            context.getResources(), R.drawable.ic_arrow_back));
-            ;
+                            context.getResources(), R.drawable.arrow))
+                    .addMenuItem(title, null);
+
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.getPackageName()));
             customTabsIntent.intent.setPackage("com.android.chrome");
@@ -242,6 +242,11 @@ public class Util {
                                     .edit();
                             editor.putString(Constant.OLD_SIM, finalSimInfo).apply();
                             editor.commit();
+                        }
+
+                        @Override
+                        public void error() {
+
                         }
                     })
             );

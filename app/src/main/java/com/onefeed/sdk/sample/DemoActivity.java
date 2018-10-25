@@ -82,6 +82,9 @@ public class DemoActivity extends AppCompatActivity {
             case R.id.btn_native_card:
                 startActivity(new Intent(this, RepeatingCardActivity.class));
                 break;
+            case R.id.btn_native_card_2:
+                startActivity(new Intent(this, RepeatingCard2Activity.class));
+                break;
             case R.id.button:
                 Map<String, String> demoNotification = new HashMap<>();
                 demoNotification.put("story_id", "60496");

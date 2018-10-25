@@ -27,6 +27,9 @@
         <activity android:name=".RepeatingCardActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".RepeatingCard2Activity"
+            android:screenOrientation="portrait"/>
+
 
         <service
             android:name="com.onefeed.sdk.sample.service.OnefeedFirebaseMessagingService">
@@ -41,8 +44,8 @@
         <meta-data android:name="com.onefeed.sdk.AppId"
             android:value="@string/onefeed_app_id"/>
 
-        <meta-data android:name="com.onefeed.sdk.CardId"
-            android:value="@string/onefeed_card_id"/>
+        <!--<meta-data android:name="com.onefeed.sdk.CardId"-->
+            <!--android:value="@string/onefeed_card_id"/>-->
     </application>
 
 </manifest>

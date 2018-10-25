@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.onefeedsdk.app.OneFeedSdk;
+import com.onefeedsdk.job.GetRepeatingCardJob;
 import com.onefeedsdk.listener.AddResponseListener;
 import com.onefeedsdk.listener.CallBackListener;
 import com.onefeedsdk.util.OneFeedNativeCard;
@@ -24,7 +25,7 @@ import com.onefeedsdk.util.OneFeedNativeCard;
  * Date: 25-September-2018
  * Time: 17:34
  */
-public class RepeatingCardActivity extends AppCompatActivity{
+public class RepeatingCard2Activity extends AppCompatActivity{
 
     private RecyclerView recyclerCard;
 
@@ -37,7 +38,7 @@ public class RepeatingCardActivity extends AppCompatActivity{
         recyclerCard.setLayoutManager(new LinearLayoutManager(this));
         final AdapterDemoCars adapter = new AdapterDemoCars();
 
-        OneFeedSdk.getInstance().initNativeCard(103, new CallBackListener() {
+        OneFeedSdk.getInstance().initNativeCard(134, new CallBackListener() {
             @Override
             public void success() {
                 runOnUiThread(new Runnable() {
@@ -82,7 +83,7 @@ public class RepeatingCardActivity extends AppCompatActivity{
             if(holder instanceof CardViewHolder){
 
                 CardViewHolder holder1 = (CardViewHolder) holder;
-                OneFeedNativeCard.showCard(RepeatingCardActivity.this, 103, holder1.linearLayout,
+                OneFeedNativeCard.showCard(RepeatingCard2Activity.this, 134, holder1.linearLayout,
                         OneFeedSdk.V_List, false);
             }else{
                 ViewHolder holder1 = (ViewHolder) holder;

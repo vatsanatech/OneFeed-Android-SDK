@@ -18,6 +18,7 @@ import com.onefeedsdk.app.OneFeedSdk;
 import com.onefeedsdk.app.RuntimeStore;
 import com.onefeedsdk.job.GetRepeatingCardJob;
 import com.onefeedsdk.job.PostUserTrackingJob;
+import com.onefeedsdk.listener.CallBackListener;
 import com.onefeedsdk.model.FeedModel;
 import com.onefeedsdk.model.RepeatingCardModel;
 
@@ -34,13 +35,13 @@ public class OneFeedNativeCard {
     private static int OFFSET_CARD = 1;
     private static boolean HIT_API = true;
 
-    public static synchronized void showCard(final Context context, final View view, String reference, boolean isVerticalImage){
+    public static synchronized void showCard(final Context context, final int cardId, final View view, String reference, boolean isVerticalImage){
 
         try {
-            RepeatingCardModel feed = (RepeatingCardModel) RuntimeStore.getInstance().getValueFor(Constant.NATIVE_CARD);
+            RepeatingCardModel feed = (RepeatingCardModel) RuntimeStore.getInstance().getValueFor(String.valueOf(cardId));
             if(feed != null) {
                 SHOW_CARD_ID++;
-                fetchNewCard(feed);
+                fetchNewCard(feed, cardId);
                 if (SHOW_CARD_ID > feed.getRepeatingCard().getCardList().size() - 1) {
                     SHOW_CARD_ID = 0;
                 }
@@ -89,22 +90,22 @@ public class OneFeedNativeCard {
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(
                         new PostUserTrackingJob(Constant.CARD_VIEWED, reference, card.getStoryId()));
             }else{
-                fetchNewCard(feed);
+                fetchNewCard(feed, cardId);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    private static void fetchNewCard( RepeatingCardModel feed) {
+    private static void fetchNewCard( RepeatingCardModel feed, final int cardId) {
         try {
             if(feed == null){
-                OneFeedSdk.getInstance().getJobManager().addJobInBackground(new GetRepeatingCardJob(0));
+                OneFeedSdk.getInstance().getJobManager().addJobInBackground(new GetRepeatingCardJob(0, cardId ));
             } else
             if (SHOW_CARD_ID > feed.getRepeatingCard().getCardList().size() - 3 && HIT_API) {
                 HIT_API = false;
-                GetRepeatingCardJob job = new GetRepeatingCardJob(OFFSET_CARD);
-                job.setListener(new GetRepeatingCardJob.CallBackListener() {
+                GetRepeatingCardJob job = new GetRepeatingCardJob(OFFSET_CARD, cardId);
+                job.setListener(new CallBackListener() {
                     @Override
                     public void success() {
                         HIT_API = true;

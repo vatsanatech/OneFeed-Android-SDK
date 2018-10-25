@@ -3,11 +3,10 @@ package com.onefeedsdk.listener;
 /**
  * Created by Yogesh Soni.
  * Company: WittyFeed
- * Date: 13-October-2018
- * Time: 15:44
+ * Date: 25-October-2018
+ * Time: 19:25
  */
-public interface AddResponseListener {
-
+public interface CallBackListener{
     void success();
     void error();
 }

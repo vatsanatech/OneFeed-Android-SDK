@@ -2,10 +2,10 @@
 
 > # Note
 > WittyFeed SDK API is now `OneFeed Android SDK`,
-> New v2.3.2 made live on 24-Oct-2018
+> New v2.3.3 made live on 25-Oct-2018
 
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](#)
-[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.3.2)
+[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.3.3)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/OneFeed-Android-SDK/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -34,7 +34,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ### 1.2. Incorporating the SDK
 
-1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.3.2)
+1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.3.3)
 
 2. SignUp at [OneFeed](http://www.onefeed.ai/) and create a new application to integrate with
 
@@ -51,10 +51,10 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 		}
 	}
 ```
-* add OneFeed-Android-SDK:2.3.2 in your app level build.gradle
+* add OneFeed-Android-SDK:2.3.3 in your app level build.gradle
 ```gradle
     dependencies {
-	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.3.2'
+	        compile 'com.github.vatsanatech:OneFeed-Android-SDK:2.3.3'
 	}
 ```
 
@@ -219,7 +219,35 @@ Step 2:  Set this tag in your View (Tag is mandatory):
         android:textColor="@color/white"/>
 ```
 
-Step 3: Add this code in your adapter class:
+Step 3: Add this code in your Activity/Fragment class (First time initialize your card):
+
+```java
+
+OneFeedSdk.getInstance().initNativeCard(YOUR CARD_ID, new CallBackListener() {
+            @Override
+            public void success() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                       //Add your adapter here
+                    }
+                });
+            }
+
+            @Override
+            public void error() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                       //Add your adapter here
+                    }
+                });
+            }
+        });
+    }
+```
+
+Step 4: Add this code in your adapter class:
 
 ```java
     @Override
@@ -230,7 +258,7 @@ Step 3: Add this code in your adapter class:
     
             YourViewHolder holder1 = (YourViewHolder) holder;
             
-            OneFeedNativeCard.showCard(RepeatingCardActivity.this, holder1.linearLayout,
+            OneFeedNativeCard.showCard(RepeatingCardActivity.this, YOUR CARD_ID, holder1.linearLayout,
         (Add reference Which type of layout manager you are using) OneFeedSdk.V_List, true);
                 
         }else{

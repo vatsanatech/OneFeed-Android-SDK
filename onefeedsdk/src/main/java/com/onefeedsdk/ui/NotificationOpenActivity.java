@@ -26,17 +26,28 @@ public class NotificationOpenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
 
-        activity = (Class) getIntent().getSerializableExtra(Constant.ACTIVITY);
-        NotificationModel model = (NotificationModel) getIntent().getSerializableExtra(Constant.MODEL);
+            boolean isNotification = getIntent().getBooleanExtra("NOTIFICATION", false);
 
-        OneFeedSdk.getInstance().getJobManager().addJobInBackground(
-                new PostUserTrackingJob(Constant.STORY_OPENED, Constant.STORY_OPENED_BY_NOTIFICATION, model.getStoryId(), model.getNoId()));
-        Util.showCustomTabBrowserByNotification(this, Color.DKGRAY, model.getTitle(), model.getStoryUrl(), model.getStoryId());
-        //finish();
-//        Intent intent = new Intent(this, activity);
-//        startActivity(intent);
-//        finish();
+            if(isNotification) {
+                activity = (Class) getIntent().getSerializableExtra(Constant.ACTIVITY);
+                NotificationModel model = (NotificationModel) getIntent().getSerializableExtra(Constant.MODEL);
+
+                OneFeedSdk.getInstance().getJobManager().addJobInBackground(
+                        new PostUserTrackingJob(Constant.STORY_OPENED, Constant.STORY_OPENED_BY_NOTIFICATION, model.getStoryId(), model.getNoId()));
+                Util.showCustomTabBrowserByNotification(this, Color.DKGRAY, model.getTitle(), model.getStoryUrl(), model.getStoryId());
+            }else{
+                int color = getIntent().getIntExtra("COLOR", 0);
+                String title = getIntent().getStringExtra("TITLE");
+                String url = getIntent().getStringExtra("URL");
+                String id = getIntent().getStringExtra("ID");
+
+                Util.showCustomTabBrowserByCard(this, color, title, url, id);
+            }
+        }catch (Exception e){
+
+        }
     }
 
     @Override
@@ -47,14 +58,21 @@ public class NotificationOpenActivity extends AppCompatActivity {
             Intent intent = new Intent(this, activity);
             startActivity(intent);
             finish();
+        }else{
+            finish();
         }
+
         isStoryLoaded = true;
     }
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, activity);
-        startActivity(intent);
+
+        if(activity != null) {
+
+            Intent intent = new Intent(this, activity);
+            startActivity(intent);
+        }
         finish();
     }
 }

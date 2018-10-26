@@ -66,7 +66,7 @@ public class NotificationHelper {
         notificationManager.notify(notificationId, mBuilder.build());
     }
 
-    public static void sendNotification(final Context context, final Class activity, final Map<String, String> data) {
+    public static void sendNotification(final Context context, final Class activity, final Map<String, String> data, final int icon) {
 
         Gson gson = new GsonBuilder().create();
         String s = gson.toJson(data);
@@ -90,7 +90,7 @@ public class NotificationHelper {
                                 .into(new SimpleTarget<Bitmap>() {
                                     @Override
                                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                        sendNotification(context, activity, model, resource);
+                                        sendNotification(context, activity, model, resource, icon);
                                     }
                                 });
                     }
@@ -99,10 +99,11 @@ public class NotificationHelper {
         }
     }
 
-    public static void sendNotification(Context context, Class activity, NotificationModel data, Bitmap myBitmap) {
+    public static void sendNotification(Context context, Class activity, NotificationModel data, Bitmap myBitmap, int icon) {
 
         Intent intent = new Intent(context, NotificationOpenActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("NOTIFICATION", true);
         intent.putExtra(Constant.ACTIVITY, activity);
         intent.putExtra(Constant.MODEL, data);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, intent,
@@ -114,7 +115,7 @@ public class NotificationHelper {
         String channelId = "DEFAULT";
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(context, channelId)
-                        .setSmallIcon(android.R.drawable.ic_menu_share)
+                        .setSmallIcon(icon)
                         .setContentTitle(data.getTitle())
                         .setContentText(data.getBody())
                         .setLargeIcon(myBitmap)

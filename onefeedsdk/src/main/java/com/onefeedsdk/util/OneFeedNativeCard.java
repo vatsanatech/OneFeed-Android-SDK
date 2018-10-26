@@ -1,6 +1,7 @@
 package com.onefeedsdk.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import com.onefeedsdk.job.PostUserTrackingJob;
 import com.onefeedsdk.listener.CallBackListener;
 import com.onefeedsdk.model.FeedModel;
 import com.onefeedsdk.model.RepeatingCardModel;
+import com.onefeedsdk.ui.NotificationOpenActivity;
 
 
 /**
@@ -51,7 +53,17 @@ public class OneFeedNativeCard {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Util.showCustomTabBrowserByCard(context, toolbarColor[0], card.getStoryTitle(), card.getStoryUrl(), card.getStoryId());
+                        Intent intent = new Intent(context, NotificationOpenActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        intent.putExtra("COLOR", toolbarColor[0]);
+                        intent.putExtra("TITLE", card.getStoryTitle());
+                        intent.putExtra("URL", card.getStoryUrl());
+                        intent.putExtra("ID", card.getStoryId());
+                        context.startActivity(intent);
+
+                       // Util.showCustomTabBrowserByCard(context, toolbarColor[0], card.getStoryTitle(), card.getStoryUrl(), card.getStoryId());
                     }
                 });
 

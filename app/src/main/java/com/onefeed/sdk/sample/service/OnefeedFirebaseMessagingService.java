@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.onefeed.sdk.sample.FeedActivity;
+import com.onefeed.sdk.sample.R;
 import com.onefeedsdk.app.OneFeedSdk;
 import com.onefeedsdk.notification.NotificationHelper;
 
@@ -21,7 +22,7 @@ public class OnefeedFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         if(remoteMessage.getData().get("notiff_agent").equalsIgnoreCase("wittyfeed_sdk")) {
-            NotificationHelper.sendNotification(getApplicationContext(), FeedActivity.class, remoteMessage.getData());
+            NotificationHelper.sendNotification(getApplicationContext(), FeedActivity.class, remoteMessage.getData(), R.mipmap.ic_launcher);
         } else {
             //Handle by user
         }

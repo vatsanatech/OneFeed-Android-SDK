@@ -89,8 +89,10 @@ public class Util {
                     .addMenuItem(title, null);
 
             CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.getPackageName()));
             customTabsIntent.intent.setPackage("com.android.chrome");
+            customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.getPackageName()));
+            customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            //customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             customTabsIntent.launchUrl(context, Uri.parse(url));
         } else {
             Intent i = new Intent(Intent.ACTION_VIEW);

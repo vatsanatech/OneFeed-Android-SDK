@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +36,7 @@ public class RepeatingCardActivity extends AppCompatActivity{
         setContentView(R.layout.activity_sample_card);
 
         recyclerCard = findViewById(R.id.recycler_card);
-        recyclerCard.setLayoutManager(new LinearLayoutManager(this));
+        recyclerCard.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         final AdapterDemoCars adapter = new AdapterDemoCars();
 
         OneFeedSdk.getInstance().initNativeCard(103, new CallBackListener() {
@@ -83,7 +85,7 @@ public class RepeatingCardActivity extends AppCompatActivity{
 
                 CardViewHolder holder1 = (CardViewHolder) holder;
                 OneFeedNativeCard.showCard(RepeatingCardActivity.this, 103, holder1.linearLayout,
-                        OneFeedSdk.V_List, false);
+                        OneFeedSdk.WATER_FALL, false);
             }else{
                 ViewHolder holder1 = (ViewHolder) holder;
                 holder1.titleView.setText(R.string.string_dummy);

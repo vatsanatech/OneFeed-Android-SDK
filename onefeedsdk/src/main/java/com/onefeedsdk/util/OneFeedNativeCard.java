@@ -37,7 +37,7 @@ public class OneFeedNativeCard {
     private static int OFFSET_CARD = 1;
     private static boolean HIT_API = true;
 
-    public static synchronized void showCard(final Context context, final int cardId, final View view, String reference, boolean isVerticalImage){
+    public static synchronized String showCard(final Context context, final int cardId, final View view, String reference, boolean isVerticalImage){
 
         try {
             RepeatingCardModel feed = (RepeatingCardModel) RuntimeStore.getInstance().getValueFor(String.valueOf(cardId));
@@ -101,12 +101,15 @@ public class OneFeedNativeCard {
                 //Tracking OneFeed Card View
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(
                         new PostUserTrackingJob(Constant.CARD_VIEWED, reference, card.getStoryId()));
+
+                return card.getSheildText();
             }else{
                 fetchNewCard(feed, cardId);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
+        return "";
     }
 
     private static void fetchNewCard( RepeatingCardModel feed, final int cardId) {

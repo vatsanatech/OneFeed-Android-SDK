@@ -22,13 +22,14 @@ public class NotificationOpenActivity extends AppCompatActivity {
 
     private Class activity;
     private boolean isStoryLoaded = false;
+    private boolean isNotification;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
 
-            boolean isNotification = getIntent().getBooleanExtra("NOTIFICATION", false);
+            isNotification = getIntent().getBooleanExtra("NOTIFICATION", false);
 
             if(isNotification) {
                 activity = (Class) getIntent().getSerializableExtra(Constant.ACTIVITY);
@@ -59,7 +60,9 @@ public class NotificationOpenActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }else{
-            finish();
+            if(!isNotification) {
+                finish();
+            }
         }
 
         isStoryLoaded = true;

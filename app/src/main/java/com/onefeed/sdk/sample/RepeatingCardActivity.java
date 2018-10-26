@@ -84,8 +84,9 @@ public class RepeatingCardActivity extends AppCompatActivity{
             if(holder instanceof CardViewHolder){
 
                 CardViewHolder holder1 = (CardViewHolder) holder;
-                OneFeedNativeCard.showCard(RepeatingCardActivity.this, 103, holder1.linearLayout,
+                String category = OneFeedNativeCard.showCard(RepeatingCardActivity.this, 103, holder1.linearLayout,
                         OneFeedSdk.WATER_FALL, false);
+                holder1.categoryView.setText(category);
             }else{
                 ViewHolder holder1 = (ViewHolder) holder;
                 holder1.titleView.setText(R.string.string_dummy);
@@ -122,11 +123,13 @@ public class RepeatingCardActivity extends AppCompatActivity{
             TextView titleView;
             LinearLayout linearLayout;
             ImageView imageView;
+            TextView categoryView;
 
             public CardViewHolder(View itemView) {
                 super(itemView);
                 linearLayout = itemView.findViewById(R.id.layout);
                 titleView = itemView.findViewById(R.id.view_text);
+                categoryView = itemView.findViewById(R.id.view_category_type);
                 imageView = itemView.findViewById(R.id.image_story);
             }
         }

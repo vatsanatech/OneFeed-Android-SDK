@@ -101,7 +101,7 @@ public class DemoActivity extends AppCompatActivity {
 
                 demoNotification.put("action", "" + "WittyFeedSDKContentViewActivity");
 
-                NotificationHelper.sendNotification(getApplicationContext(), FeedActivity.class, demoNotification, android.R.drawable.checkbox_off_background);
+                NotificationHelper.sendNotification(getApplicationContext(), FeedActivity.class, demoNotification, android.R.drawable.ic_menu_share);
         }
     }
 }

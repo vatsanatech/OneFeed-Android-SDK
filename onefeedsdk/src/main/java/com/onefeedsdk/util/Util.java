@@ -88,6 +88,9 @@ public class Util {
                             context.getResources(), R.drawable.arrow))
                     .addMenuItem(title, null);
 
+            builder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left);
+            builder.setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right);
+
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.setPackage("com.android.chrome");
             customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.getPackageName()));

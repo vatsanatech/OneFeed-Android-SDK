@@ -1,8 +1,6 @@
 package com.onefeed.sdk.sample.app;
 
 import android.app.Application;
-
-import com.google.firebase.FirebaseApp;
 import com.onefeedsdk.app.OneFeedSdk;
 
 /**

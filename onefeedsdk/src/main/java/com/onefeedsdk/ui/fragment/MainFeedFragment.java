@@ -174,9 +174,6 @@ public class MainFeedFragment extends Fragment implements View.OnClickListener {
                 editor.putString(Constant.USER_ID, event.getFeed().getFeedData().getConfig().getUserId());
                 editor.apply();
                 editor.commit();
-                //Tracking
-                OneFeedSdk.getInstance().getJobManager().addJobInBackground(
-                        new PostUserTrackingJob(Constant.SDK_INITIALISED, Constant.APP_INIT));
 
                 if (getUserVisibleHint()) {
                     //Tracking OneFeed View

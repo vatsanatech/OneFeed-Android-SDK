@@ -103,7 +103,7 @@ public class NotificationHelper {
 
         Intent intent = new Intent(context, NotificationOpenActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("NOTIFICATION", true);
+        intent.putExtra(Constant.NOTIFICATION, true);
         intent.putExtra(Constant.ACTIVITY, activity);
         intent.putExtra(Constant.MODEL, data);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, intent,

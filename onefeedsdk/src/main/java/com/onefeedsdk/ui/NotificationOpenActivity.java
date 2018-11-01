@@ -23,30 +23,35 @@ public class NotificationOpenActivity extends AppCompatActivity {
     private Class activity;
     private boolean isStoryLoaded = false;
     private boolean isNotification;
+    private boolean isFeed;
+    private boolean isCard;
+    private String storyId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
 
-            isNotification = getIntent().getBooleanExtra("NOTIFICATION", false);
+            isNotification = getIntent().getBooleanExtra(Constant.NOTIFICATION, false);
+            isFeed = getIntent().getBooleanExtra(Constant.ONE_FEED, false);
+            isCard = getIntent().getBooleanExtra(Constant.CARD_VIEWED, false);
 
-            if(isNotification) {
+            if (isNotification) {
                 activity = (Class) getIntent().getSerializableExtra(Constant.ACTIVITY);
                 NotificationModel model = (NotificationModel) getIntent().getSerializableExtra(Constant.MODEL);
-
+                storyId = model.getStoryId();
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(
                         new PostUserTrackingJob(Constant.STORY_OPENED, Constant.STORY_OPENED_BY_NOTIFICATION, model.getStoryId(), model.getNoId()));
                 Util.showCustomTabBrowserByNotification(this, Color.DKGRAY, model.getTitle(), model.getStoryUrl(), model.getStoryId());
-            }else{
-                int color = getIntent().getIntExtra("COLOR", 0);
-                String title = getIntent().getStringExtra("TITLE");
-                String url = getIntent().getStringExtra("URL");
-                String id = getIntent().getStringExtra("ID");
+            } else {
+                int color = getIntent().getIntExtra(Constant.COLOR, 0);
+                String title = getIntent().getStringExtra(Constant.TITLE);
+                String url = getIntent().getStringExtra(Constant.URL);
+                storyId = getIntent().getStringExtra(Constant.ID);
 
-                Util.showCustomTabBrowserByCard(this, color, title, url, id);
+                Util.showCustomTabBrowserByCard(this, color, title, url, storyId);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -54,24 +59,41 @@ public class NotificationOpenActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(isStoryLoaded) {
+        if (isStoryLoaded) {
             isStoryLoaded = false;
-            Intent intent = new Intent(this, activity);
-            startActivity(intent);
-            finish();
-        }else{
-            if(!isNotification) {
-                finish();
+            if (isNotification) {
+                Intent intent = new Intent(this, activity);
+                startActivity(intent);
             }
-        }
 
+            String type = "";
+            String res = "";
+
+            if (isNotification) {
+                type = Constant.APP_VIEWED;
+                res = Constant.STORY_BACK;
+            } else if (isCard) {
+
+                type = Constant.CARD_VIEWED;
+                res = Constant.STORY_BACK;
+            } else if (isFeed) {
+
+                type = Constant.ONE_FEED;
+                res = Constant.STORY_BACK;
+            }
+
+            //Tracking
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(
+                    new PostUserTrackingJob(type, res, storyId));
+            finish();
+        }
         isStoryLoaded = true;
     }
 
     @Override
     public void onBackPressed() {
 
-        if(activity != null) {
+        if (activity != null) {
 
             Intent intent = new Intent(this, activity);
             startActivity(intent);

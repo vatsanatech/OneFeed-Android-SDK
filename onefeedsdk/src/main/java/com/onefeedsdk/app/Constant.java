@@ -52,6 +52,9 @@ public interface Constant {
     String CARD_VIEWED = "Card Viewed";
     String CARD_VIEWED_BY_SCROLLING = "Scrolling";
 
+    //APP View
+    String APP_VIEWED = "App Viewed";
+
     //Search Feed
     String SEARCH_VIEWED = "Search Executed";
     String SEARCH_VIEWED_BY_FEED = "Feed";
@@ -87,4 +90,13 @@ public interface Constant {
 
     //
     String FEED_TEMP = "FEED_TEMP";
+
+    //Back
+    String STORY_BACK = "Story-Back";
+
+    String COLOR = "Color";
+    String TITLE = "Title";
+    String URL = "Url";
+    String ID = "Id";
+
 }

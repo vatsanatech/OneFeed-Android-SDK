@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.config.Configuration;
+import com.onefeedsdk.job.GetHomeFeedJob;
 import com.onefeedsdk.job.GetRepeatingCardJob;
 import com.onefeedsdk.job.PostTokenUpdateJob;
 import com.onefeedsdk.job.PostUserTrackingJob;
@@ -236,6 +237,10 @@ public class OneFeedSdk {
     }
 
     private void initializeSdk(){
+
+        //Initialize feed
+        OneFeedSdk.getInstance().getJobManager().addJobInBackground(new GetHomeFeedJob(false, 0));
+
         //Tracking
         OneFeedSdk.getInstance().getJobManager().addJobInBackground(
                 new PostUserTrackingJob(Constant.SDK_INITIALISED, Constant.APP_INIT));

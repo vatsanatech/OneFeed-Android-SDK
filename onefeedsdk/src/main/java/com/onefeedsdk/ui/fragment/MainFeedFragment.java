@@ -107,8 +107,8 @@ public class MainFeedFragment extends Fragment implements View.OnClickListener {
         });
         feedAdapter.setBlocks(feedDataList);
         feedRecycler.setAdapter(feedAdapter);
+        defaultSetFeed(false);
 
-        fetchFeed(false, 0);
     }
 
     private void fetchFeed(boolean loadMoreFeed, int offset){
@@ -116,14 +116,23 @@ public class MainFeedFragment extends Fragment implements View.OnClickListener {
             this.offset = offset;
             OneFeedSdk.getInstance().getJobManager().addJobInBackground(new GetHomeFeedJob(loadMoreFeed, offset));
         }else {
-            String feedString = OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.FEED_TEMP, "");
-            if(!TextUtils.isEmpty(feedString) && !loadMoreFeed) {
-                Event.FeedEvent event = new GsonBuilder().create().fromJson(feedString, Event.FeedEvent.class);
-                OneFeedSdk.getInstance().getEventBus().postSticky(event);
-            }
-            feedAdapter.setLoaded();
+            swipeContainer.setRefreshing(false);
             Util.showToastMsg(getActivity(), getString(R.string.error_network_msg));
         }
+    }
+
+    //If available in local storage
+    private void defaultSetFeed(boolean loadMoreFeed){
+        String feedString = OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.FEED_TEMP, "");
+       if(!TextUtils.isEmpty(feedString)) {
+           if (!TextUtils.isEmpty(feedString) && !loadMoreFeed) {
+               Event.FeedEvent event = new GsonBuilder().create().fromJson(feedString, Event.FeedEvent.class);
+               OneFeedSdk.getInstance().getEventBus().postSticky(event);
+           }
+           feedAdapter.setLoaded();
+       }else {
+           fetchFeed(false, 0);
+       }
     }
 
     @Override
@@ -154,9 +163,6 @@ public class MainFeedFragment extends Fragment implements View.OnClickListener {
 
         if (event.getFeed() != null && event.isSuccess() && !event.isLoadMoreFeed()) {
 
-            String feedTemp = new GsonBuilder().create().toJson(event);
-            Util.setPrefValue(Constant.FEED_TEMP, feedTemp);
-
             feedModel = event.getFeed();
             feedDataList.clear();
             feedDataList.addAll(event.getFeed().getFeedData().getBlocks());
@@ -169,12 +175,6 @@ public class MainFeedFragment extends Fragment implements View.OnClickListener {
             if (!isSdkInitialize) {
 
                 isSdkInitialize = true;
-
-                SharedPreferences.Editor editor = OneFeedSdk.getInstance().getDefaultAppSharedPreferences().edit();
-                editor.putString(Constant.USER_ID, event.getFeed().getFeedData().getConfig().getUserId());
-                editor.apply();
-                editor.commit();
-
                 if (getUserVisibleHint()) {
                     //Tracking OneFeed View
                     OneFeedSdk.getInstance().getJobManager().addJobInBackground(

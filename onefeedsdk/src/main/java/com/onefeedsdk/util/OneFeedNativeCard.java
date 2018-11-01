@@ -3,6 +3,7 @@ package com.onefeedsdk.util;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.graphics.Palette;
@@ -57,10 +58,11 @@ public class OneFeedNativeCard {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                        intent.putExtra("COLOR", toolbarColor[0]);
-                        intent.putExtra("TITLE", card.getStoryTitle());
-                        intent.putExtra("URL", card.getStoryUrl());
-                        intent.putExtra("ID", card.getStoryId());
+                        intent.putExtra(Constant.CARD_VIEWED, true);
+                        intent.putExtra(Constant.COLOR, toolbarColor[0]);
+                        intent.putExtra(Constant.TITLE, card.getStoryTitle());
+                        intent.putExtra(Constant.URL, card.getStoryUrl());
+                        intent.putExtra(Constant.ID, card.getStoryId());
                         context.startActivity(intent);
 
                        // Util.showCustomTabBrowserByCard(context, toolbarColor[0], card.getStoryTitle(), card.getStoryUrl(), card.getStoryId());

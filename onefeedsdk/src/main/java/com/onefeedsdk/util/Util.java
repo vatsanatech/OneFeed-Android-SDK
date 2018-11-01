@@ -31,6 +31,7 @@ import com.onefeedsdk.app.Constant;
 import com.onefeedsdk.app.OneFeedSdk;
 import com.onefeedsdk.job.PostUserTrackingJob;
 import com.onefeedsdk.listener.AddResponseListener;
+import com.onefeedsdk.ui.NotificationOpenActivity;
 
 import java.util.List;
 
@@ -64,10 +65,24 @@ public class Util {
     }
 
     public static void showCustomTabBrowser(Context context, int color, String title, String url, String storyId) {
-        openCustomTab(context, color, title, url, storyId);
-        //Tracking OneFeed View
-        OneFeedSdk.getInstance().getJobManager().addJobInBackground(
-                new PostUserTrackingJob(Constant.STORY_OPENED, Constant.STORY_OPENED_BY_ONE_FEED, storyId));
+        //openCustomTab(context, color, title, url, storyId);
+        try {
+            Intent intent = new Intent(context, NotificationOpenActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            intent.putExtra(Constant.ONE_FEED, true);
+            intent.putExtra(Constant.COLOR, color);
+            intent.putExtra(Constant.TITLE, title);
+            intent.putExtra(Constant.URL, url);
+            intent.putExtra(Constant.ID, storyId);
+            context.startActivity(intent);
+            //Tracking OneFeed View
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(
+                    new PostUserTrackingJob(Constant.STORY_OPENED, Constant.STORY_OPENED_BY_ONE_FEED, storyId));
+        }catch (Exception e){
+            Log.e("Exceptions", e.getMessage());
+        }
     }
 
     public static void showCustomTabBrowserByCard(Context context, int color, String title, String url, String storyId) {

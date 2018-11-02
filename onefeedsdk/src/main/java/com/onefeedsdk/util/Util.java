@@ -140,7 +140,6 @@ public class Util {
         editor.commit();
     }
 
-
     public static boolean preventMultipleClick() {
         // preventing double, using threshold of 1000 ms
         if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {

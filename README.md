@@ -139,7 +139,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
     
        if (TextUtils.isEmpty(OneFeedSdk.getInstance().getOldTopicSubscribe())) {
            OneFeedSdk.getInstance().setTopicSubscription();
-       } else if (OneFeedSdk.getInstance().getSubscribeTopic() != OneFeedSdk.getInstance().getOldTopicSubscribe()) {
+       } else if (!OneFeedSdk.getInstance().getSubscribeTopic().equalsIgnoreCase(OneFeedSdk.getInstance().getOldTopicSubscribe())) {
            FirebaseMessaging.getInstance().unsubscribeFromTopic(OneFeedSdk.getInstance().getOldTopicSubscribe());
            OneFeedSdk.getInstance().setTopicSubscription();
        }

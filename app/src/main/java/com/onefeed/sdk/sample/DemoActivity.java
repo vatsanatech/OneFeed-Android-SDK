@@ -65,10 +65,9 @@ public class DemoActivity extends AppCompatActivity {
 
         //Topic Subscribe
         FirebaseMessaging.getInstance().subscribeToTopic(OneFeedSdk.getInstance().getSubscribeTopic());
-
         if (TextUtils.isEmpty(OneFeedSdk.getInstance().getOldTopicSubscribe())) {
             OneFeedSdk.getInstance().setTopicSubscription();
-        } else if (OneFeedSdk.getInstance().getSubscribeTopic() != OneFeedSdk.getInstance().getOldTopicSubscribe()) {
+        } else if (!OneFeedSdk.getInstance().getSubscribeTopic().equalsIgnoreCase(OneFeedSdk.getInstance().getOldTopicSubscribe())) {
             FirebaseMessaging.getInstance().unsubscribeFromTopic(OneFeedSdk.getInstance().getOldTopicSubscribe());
             OneFeedSdk.getInstance().setTopicSubscription();
         }

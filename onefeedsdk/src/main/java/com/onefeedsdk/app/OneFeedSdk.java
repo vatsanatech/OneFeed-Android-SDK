@@ -205,7 +205,7 @@ public class OneFeedSdk {
             String oldToken = OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.TOKEN, "");
             if (!oldToken.equalsIgnoreCase(newToken)) {
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken));
-            }else if (getSubscribeTopic() != getOldTopicSubscribe()) {
+            }else if (!getSubscribeTopic().equalsIgnoreCase(getOldTopicSubscribe())) {
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken));
             }
         } catch (Exception e) {

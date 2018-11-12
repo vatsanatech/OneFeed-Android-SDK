@@ -2,10 +2,10 @@
 
 > # Note
 > WittyFeed SDK API is now `OneFeed Android SDK`,
-> New v2.3.8 made live on 01-Nov-2018
+> New v2.3.9 made live on 06-Nov-2018
 
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](#)
-[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.3.8)
+[![Source](https://img.shields.io/badge/Source-JitPack-brightgreen.svg)](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.3.9)
 [![License](https://img.shields.io/badge/LICENSE-WittyFeed%20SDK%20License-blue.svg)](https://github.com/vatsanatech/OneFeed-Android-SDK/blob/master/LICENSE)
 
 ## Table Of Contents
@@ -34,7 +34,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 
 ### 1.2. Incorporating the SDK
 
-1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.3.8)
+1. [Integrate OneFeed with JitPack](https://jitpack.io/private#vatsanatech/OneFeed-Android-SDK/2.3.9)
 
 2. SignUp at [OneFeed](http://www.onefeed.ai/) and create a new application to integrate with
 
@@ -51,10 +51,10 @@ Browse through the example app in this repository to see how the OneFeed SDK can
 		}
 	}
 ```
-* add OneFeed-Android-SDK:2.3.8 in your app level build.gradle
+* add OneFeed-Android-SDK:2.3.9 in your app level build.gradle
 ```gradle
     dependencies {
-	        implementation 'com.github.vatsanatech:OneFeed-Android-SDK:2.3.8'
+	        implementation 'com.github.vatsanatech:OneFeed-Android-SDK:2.3.9'
 	}
 ```
 
@@ -318,10 +318,8 @@ In your class which extends Application, update with the code below
 
      	   // NOTE: optionally you can check that notification has arrived from WittyFeed by below line -
             if(!TextUtils.isEmpty(agent) && agent.equalsIgnoreCase("wittyfeed_sdk")) {
-                OFNotificationManager
-                        .getInstance()
-                        .handleOneSignalNotification(Root.this, "",
-                                notification.payload.additionalData, R.mipmap.ic_launcher, YOUR_APP_ID);
+        
+		 NotificationHelper.sendNotification(getApplicationContext(), FeedActivity.class, notification.payload.additionalData,  android.R.drawable.ic_menu_share);
             }else {
                 // Handle by user
             }

@@ -42,7 +42,7 @@ import java.util.List;
 public class OneFeedSdk {
 
     private static final String PREF_DEFAULT = "share-app-pref";
-    public static final String VERSION = "2.3.10";
+    public static final String VERSION = "2.3.11";
     public static final String WATER_FALL = "Waterfall";
     public static final String H_List = "H-List";
     public static final String V_List = "V-List";
@@ -208,6 +208,7 @@ public class OneFeedSdk {
             String oldToken = OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.TOKEN, "");
             if (!oldToken.equalsIgnoreCase(newToken)) {
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken));
+                Util.setPrefValue(Constant.TOPIC, getSubscribeTopic());
             }else if (!getSubscribeTopic().equalsIgnoreCase(getOldTopicSubscribe())) {
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken));
                 Util.setPrefValue(Constant.TOPIC, getSubscribeTopic());

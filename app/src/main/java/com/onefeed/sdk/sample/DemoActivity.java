@@ -58,8 +58,8 @@ public class DemoActivity extends AppCompatActivity {
                     }
                 });
 
-        OneFeedSdk.getInstance().setUserInterests("Life-Style", "Like",
-                FirebaseInstanceId.getInstance().getToken(), new AddResponseListener() {
+        OneFeedSdk.getInstance().setUserInterests("YOUR_CATEGORY", "USER_ACTION",
+                "TOKEN", new AddResponseListener() {
             @Override
             public void success() {
                 Log.e("UserInterests", "success");

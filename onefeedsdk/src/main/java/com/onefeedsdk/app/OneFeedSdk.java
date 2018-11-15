@@ -8,6 +8,8 @@ import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.birbit.android.jobqueue.JobManager;
@@ -15,6 +17,7 @@ import com.birbit.android.jobqueue.config.Configuration;
 import com.onefeedsdk.job.GetHomeFeedJob;
 import com.onefeedsdk.job.GetRepeatingCardJob;
 import com.onefeedsdk.job.PostTokenUpdateJob;
+import com.onefeedsdk.job.PostUserInterestsJob;
 import com.onefeedsdk.job.PostUserTrackingJob;
 import com.onefeedsdk.listener.AddResponseListener;
 import com.onefeedsdk.listener.CallBackListener;
@@ -39,7 +42,7 @@ import java.util.List;
 public class OneFeedSdk {
 
     private static final String PREF_DEFAULT = "share-app-pref";
-    public static final String VERSION = "2.3.9";
+    public static final String VERSION = "2.3.10";
     public static final String WATER_FALL = "Waterfall";
     public static final String H_List = "H-List";
     public static final String V_List = "V-List";
@@ -207,6 +210,7 @@ public class OneFeedSdk {
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken));
             }else if (!getSubscribeTopic().equalsIgnoreCase(getOldTopicSubscribe())) {
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken));
+                Util.setPrefValue(Constant.TOPIC, getSubscribeTopic());
             }
         } catch (Exception e) {
         }
@@ -221,7 +225,7 @@ public class OneFeedSdk {
     }
 
     public void setTopicSubscription() {
-        Util.setPrefValue(Constant.TOPIC, getSubscribeTopic());
+        //Util.setPrefValue(Constant.TOPIC, getSubscribeTopic());
     }
 
     public String getOldTopicSubscribe() {
@@ -252,6 +256,13 @@ public class OneFeedSdk {
         }catch (Exception e){
             Log.e("Exception", e.getMessage());
         }
+    }
+
+
+    public void setUserInterests(String category, String userAction, String token, @NonNull AddResponseListener listener){
+
+        OneFeedSdk.getInstance().jobManager
+                .addJobInBackground(new PostUserInterestsJob(Constant.USER_INTERESTS, userAction, category, token, listener));
     }
 
     private void getInstallAppInfo() {

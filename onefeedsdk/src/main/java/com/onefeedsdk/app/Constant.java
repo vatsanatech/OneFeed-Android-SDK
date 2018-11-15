@@ -94,6 +94,9 @@ public interface Constant {
     //Back
     String STORY_BACK = "Story-Back";
 
+    //Interests
+    String USER_INTERESTS = "User-Interests";
+
     String COLOR = "Color";
     String TITLE = "Title";
     String URL = "Url";

@@ -58,6 +58,27 @@ public class TrackingModel {
     @SerializedName("mode")
     private String mode;
 
+    @SerializedName("uaction")
+    private String action;
+
+    @SerializedName("category")
+    private String category;
+
+    @SerializedName("ftoken")
+    private String token;
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public void setMode(String mode) {
         this.mode = mode;
     }

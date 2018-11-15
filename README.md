@@ -68,8 +68,6 @@ Browse through the example app in this repository to see how the OneFeed SDK can
     <string name="onefeed_app_id">YOUR APP ID</string>
     <string name="onefeed_api_key">YOUR API KEY</string>
     
-    <!--Optional if you are using Repeating Card-->
-    <string name="onefeed_card_id">YOUR CARD ID</string>
 ```
    * Add this code in your Manifests.xml
 
@@ -318,10 +316,10 @@ In your class which extends Application, update with the code below
 
      	   // NOTE: optionally you can check that notification has arrived from WittyFeed by below line -
             if(!TextUtils.isEmpty(agent) && agent.equalsIgnoreCase("wittyfeed_sdk")) {
-                OFNotificationManager
-                        .getInstance()
-                        .handleOneSignalNotification(Root.this, "",
-                                notification.payload.additionalData, R.mipmap.ic_launcher, YOUR_APP_ID);
+                
+                 NotificationHelper.sendNotification(getApplicationContext(), FeedActivity.class, 
+                        notification.payload.additionalData, android.R.drawable.ic_menu_share);
+                
             }else {
                 // Handle by user
             }

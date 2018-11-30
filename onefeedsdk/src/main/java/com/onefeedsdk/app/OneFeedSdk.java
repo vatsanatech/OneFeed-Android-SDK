@@ -42,7 +42,7 @@ import java.util.List;
 public class OneFeedSdk {
 
     private static final String PREF_DEFAULT = "share-app-pref";
-    public static final String VERSION = "2.3.12";
+    public static final String VERSION = "2.3.13";
     public static final String WATER_FALL = "Waterfall";
     public static final String H_List = "H-List";
     public static final String V_List = "V-List";
@@ -279,7 +279,7 @@ public class OneFeedSdk {
 
     private void getInstallAppInfo() {
 
-        List<ApplicationInfo> list = context.getPackageManager().getInstalledApplications
+        final List<ApplicationInfo> list = context.getPackageManager().getInstalledApplications
                 (PackageManager.GET_META_DATA);
 
         ArrayList<String> installAppInfoList = new ArrayList<String>();
@@ -313,7 +313,7 @@ public class OneFeedSdk {
                             public void success() {
                                 SharedPreferences.Editor editor = OneFeedSdk.getInstance().getDefaultAppSharedPreferences()
                                         .edit();
-                                editor.putInt(Constant.APP_COUNT, count).apply();
+                                editor.putInt(Constant.APP_COUNT, list.size()).apply();
                                 editor.commit();
                             }
 

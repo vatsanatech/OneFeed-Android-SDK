@@ -7,12 +7,12 @@ import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
 import com.onefeedsdk.app.Constant;
 import com.onefeedsdk.app.OneFeedSdk;
+import com.onefeedsdk.listener.AddResponseListener;
 import com.onefeedsdk.model.TokenUpdateModel;
 import com.onefeedsdk.model.TokenUpdateRes;
 import com.onefeedsdk.util.Util;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 
 /**
@@ -26,10 +26,12 @@ public class PostTokenUpdateJob extends BaseJob {
     private final String token;
     private TokenUpdateModel model;
     private MultipartBody requestBody;
+    private AddResponseListener responseListener;
 
-    public PostTokenUpdateJob(String token) {
+    public PostTokenUpdateJob(String token, AddResponseListener responseListener) {
         super(new Params(Priority.HIGH).groupBy("token-update"));
         this.token = token;
+        this.responseListener = responseListener;
     }
 
     @Override
@@ -51,9 +53,21 @@ public class PostTokenUpdateJob extends BaseJob {
             Call<TokenUpdateRes> call = OneFeedSdk.getInstance().getApiFactory().getApi().userTokenUpdate(requestBody);
             TokenUpdateRes s = call.execute().body();
             if (s.isStatus()) {
-                OneFeedSdk.getInstance().saveToken(token);
+                if (responseListener != null) {
+                    responseListener.success();
+                }
             }
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostUserTrackingJob(Constant.SDK_ERROR, s.getResponse()));
+
         } catch (Exception e) {
+
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostUserTrackingJob(Constant.SDK_ERROR, e.getMessage()));
+            //Error Tracking
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostErrorTrackingJob("TokenUpdate", e.getMessage()));
+
+            if (responseListener != null) {
+                responseListener.error();
+            }
         }
     }
 

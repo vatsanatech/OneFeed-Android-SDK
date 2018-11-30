@@ -24,7 +24,7 @@ import retrofit2.Call;
  * Date: 01-October-2018
  * Time: 13:04
  */
-public class PostUserTrackingJob extends BaseJob{
+public class PostUserTrackingJob extends BaseJob {
 
     private final String type;
     private final String resource;
@@ -32,15 +32,23 @@ public class PostUserTrackingJob extends BaseJob{
     private TrackingModel model;
     private AddResponseListener listener;
 
-    public PostUserTrackingJob(String type, String resource){
+    // Common tracking
+    public PostUserTrackingJob(String type, String resource) {
         super(new Params(Priority.HIGH).groupBy("user-tracking"));
         this.type = type;
         this.resource = resource;
-
         model = new TrackingModel();
+
+        if (Constant.SDK_INITIALISED.equalsIgnoreCase(type)) {
+            String oldToken = OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.TOKEN, "");
+            model.setToken(oldToken);
+        }else if(Constant.SDK_ERROR.equalsIgnoreCase(type)){
+            model.setAction("FCM Update");
+        }
     }
 
-    public PostUserTrackingJob(String type, String resource, String storyId){
+    //Tracking with story id
+    public PostUserTrackingJob(String type, String resource, String storyId) {
         super(new Params(Priority.HIGH).groupBy("user-tracking"));
         this.type = type;
         this.resource = resource;
@@ -50,7 +58,7 @@ public class PostUserTrackingJob extends BaseJob{
     }
 
     //For Notification
-    public PostUserTrackingJob(String type, String resource, String storyId, String noId){
+    public PostUserTrackingJob(String type, String resource, String storyId, String noId) {
         super(new Params(Priority.HIGH).groupBy("user-tracking"));
         this.type = type;
         this.resource = resource;
@@ -61,7 +69,7 @@ public class PostUserTrackingJob extends BaseJob{
     }
 
     //Set app list and sim info
-    public PostUserTrackingJob(String type, String resource, String data, int id, AddResponseListener listener){
+    public PostUserTrackingJob(String type, String resource, String data, int id, AddResponseListener listener) {
         super(new Params(Priority.HIGH).groupBy("user-tracking"));
         this.type = type;
         this.resource = resource;
@@ -70,9 +78,9 @@ public class PostUserTrackingJob extends BaseJob{
 
         //0 for app list and operator
         model = new TrackingModel();
-        if(id == 0){
+        if (id == 0) {
             model.setAppList(data);
-        }else {
+        } else {
             model.setNewSim(data);
         }
     }
@@ -97,18 +105,21 @@ public class PostUserTrackingJob extends BaseJob{
 
     @Override
     public void onRun() throws Throwable {
-        try{
+        try {
 
             Call<String> call = OneFeedSdk.getInstance().getApiFactory().getTrackingApi().userTracking(model);
             String result = call.execute().body();
             Log.e("Tracking - " + type, result);
 
             //Only Info and App List
-            if(listener != null){
+            if (listener != null) {
                 listener.success();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("Tracking - Error" + type, e.getMessage());
+            //Error Tracking
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostErrorTrackingJob(type, e.getMessage()));
+
         }
     }
 

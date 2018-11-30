@@ -58,8 +58,8 @@ public class DemoActivity extends AppCompatActivity {
                     }
                 });
 
-        OneFeedSdk.getInstance().setUserInterests("YOUR_CATEGORY", "USER_ACTION",
-                "TOKEN", new AddResponseListener() {
+        OneFeedSdk.getInstance().setUserInterests("Life Style", "Like",
+                "Test_1234567890", new AddResponseListener() {
             @Override
             public void success() {
                 Log.e("UserInterests", "success");
@@ -103,13 +103,13 @@ public class DemoActivity extends AppCompatActivity {
                 Map<String, String> demoNotification = new HashMap<>();
                 demoNotification.put("story_id", "60496");
                 // demoNotification.put("noid", "10001");
-                demoNotification.put("story_title", "10 Things Every Girl Should Put On Her List");
-                demoNotification.put("cover_image", "https://cdn.wittyfeed.com/41441/ilik0kqmr2hpv1i4l8ya.jpeg?imwidth=960");
-                demoNotification.put("story_url", "https://www.wittyfeed.me/story/41441/things-every-girl-should-put-in-her-list?utm_hash=ArD51&nohead=1");
+                demoNotification.put("story_title", "20 DC Characters Who Could Easily Defeat Thanos");
+                demoNotification.put("cover_image", "https://cdn.geeksmate.io/71629/20-DC-Characters-Who-Could-Defeat-Thanos-41.jpeg");
+                demoNotification.put("story_url", "https://www.geeksmate.io/dc-characters-defeat-thanos-seconds-71629?utm_source=SDK&utm_medium=noti&utm_campaign=38237-campaign&utm_hash=108_71629&noid=5385987&sdk_aid=108");
 
                 demoNotification.put("id", "400");
                 demoNotification.put("body", "Hey, Here's a new amazing story for you!");
-                demoNotification.put("title", "10 Things Every Girl Should Put On Her List");
+                demoNotification.put("title", "20 DC Characters Who Could Easily Defeat Thanos");
                 demoNotification.put("notiff_agent", "wittyfeed_sdk");
                 demoNotification.put("app_id", "108");
 

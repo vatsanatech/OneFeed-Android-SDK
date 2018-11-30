@@ -53,6 +53,8 @@ public class GetSearchFeedJob extends BaseJob {
             OneFeedSdk.getInstance().getEventBus().postSticky(new Event.SearchFeedEvent(feed, true, false));
         }catch (Exception e){
             log.error(e);
+            //Error Tracking
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostErrorTrackingJob("SearchFeed", e.getMessage()));
             OneFeedSdk.getInstance().getEventBus().postSticky(new Event.SearchFeedEvent(null, false, false));
         }
     }

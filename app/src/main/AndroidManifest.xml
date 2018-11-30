@@ -30,7 +30,6 @@
         <activity android:name=".RepeatingCard2Activity"
             android:screenOrientation="portrait"/>
 
-
         <service
             android:name="com.onefeed.sdk.sample.service.OnefeedFirebaseMessagingService">
             <intent-filter>

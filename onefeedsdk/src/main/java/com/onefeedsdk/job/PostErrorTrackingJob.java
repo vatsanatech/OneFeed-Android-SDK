@@ -20,10 +20,10 @@ import retrofit2.Call;
 /**
  * Created by Yogesh Soni.
  * Company: WittyFeed
- * Date: 15-November-2018
- * Time: 17:04
+ * Date: 01-October-2018
+ * Time: 13:04
  */
-public class PostUserInterestsJob extends BaseJob{
+public class PostErrorTrackingJob extends BaseJob {
 
     private final String type;
     private final String resource;
@@ -31,17 +31,13 @@ public class PostUserInterestsJob extends BaseJob{
     private TrackingModel model;
     private AddResponseListener listener;
 
-    public PostUserInterestsJob(String type, String uAction, String category, String token, @NonNull AddResponseListener listener){
+    // Common tracking
+    public PostErrorTrackingJob(String action, String resource) {
         super(new Params(Priority.HIGH).groupBy("user-tracking"));
-        this.type = type;
-        this.resource = Constant.RSRC;
-
-        this.listener = listener;
-
+        this.type = Constant.SDK_ERROR;
+        this.resource = resource;
         model = new TrackingModel();
-        model.setAction(uAction);
-        model.setCategory(category);
-        model.setToken(token);
+        model.setAction(action);
     }
 
     @Override
@@ -64,24 +60,18 @@ public class PostUserInterestsJob extends BaseJob{
 
     @Override
     public void onRun() throws Throwable {
-        try{
+        try {
 
-            Call<String> call = OneFeedSdk.getInstance().getApiFactory().getTrackingApi().userTracking(model);
+            Call<String> call = OneFeedSdk.getInstance().getApiFactory().getErrorTrackingApi().errorTracking(model);
             String result = call.execute().body();
             Log.e("Tracking - " + type, result);
 
             //Only Info and App List
-            if(listener != null){
+            if (listener != null) {
                 listener.success();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("Tracking - Error" + type, e.getMessage());
-            //Error Tracking
-            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostErrorTrackingJob("User-Interest", e.getMessage()));
-
-            if(listener != null){
-                listener.error();
-            }
         }
     }
 

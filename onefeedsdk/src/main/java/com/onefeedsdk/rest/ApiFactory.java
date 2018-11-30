@@ -29,6 +29,7 @@ public class ApiFactory {
     private OkHttpClient okHttpClient;
     private Api api;
     private Api trackingApi;
+    private Api errorTrackingApi;
 
     public ApiFactory() {
         init();
@@ -69,6 +70,7 @@ public class ApiFactory {
 
         api = retrofit.create(Api.class);
 
+        //Tracking
         Retrofit retrofitTracking = new Retrofit.Builder()
                 .baseUrl(Constant.TRACKING_URL)
                 .client(okHttpClient)
@@ -76,6 +78,15 @@ public class ApiFactory {
                 .build();
 
         trackingApi = retrofitTracking.create(Api.class);
+
+        //Error Tracking
+        Retrofit retrofitErrorTracking = new Retrofit.Builder()
+                .baseUrl(Constant.ERROR_TRACKING_URL)
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        errorTrackingApi = retrofitErrorTracking.create(Api.class);
     }
 
     public Api getApi() {
@@ -84,5 +95,9 @@ public class ApiFactory {
 
     public Api getTrackingApi() {
         return trackingApi;
+    }
+
+    public Api getErrorTrackingApi() {
+        return errorTrackingApi;
     }
 }

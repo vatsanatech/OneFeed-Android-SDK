@@ -42,7 +42,7 @@ import java.util.List;
 public class OneFeedSdk {
 
     private static final String PREF_DEFAULT = "share-app-pref";
-    public static final String VERSION = "2.3.11";
+    public static final String VERSION = "2.3.12";
     public static final String WATER_FALL = "Waterfall";
     public static final String H_List = "H-List";
     public static final String V_List = "V-List";
@@ -202,16 +202,27 @@ public class OneFeedSdk {
     }
 
     //Token Update
-    public void setToken(String newToken) {
+    public void setToken(final String newToken) {
         try {
+
+            //Topic subscribe if successful api run
+            AddResponseListener responseListener = new AddResponseListener() {
+                @Override
+                public void success() {
+                    OneFeedSdk.getInstance().saveToken(newToken);
+                    Util.setPrefValue(Constant.TOPIC, getSubscribeTopic());
+                }
+
+                @Override
+                public void error() {
+                }
+            };
 
             String oldToken = OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.TOKEN, "");
             if (!oldToken.equalsIgnoreCase(newToken)) {
-                OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken));
-                Util.setPrefValue(Constant.TOPIC, getSubscribeTopic());
+                OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken, responseListener));
             }else if (!getSubscribeTopic().equalsIgnoreCase(getOldTopicSubscribe())) {
-                OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken));
-                Util.setPrefValue(Constant.TOPIC, getSubscribeTopic());
+                OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken, responseListener));
             }
         } catch (Exception e) {
         }

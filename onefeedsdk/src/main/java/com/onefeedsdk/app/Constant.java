@@ -10,6 +10,8 @@ package com.onefeedsdk.app;
 public interface Constant {
 
     String BASE_URL = "https://api.wittyfeed.com/Sdk/";
+    String ERROR_TRACKING_URL = "https://apptrackerr.onefeed.ai/";
+    String ERROR_TRACKING = "apptrackerr";
 
     String HOME_FEED = "home_feed_v5";
     String SEARCH_FEED = "search_v5";
@@ -35,6 +37,9 @@ public interface Constant {
     //Tracking
     String SDK_INITIALISED = "SDK Initialised";
     String APP_INIT = "App-Init";
+
+    //ERROR
+    String SDK_ERROR = "sdkerr";
 
     //OneFeed View
     String ONE_FEED = "OneFeed Viewed";

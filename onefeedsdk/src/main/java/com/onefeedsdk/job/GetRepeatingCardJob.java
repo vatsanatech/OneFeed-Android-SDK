@@ -72,6 +72,8 @@ public class GetRepeatingCardJob extends BaseJob {
             }
         }catch (Exception e){
             log.error(e);
+            //Error Tracking
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostErrorTrackingJob("Repeating Card", e.getMessage()));
             if(listener != null) {
                 listener.error();
             }

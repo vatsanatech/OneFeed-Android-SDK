@@ -59,6 +59,8 @@ public class GetHomeFeedJob extends BaseJob {
                     Util.setPrefValue(Constant.USER_ID, event.getFeed().getFeedData().getConfig().getUserId());
                 }catch (Exception e){
                     Log.e("Exceptions:", e.getMessage());
+                    //Error Tracking
+                    OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostErrorTrackingJob("HomeFeed", e.getMessage()));
                 }
                 String feedTemp = new GsonBuilder().create().toJson(event);
                 Util.setPrefValue(Constant.FEED_TEMP, feedTemp);
@@ -66,8 +68,11 @@ public class GetHomeFeedJob extends BaseJob {
             }else {
                 OneFeedSdk.getInstance().getEventBus().postSticky(new Event.FeedEvent(feed, true, isLoadMoreFeed));
             }
+
         }catch (Exception e){
             log.error(e);
+            //Error Tracking
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostErrorTrackingJob("HomeFeed", e.getMessage()));
             OneFeedSdk.getInstance().getEventBus().postSticky(new Event.FeedEvent(null, false, isLoadMoreFeed));
         }
     }

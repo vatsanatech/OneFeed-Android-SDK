@@ -78,9 +78,7 @@ Browse through the example app in this repository to see how the OneFeed SDK can
         <meta-data android:name="com.onefeed.sdk.AppId"
             android:value="@string/onefeed_app_id"/>
 
-        <!--Optional if you are using Repeating Card-->
-        <meta-data android:name="com.onefeed.sdk.CardId"
-            android:value="@string/onefeed_card_id"/>
+       
 ```
 * Add this code in your Application class
 ```java
@@ -93,8 +91,6 @@ Browse through the example app in this repository to see how the OneFeed SDK can
             //Initialize OneFeedSdk
             OneFeedSdk.getInstance().init(getApplicationContext());
             
-            //Optional Initialize Repeating card if you are using
-            OneFeedSdk.getInstance().initNativeCard();
         }
     }
     

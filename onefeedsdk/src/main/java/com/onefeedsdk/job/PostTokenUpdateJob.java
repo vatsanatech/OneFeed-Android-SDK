@@ -56,9 +56,9 @@ public class PostTokenUpdateJob extends BaseJob {
                 if (responseListener != null) {
                     responseListener.success();
                 }
+            } else {
+                OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostUserTrackingJob(Constant.SDK_ERROR, s.getResponse()));
             }
-            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostUserTrackingJob(Constant.SDK_ERROR, s.getResponse()));
-
         } catch (Exception e) {
 
             OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostUserTrackingJob(Constant.SDK_ERROR, e.getMessage()));

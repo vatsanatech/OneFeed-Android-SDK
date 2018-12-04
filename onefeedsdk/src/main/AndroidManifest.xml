@@ -9,22 +9,22 @@
             android:name=".ui.NotificationOpenActivity"
             android:exported="false" />
 
-        <receiver android:name=".receiver.CommonReceiver">
-            <!--<intent-filter>
+        <!--<receiver android:name=".receiver.CommonReceiver">
+            &lt;!&ndash;<intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
                 <action android:name="android.intent.action.HEADSET_PLUG" />
                 <action android:name="android.intent.action.SCREEN_OFF" />
                 <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>-->
-        </receiver>
+            </intent-filter>&ndash;&gt;
+        </receiver>-->
 
-        <service
+       <!-- <service
             android:name=".service.CommonJobService"
             android:enabled="true"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            android:permission="android.permission.BIND_JOB_SERVICE" />-->
 
         <service
             android:name=".service.CommonService"

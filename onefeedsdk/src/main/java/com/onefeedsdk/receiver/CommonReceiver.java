@@ -47,7 +47,9 @@ public class CommonReceiver extends BroadcastReceiver {
             sb.append("URI: " + intent.toUri(Intent.URI_INTENT_SCHEME).toString() + "\n");
             String log = sb.toString();
             Log.d(TAG, log);*/
-            checkReceiver(intent, context);
+
+            // User activity tracking remove by yogesh 04-12-2018
+            // checkReceiver(intent, context);
             return "";
         }
 

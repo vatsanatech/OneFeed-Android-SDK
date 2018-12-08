@@ -51,7 +51,7 @@ public class PostUserInterestsJob extends BaseJob{
         model.setDeviceId(Util.getAndroidUniqueId());
         model.setLanguage(Locale.getDefault().getISO3Language());
         //model.setPackageId(getApplicationContext().getPackageName());
-        model.setSdkVersion(OneFeedSdk.VERSION);
+        model.setSdkVersion(OneFeedSdk.getInstance().VERSION);
         model.setNetworkType(Util.getNetworkConnectionType(OneFeedSdk.getInstance().getContext()));
 
         model.setAppUserId(OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.USER_ID, "0"));

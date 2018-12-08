@@ -26,7 +26,6 @@ public class GetSearchFeedJob extends BaseJob {
     private static LogFactory.Log log = LogFactory.getLog(GetSearchFeedJob.class);
 
     private String search;
-    private int offset = 0;
 
     public GetSearchFeedJob(String search) {
         super(new Params(Priority.HIGH).groupBy("home-feed"));
@@ -48,7 +47,7 @@ public class GetSearchFeedJob extends BaseJob {
 
             Call<FeedModel> call = OneFeedSdk.getInstance().getApiFactory().getApi()
                     .searchFeed(search, 0, OneFeedSdk.getInstance().getAppId(),
-                            userId, Util.getAndroidUniqueId(), OneFeedSdk.VERSION);
+                            userId, Util.getAndroidUniqueId(), OneFeedSdk.getInstance().VERSION);
             FeedModel feed = call.execute().body();
             OneFeedSdk.getInstance().getEventBus().postSticky(new Event.SearchFeedEvent(feed, true, false));
         }catch (Exception e){

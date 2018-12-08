@@ -42,7 +42,7 @@ import java.util.List;
 public class OneFeedSdk {
 
     private static final String PREF_DEFAULT = "share-app-pref";
-    public static final String VERSION = "2.3.14";
+    public static final String VERSION = "2.3.15";
     public static final String WATER_FALL = "Waterfall";
     public static final String H_List = "H-List";
     public static final String V_List = "V-List";

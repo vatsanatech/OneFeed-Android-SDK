@@ -57,7 +57,7 @@ public class GetRepeatingCardJob extends BaseJob {
                     .initOneFeedRepeatingCard(OneFeedSdk.getInstance().getAppId(),
                             OneFeedSdk.getInstance().getAppKey(),
                             OneFeedSdk.getInstance().getContext().getPackageName(), offset, "", 1
-                            , cardId, Util.getAndroidUniqueId(), OneFeedSdk.VERSION);
+                            , cardId, Util.getAndroidUniqueId(), OneFeedSdk.getInstance().VERSION);
             RepeatingCardModel newFeed = call.execute().body();
 
             RepeatingCardModel feedRepeatingCard = (RepeatingCardModel) RuntimeStore.getInstance().getValueFor(Constant.NATIVE_CARD);

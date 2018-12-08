@@ -43,7 +43,7 @@ public class PostTokenUpdateJob extends BaseJob {
                 .addFormDataPart("device_id", Util.getAndroidUniqueId())
                 .addFormDataPart("firebase_token", token)
                 .addFormDataPart("old_firebase_token", "")
-                .addFormDataPart("onefeed_sdk_version", OneFeedSdk.VERSION)
+                .addFormDataPart("onefeed_sdk_version", OneFeedSdk.getInstance().VERSION)
                 .build();
     }
 

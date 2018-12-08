@@ -49,7 +49,7 @@ public class GetHomeFeedJob extends BaseJob {
                     .initOneFeedInitialise(OneFeedSdk.getInstance().getAppId(),
                             OneFeedSdk.getInstance().getAppKey(),
                             OneFeedSdk.getInstance().getContext().getPackageName(), offset,
-                            "", Util.getAndroidUniqueId(), OneFeedSdk.VERSION);
+                            "", Util.getAndroidUniqueId(), OneFeedSdk.getInstance().VERSION);
             FeedModel feed = call.execute().body();
 
             if(!isLoadMoreFeed && offset == 0){

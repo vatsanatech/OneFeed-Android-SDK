@@ -39,11 +39,11 @@ public class PostTokenUpdateJob extends BaseJob {
 
         requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("app_id", OneFeedSdk.getInstance().getAppId())
-                .addFormDataPart("device_id", Util.getAndroidUniqueId())
-                .addFormDataPart("firebase_token", token)
+                .addFormDataPart("app_id", ""+OneFeedSdk.getInstance().getAppId())
+                .addFormDataPart("device_id", ""+Util.getAndroidUniqueId())
+                .addFormDataPart("firebase_token", ""+token)
                 .addFormDataPart("old_firebase_token", "")
-                .addFormDataPart("onefeed_sdk_version", OneFeedSdk.getInstance().VERSION)
+                .addFormDataPart("onefeed_sdk_version", ""+OneFeedSdk.getInstance().VERSION)
                 .build();
     }
 

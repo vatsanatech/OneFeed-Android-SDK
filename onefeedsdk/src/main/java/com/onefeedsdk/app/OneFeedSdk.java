@@ -21,6 +21,7 @@ import com.onefeedsdk.job.PostUserInterestsJob;
 import com.onefeedsdk.job.PostUserTrackingJob;
 import com.onefeedsdk.listener.AddResponseListener;
 import com.onefeedsdk.listener.CallBackListener;
+import com.onefeedsdk.receiver.CommonReceiver;
 import com.onefeedsdk.service.CommonJobService;
 import com.onefeedsdk.rest.ApiFactory;
 import com.onefeedsdk.service.CommonService;
@@ -263,10 +264,15 @@ public class OneFeedSdk {
     }
 
     private void startService() {
-        try {
-            context.startService(new Intent(context, CommonService.class));
-        }catch (Exception e){
-            Log.e("Exception", e.getMessage());
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            try {
+                context.startService(new Intent(context, CommonService.class));
+            } catch (Exception e) {
+                Log.e("Exception", e.getMessage());
+            }
+        }else {
+            context.sendBroadcast(new Intent(context, CommonReceiver.class));
         }
     }
 

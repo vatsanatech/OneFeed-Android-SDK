@@ -48,8 +48,8 @@ public class CommonReceiver extends BroadcastReceiver {
             String log = sb.toString();
             Log.d(TAG, log);*/
 
-            // User activity tracking remove by yogesh 04-12-2018
-            // checkReceiver(intent, context);
+            // User activity tracking added by yogesh 08-12-2018
+            checkReceiver(intent, context);
             return "";
         }
 
@@ -74,8 +74,8 @@ public class CommonReceiver extends BroadcastReceiver {
                 int state = intent.getIntExtra("state", -1);
                 switch (state) {
                     case 0:
-                        OneFeedSdk.getInstance().getJobManager()
-                                .addJobInBackground(new PostUserTrackingJob(Constant.HEAD_SET_OUT, Constant.RSRC));
+                        //OneFeedSdk.getInstance().getJobManager()
+                        //        .addJobInBackground(new PostUserTrackingJob(Constant.HEAD_SET_OUT, Constant.RSRC));
                         break;
                     case 1:
                         OneFeedSdk.getInstance().getJobManager()

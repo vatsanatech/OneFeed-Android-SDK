@@ -18,6 +18,7 @@ import com.onefeedsdk.job.GetRepeatingCardJob;
 import com.onefeedsdk.listener.AddResponseListener;
 import com.onefeedsdk.listener.CallBackListener;
 import com.onefeedsdk.util.OneFeedNativeCard;
+import com.onefeedsdk.util.OneFeedSearchedStory;
 
 /**
  * Created by Yogesh Soni.
@@ -38,7 +39,7 @@ public class RepeatingCard2Activity extends AppCompatActivity{
         recyclerCard.setLayoutManager(new LinearLayoutManager(this));
         final AdapterDemoCars adapter = new AdapterDemoCars();
 
-        OneFeedSdk.getInstance().initNativeCard(134, new CallBackListener() {
+        OneFeedSdk.getInstance().searchStoriesByKeyword("Love", new AddResponseListener() {
             @Override
             public void success() {
                 runOnUiThread(new Runnable() {
@@ -83,8 +84,7 @@ public class RepeatingCard2Activity extends AppCompatActivity{
             if(holder instanceof CardViewHolder){
 
                 CardViewHolder holder1 = (CardViewHolder) holder;
-                OneFeedNativeCard.showCard(RepeatingCard2Activity.this, 134, holder1.linearLayout,
-                        OneFeedSdk.V_List, false);
+                OneFeedSearchedStory.showSearchCard(RepeatingCard2Activity.this, holder1.linearLayout);
             }else{
                 ViewHolder holder1 = (ViewHolder) holder;
                 holder1.titleView.setText(R.string.string_dummy);

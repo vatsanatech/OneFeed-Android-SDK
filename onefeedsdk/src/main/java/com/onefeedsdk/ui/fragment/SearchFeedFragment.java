@@ -183,7 +183,8 @@ public class SearchFeedFragment extends Fragment {
 
             //Tracking
             OneFeedSdk.getInstance().getJobManager().addJobInBackground(
-                    new PostUserTrackingJob(Constant.SEARCH_VIEWED, Constant.SEARCH_VIEWED_BY_FEED));
+                    new PostUserTrackingJob(Constant.SEARCH_VIEWED, Constant.SEARCH_VIEWED_BY_FEED,
+                            searchText.getText().toString()));
 
         } else {
             errorView.setVisibility(View.VISIBLE);

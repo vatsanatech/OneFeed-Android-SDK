@@ -53,6 +53,14 @@ public interface Api {
                                @Query("device_id") String deviceId,
                                @Query("onefeed_sdk_version") String sdkVersion);
 
+    @GET(Constant.SEARCH_BY_APP)
+    Call<FeedModel> searchByApp(@Query("keyword") String keyword,
+                               @Query("offset") int offset,
+                               @Query("app_id") String appId,
+                               @Query("user_id") String userId,
+                               @Query("device_id") String deviceId,
+                               @Query("onefeed_sdk_version") String sdkVersion);
+
     @POST(Constant.TOKEN_UPDATE)
     Call<TokenUpdateRes> userTokenUpdate(@Body RequestBody model);
 

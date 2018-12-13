@@ -15,17 +15,20 @@ public interface Constant {
 
     String HOME_FEED = "home_feed_v5";
     String SEARCH_FEED = "search_v5";
+    String SEARCH_BY_APP = "search_v5_1";
 
     String TRACKING_URL = "https://apptrack.onefeed.ai/";
     String TRACKING = "apptrack";
     String TOKEN_UPDATE = "fetchFcmToken";
 
+    String SEARCH_CARD = "SEARCH_CARD";
     String NATIVE_CARD = "NATIVE_CARD";
     String ACTIVITY = "ACTIVITY";
     String MODEL = "MODEL";
 
     //Search
     String SEARCH = "SEARCH";
+    String SEARCH_BY = "SEARCH_BY_APP";
 
     //User
     String USER_ID = "user_id";

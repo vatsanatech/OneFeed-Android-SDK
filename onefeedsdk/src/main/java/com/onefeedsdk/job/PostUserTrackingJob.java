@@ -47,14 +47,18 @@ public class PostUserTrackingJob extends BaseJob {
         }
     }
 
-    //Tracking with story id
-    public PostUserTrackingJob(String type, String resource, String storyId) {
+    //Tracking with story id or Search String
+    public PostUserTrackingJob(String type, String resource, String s) {
         super(new Params(Priority.HIGH).groupBy("user-tracking"));
         this.type = type;
         this.resource = resource;
 
         model = new TrackingModel();
-        model.setStoryId(storyId);
+        if (Constant.SEARCH_VIEWED.equalsIgnoreCase(type)) {
+            model.setSearchString(s);
+        }else {
+            model.setStoryId(s);
+        }
     }
 
     //For Notification

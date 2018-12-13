@@ -16,6 +16,7 @@ import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.config.Configuration;
 import com.onefeedsdk.job.GetHomeFeedJob;
 import com.onefeedsdk.job.GetRepeatingCardJob;
+import com.onefeedsdk.job.GetSearchFeedJob;
 import com.onefeedsdk.job.PostTokenUpdateJob;
 import com.onefeedsdk.job.PostUserInterestsJob;
 import com.onefeedsdk.job.PostUserTrackingJob;
@@ -276,7 +277,14 @@ public class OneFeedSdk {
         }
     }
 
+    //Search Api for user
+    public void searchStoriesByKeyword(@NonNull String keyword, @NonNull AddResponseListener listener){
+        OneFeedSdk.getInstance().jobManager
+                .addJobInBackground(new GetSearchFeedJob(keyword, listener));
+    }
 
+
+    //Call Api for taking User Interest
     public void setUserInterests(String category, String userAction, String token, @NonNull AddResponseListener listener){
 
         OneFeedSdk.getInstance().jobManager

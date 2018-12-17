@@ -56,7 +56,7 @@ public class OneFeedSearchedStory {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                        intent.putExtra(Constant.CARD_VIEWED, true);
+                        intent.putExtra(Constant.SEARCH_CARD_VIEWED, true);
                         intent.putExtra(Constant.COLOR, toolbarColor[0]);
                         intent.putExtra(Constant.TITLE, card.getStoryTitle());
                         intent.putExtra(Constant.URL, card.getStoryUrl());
@@ -95,6 +95,9 @@ public class OneFeedSearchedStory {
                             }
                         });
 
+                //Tracking OneFeed Card View
+                OneFeedSdk.getInstance().getJobManager().addJobInBackground(
+                        new PostUserTrackingJob(Constant.CARD_VIEWED, Constant.CARD_VIEWED_BY_SEARCH, card.getStoryId()));
 
                 return card.getSheildText();
             }else{

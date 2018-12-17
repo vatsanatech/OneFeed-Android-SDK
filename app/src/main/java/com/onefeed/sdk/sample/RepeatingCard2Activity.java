@@ -39,7 +39,7 @@ public class RepeatingCard2Activity extends AppCompatActivity{
         recyclerCard.setLayoutManager(new LinearLayoutManager(this));
         final AdapterDemoCars adapter = new AdapterDemoCars();
 
-        OneFeedSdk.getInstance().searchStoriesByKeyword("Love", new AddResponseListener() {
+        OneFeedSdk.getInstance().searchStoriesByKeyword("Hello", new AddResponseListener() {
             @Override
             public void success() {
                 runOnUiThread(new Runnable() {

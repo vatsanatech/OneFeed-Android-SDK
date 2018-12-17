@@ -28,7 +28,7 @@ public interface Constant {
 
     //Search
     String SEARCH = "SEARCH";
-    String SEARCH_BY = "SEARCH_BY_APP";
+    String SEARCH_BY = "Search_By_App";
 
     //User
     String USER_ID = "user_id";
@@ -53,12 +53,18 @@ public interface Constant {
     //Story Opened
     String STORY_OPENED = "Story Opened";
     String STORY_OPENED_BY_CARD = "Card";
+    String STORY_OPENED_BY_SEARCH_CARD = "Search Card";
     String STORY_OPENED_BY_ONE_FEED = "Feed";
     String STORY_OPENED_BY_NOTIFICATION = "Notification";
 
     //Card
     String CARD_VIEWED = "Card Viewed";
     String CARD_VIEWED_BY_SCROLLING = "Scrolling";
+
+    //Search
+    String SEARCH_CARD_VIEWED = "Search Card Viewed";
+    String CARD_VIEWED_BY_SEARCH = "By Search";
+
 
     //APP View
     String APP_VIEWED = "App Viewed";

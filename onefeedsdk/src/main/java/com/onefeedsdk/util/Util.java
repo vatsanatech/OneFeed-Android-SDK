@@ -85,11 +85,15 @@ public class Util {
         }
     }
 
-    public static void showCustomTabBrowserByCard(Context context, int color, String title, String url, String storyId) {
+    public static void showCustomTabBrowserByCard(Context context, int color, String title, String url,
+                                                  String storyId, String resource, boolean isFeed) {
         openCustomTab(context, color, title, url, storyId);
-        //Tracking OneFeed Card View
-        OneFeedSdk.getInstance().getJobManager().addJobInBackground(
-                new PostUserTrackingJob(Constant.STORY_OPENED, Constant.STORY_OPENED_BY_CARD, storyId));
+
+        if(!isFeed) {
+            //Tracking OneFeed Card View
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(
+                    new PostUserTrackingJob(Constant.STORY_OPENED, resource, storyId));
+        }
     }
 
     private static void openCustomTab(Context context, int color, String title, String url, String storyId) {

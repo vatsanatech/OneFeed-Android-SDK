@@ -25,6 +25,7 @@ public class NotificationOpenActivity extends AppCompatActivity {
     private boolean isNotification;
     private boolean isFeed;
     private boolean isCard;
+    private boolean isSearchCard;
     private String storyId;
 
     @Override
@@ -35,6 +36,7 @@ public class NotificationOpenActivity extends AppCompatActivity {
             isNotification = getIntent().getBooleanExtra(Constant.NOTIFICATION, false);
             isFeed = getIntent().getBooleanExtra(Constant.ONE_FEED, false);
             isCard = getIntent().getBooleanExtra(Constant.CARD_VIEWED, false);
+            isSearchCard = getIntent().getBooleanExtra(Constant.SEARCH_CARD_VIEWED, false);
 
             if (isNotification) {
                 activity = (Class) getIntent().getSerializableExtra(Constant.ACTIVITY);
@@ -48,8 +50,16 @@ public class NotificationOpenActivity extends AppCompatActivity {
                 String title = getIntent().getStringExtra(Constant.TITLE);
                 String url = getIntent().getStringExtra(Constant.URL);
                 storyId = getIntent().getStringExtra(Constant.ID);
-
-                Util.showCustomTabBrowserByCard(this, color, title, url, storyId);
+                String resc = "";
+                boolean isFeed = true;
+                if(isSearchCard) {
+                    resc = Constant.STORY_OPENED_BY_SEARCH_CARD;
+                    isFeed = false;
+                }else if(isCard){
+                    isFeed = false;
+                    resc = Constant.STORY_OPENED_BY_CARD;
+                }
+                Util.showCustomTabBrowserByCard(this, color, title, url, storyId, resc, isFeed);
             }
         } catch (Exception e) {
 
@@ -80,6 +90,11 @@ public class NotificationOpenActivity extends AppCompatActivity {
 
                 type = Constant.ONE_FEED;
                 res = Constant.STORY_BACK;
+            } else  if (isSearchCard) {
+
+                type = Constant.SEARCH_CARD_VIEWED;
+                res = Constant.STORY_BACK;
+
             }
 
             //Tracking

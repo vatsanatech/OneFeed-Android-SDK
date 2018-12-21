@@ -25,10 +25,6 @@ import com.onefeedsdk.receiver.CommonReceiver;
 public class CommonService extends Service {
 
     private static String TAG = "MyService";
-    private Handler handler;
-    private Runnable runnable;
-    private final int runTime = 5000;
-
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -46,9 +42,6 @@ public class CommonService extends Service {
 
     @Override
     public void onDestroy() {
-        if (handler != null) {
-            handler.removeCallbacks(runnable);
-        }
         super.onDestroy();
     }
 
@@ -61,36 +54,22 @@ public class CommonService extends Service {
         return START_STICKY;
     }
 
-
     private void startJobService() {
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                JobScheduler js = (JobScheduler) this.getSystemService(
+                        Context.JOB_SCHEDULER_SERVICE);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            JobScheduler js = (JobScheduler) this.getSystemService(
-                    Context.JOB_SCHEDULER_SERVICE);
-
-            JobInfo job = new JobInfo.Builder(
-                    0, new ComponentName(this, CommonJobService.class))
-                    .setRequiresCharging(true)
-                    .setOverrideDeadline(1)
-                    .build();
-            js.schedule(job);
-        }else{
-        }
-
-
-       /* ComponentName serviceComponent = new ComponentName(this, CommonJobService.class);
-        JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);
-        builder.setOverrideDeadline(1); // maximum delay
-        JobScheduler jobScheduler = this.getSystemService(JobScheduler.class);
-        jobScheduler.schedule(builder.build());
-
-        handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                handler.postDelayed(runnable, runTime);
+                JobInfo job = new JobInfo.Builder(
+                        0, new ComponentName(this, CommonJobService.class))
+                        .setRequiresCharging(true)
+                        .setOverrideDeadline(1)
+                        .build();
+                js.schedule(job);
+            } else {
             }
-        };
-        handler.post(runnable);*/
+        }catch (Exception e){
+            Log.e("Exception", e.getMessage());
+        }
     }
 }

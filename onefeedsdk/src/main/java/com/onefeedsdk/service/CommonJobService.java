@@ -59,7 +59,11 @@ public class CommonJobService extends JobService {
     @Override
     public boolean onStopJob(JobParameters params) {
         // Toast.makeText(this, "Job Service stopped", Toast.LENGTH_SHORT).show();
-        unregisterReceiver(receiver);
+        try {
+            unregisterReceiver(receiver);
+        }catch (Exception e){
+            Log.e("Exception", e.getMessage());
+        }
         return true;
     }
 }

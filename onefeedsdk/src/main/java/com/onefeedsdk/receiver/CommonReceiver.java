@@ -56,45 +56,52 @@ public class CommonReceiver extends BroadcastReceiver {
 
         @Override
         protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            // Must call finish() so the BroadcastReceiver can be recycled.
-            pendingResult.finish();
+            try {
+                // Must call finish() so the BroadcastReceiver can be recycled.
+                pendingResult.finish();
+            } catch (Exception e) {
+                Log.e("Exception", e.getMessage());
+            }
         }
 
         private void checkReceiver(Intent intent, Context context) {
-            if (intent.getAction() == Intent.ACTION_POWER_CONNECTED) {
-                OneFeedSdk.getInstance().getJobManager()
-                        .addJobInBackground(new PostUserTrackingJob(Constant.PLUG_IN, Constant.RSRC));
+            try {
+                if (intent.getAction() == Intent.ACTION_POWER_CONNECTED) {
+                    OneFeedSdk.getInstance().getJobManager()
+                            .addJobInBackground(new PostUserTrackingJob(Constant.PLUG_IN, Constant.RSRC));
 
-            } else if (intent.getAction() == Intent.ACTION_POWER_DISCONNECTED) {
-                OneFeedSdk.getInstance().getJobManager()
-                        .addJobInBackground(new PostUserTrackingJob(Constant.PLUG_OUT, Constant.RSRC));
+                } else if (intent.getAction() == Intent.ACTION_POWER_DISCONNECTED) {
+                    OneFeedSdk.getInstance().getJobManager()
+                            .addJobInBackground(new PostUserTrackingJob(Constant.PLUG_OUT, Constant.RSRC));
 
-            } else if (intent.getAction() == Intent.ACTION_HEADSET_PLUG) {
-                int state = intent.getIntExtra("state", -1);
-                switch (state) {
-                    case 0:
-                        //OneFeedSdk.getInstance().getJobManager()
-                        //        .addJobInBackground(new PostUserTrackingJob(Constant.HEAD_SET_OUT, Constant.RSRC));
-                        break;
-                    case 1:
-                        OneFeedSdk.getInstance().getJobManager()
-                                .addJobInBackground(new PostUserTrackingJob(Constant.HEAD_SET_IN, Constant.RSRC));
-                        break;
-                    default:
-                        Toast.makeText(context, "Head Set Unknown", Toast.LENGTH_SHORT).show();
-                        break;
+                } else if (intent.getAction() == Intent.ACTION_HEADSET_PLUG) {
+                    int state = intent.getIntExtra("state", -1);
+                    switch (state) {
+                        case 0:
+                            //OneFeedSdk.getInstance().getJobManager()
+                            //        .addJobInBackground(new PostUserTrackingJob(Constant.HEAD_SET_OUT, Constant.RSRC));
+                            break;
+                        case 1:
+                            OneFeedSdk.getInstance().getJobManager()
+                                    .addJobInBackground(new PostUserTrackingJob(Constant.HEAD_SET_IN, Constant.RSRC));
+                            break;
+                        default:
+                            Toast.makeText(context, "Head Set Unknown", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                } else if (intent.getAction() == Intent.ACTION_SCREEN_OFF) {
+
+                } else if (intent.getAction() == Intent.ACTION_SCREEN_ON) {
+
+                } else if (intent.getAction() == Intent.ACTION_USER_PRESENT) {
+                    OneFeedSdk.getInstance().getJobManager()
+                            .addJobInBackground(new PostUserTrackingJob(Constant.SCREEN_UNLOCK, Constant.RSRC));
+
+                } else if (intent.getAction() == Intent.ACTION_USER_UNLOCKED) {
+                    Log.e("USER_UNLOCKED", "USER_UNLOCKED");
                 }
-            } else if (intent.getAction() == Intent.ACTION_SCREEN_OFF) {
-
-            } else if (intent.getAction() == Intent.ACTION_SCREEN_ON) {
-
-            } else if (intent.getAction() == Intent.ACTION_USER_PRESENT) {
-                OneFeedSdk.getInstance().getJobManager()
-                        .addJobInBackground(new PostUserTrackingJob(Constant.SCREEN_UNLOCK, Constant.RSRC));
-
-            } else if (intent.getAction() == Intent.ACTION_USER_UNLOCKED) {
-                Log.e("USER_UNLOCKED", "USER_UNLOCKED");
+            } catch (Exception e) {
+                Log.e("Exception", e.getMessage());
             }
         }
     }

@@ -17,6 +17,7 @@ import com.birbit.android.jobqueue.config.Configuration;
 import com.onefeedsdk.job.GetHomeFeedJob;
 import com.onefeedsdk.job.GetRepeatingCardJob;
 import com.onefeedsdk.job.GetSearchFeedJob;
+import com.onefeedsdk.job.PostErrorTrackingJob;
 import com.onefeedsdk.job.PostTokenUpdateJob;
 import com.onefeedsdk.job.PostUserInterestsJob;
 import com.onefeedsdk.job.PostUserTrackingJob;
@@ -44,7 +45,7 @@ import java.util.List;
 public class OneFeedSdk {
 
     private static final String PREF_DEFAULT = "share-app-pref";
-    public final String VERSION = "2.3.19";
+    public final String VERSION = "2.3.20";
     public static final String WATER_FALL = "Waterfall";
     public static final String H_List = "H-List";
     public static final String V_List = "V-List";
@@ -223,7 +224,7 @@ public class OneFeedSdk {
             String oldToken = OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.TOKEN, "");
             if (!oldToken.equalsIgnoreCase(newToken)) {
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken, responseListener));
-            }else if (!getSubscribeTopic().equalsIgnoreCase(getOldTopicSubscribe())) {
+            } else if (!getSubscribeTopic().equalsIgnoreCase(getOldTopicSubscribe())) {
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostTokenUpdateJob(newToken, responseListener));
             }
         } catch (Exception e) {
@@ -254,7 +255,7 @@ public class OneFeedSdk {
         this.customTopicParameter = customTopic;
     }
 
-    private void initializeSdk(){
+    private void initializeSdk() {
 
         //Initialize feed
         OneFeedSdk.getInstance().getJobManager().addJobInBackground(new GetHomeFeedJob(false, 0));
@@ -272,74 +273,79 @@ public class OneFeedSdk {
             } catch (Exception e) {
                 Log.e("Exception", e.getMessage());
             }
-        }else {
+        } else {
             context.sendBroadcast(new Intent(context, CommonReceiver.class));
         }
     }
 
     //Search Api for user
-    public void searchStoriesByKeyword(@NonNull String keyword, @NonNull AddResponseListener listener){
+    public void searchStoriesByKeyword(@NonNull String keyword, @NonNull AddResponseListener listener) {
         OneFeedSdk.getInstance().jobManager
                 .addJobInBackground(new GetSearchFeedJob(keyword, listener));
     }
 
 
     //Call Api for taking User Interest
-    public void setUserInterests(String category, String userAction, String token, @NonNull AddResponseListener listener){
+    public void setUserInterests(String category, String userAction, String token, @NonNull AddResponseListener listener) {
 
         OneFeedSdk.getInstance().jobManager
                 .addJobInBackground(new PostUserInterestsJob(Constant.USER_INTERESTS, userAction, category, token, listener));
     }
 
     private void getInstallAppInfo() {
+        try {
+            final List<ApplicationInfo> list = context.getPackageManager().getInstalledApplications
+                    (PackageManager.GET_META_DATA);
 
-        final List<ApplicationInfo> list = context.getPackageManager().getInstalledApplications
-                (PackageManager.GET_META_DATA);
+            ArrayList<String> installAppInfoList = new ArrayList<String>();
+            StringBuilder appList = new StringBuilder();
+            for (ApplicationInfo info : list) {
+                try {
+                    if (null != context.getPackageManager().getLaunchIntentForPackage(info.packageName)) {
 
-        ArrayList<String> installAppInfoList = new ArrayList<String>();
-        StringBuilder appList = new StringBuilder();
-        for (ApplicationInfo info : list) {
-            try {
-                if (null != context.getPackageManager().getLaunchIntentForPackage(info.packageName)) {
-
-                    String appName = (String) info.loadLabel(context.getPackageManager());
-                   // String packageName = (String) info.loadLabel(context.getPackageManager());
-                    installAppInfoList.add(appName /*+ " - " + packageName*/);
-                    if(installAppInfoList.size() == 1){
-                        appList = new StringBuilder(appName);
-                    }else {
-                        appList.append(",").append(appName);
+                        String appName = (String) info.loadLabel(context.getPackageManager());
+                        // String packageName = (String) info.loadLabel(context.getPackageManager());
+                        installAppInfoList.add(appName /*+ " - " + packageName*/);
+                        if (installAppInfoList.size() == 1) {
+                            appList = new StringBuilder(appName);
+                        } else {
+                            appList.append(",").append(appName);
+                        }
                     }
+                } catch (Exception e) {
+                    Log.e("Exception", e.getMessage());
+                }
+            }
+            try {
+                final int count = OneFeedSdk.getInstance().defaultAppSharedPreferences
+                        .getInt(Constant.APP_COUNT, 0);
+
+                if (count >= 0 && count != list.size()) {
+                    appList = new StringBuilder(appList.toString().replace("'", ""));
+                    OneFeedSdk.getInstance().getJobManager().addJobInBackground(
+                            new PostUserTrackingJob(Constant.APP_LIST, Constant.RSRC, appList.toString(), 0, new AddResponseListener() {
+                                @Override
+                                public void success() {
+                                    SharedPreferences.Editor editor = OneFeedSdk.getInstance().getDefaultAppSharedPreferences()
+                                            .edit();
+                                    editor.putInt(Constant.APP_COUNT, list.size()).apply();
+                                    editor.commit();
+                                }
+
+                                @Override
+                                public void error() {
+
+                                }
+                            })
+                    );
                 }
             } catch (Exception e) {
                 Log.e("Exception", e.getMessage());
             }
-        }
-        try {
-            final int count = OneFeedSdk.getInstance().defaultAppSharedPreferences
-                    .getInt(Constant.APP_COUNT, 0);
-
-            if (count >= 0 && count != list.size()) {
-                appList = new StringBuilder(appList.toString().replace("'", ""));
-                OneFeedSdk.getInstance().getJobManager().addJobInBackground(
-                        new PostUserTrackingJob(Constant.APP_LIST, Constant.RSRC, appList.toString(), 0, new AddResponseListener() {
-                            @Override
-                            public void success() {
-                                SharedPreferences.Editor editor = OneFeedSdk.getInstance().getDefaultAppSharedPreferences()
-                                        .edit();
-                                editor.putInt(Constant.APP_COUNT, list.size()).apply();
-                                editor.commit();
-                            }
-
-                            @Override
-                            public void error() {
-
-                            }
-                        })
-                );
-            }
-        }catch (Exception e){
-            Log.e("Exception", e.getMessage());
+        } catch (Exception e) {
+            //Error Tracking
+            OneFeedSdk.getInstance().getJobManager()
+                    .addJobInBackground(new PostErrorTrackingJob("OneFeedSdk-InstallAppInfo", e.getMessage()));
         }
     }
 }

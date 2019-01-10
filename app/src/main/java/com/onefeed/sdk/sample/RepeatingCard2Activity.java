@@ -38,8 +38,9 @@ public class RepeatingCard2Activity extends AppCompatActivity{
         recyclerCard = findViewById(R.id.recycler_card);
         recyclerCard.setLayoutManager(new LinearLayoutManager(this));
         final AdapterDemoCars adapter = new AdapterDemoCars();
+        recyclerCard.setAdapter(adapter);
 
-        OneFeedSdk.getInstance().searchStoriesByKeyword("Hello", new AddResponseListener() {
+       /* OneFeedSdk.getInstance().searchStoriesByKeyword("Love", new AddResponseListener() {
             @Override
             public void success() {
                 runOnUiThread(new Runnable() {
@@ -59,7 +60,7 @@ public class RepeatingCard2Activity extends AppCompatActivity{
                     }
                 });
             }
-        });
+        });*/
     }
 
     private class AdapterDemoCars extends RecyclerView.Adapter{
@@ -84,7 +85,10 @@ public class RepeatingCard2Activity extends AppCompatActivity{
             if(holder instanceof CardViewHolder){
 
                 CardViewHolder holder1 = (CardViewHolder) holder;
-                OneFeedSearchedStory.showSearchCard(RepeatingCard2Activity.this, holder1.linearLayout);
+              //  OneFeedSearchedStory.showSearchCard(RepeatingCard2Activity.this, holder1.linearLayout);
+                String category = OneFeedNativeCard.showCard(RepeatingCard2Activity.this, 134, holder1.linearLayout,
+                        OneFeedSdk.WATER_FALL, false);
+                //holder1.categoryView.setText(category);
             }else{
                 ViewHolder holder1 = (ViewHolder) holder;
                 holder1.titleView.setText(R.string.string_dummy);

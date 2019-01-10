@@ -45,7 +45,7 @@ import java.util.List;
 public class OneFeedSdk {
 
     private static final String PREF_DEFAULT = "share-app-pref";
-    public final String VERSION = "2.3.20";
+    public final String VERSION = "2.3.21";
     public static final String WATER_FALL = "Waterfall";
     public static final String H_List = "H-List";
     public static final String V_List = "V-List";
@@ -102,9 +102,16 @@ public class OneFeedSdk {
         OneFeedSdk.getInstance().getJobManager().addJobInBackground(repeatingCardJob);
     }
 
+    //Card initialize
+    public void initNativeCard(int cardId) {
+        GetRepeatingCardJob repeatingCardJob = new GetRepeatingCardJob(0, cardId);
+        OneFeedSdk.getInstance().getJobManager().addJobInBackground(repeatingCardJob);
+    }
+
     private void fetchAppId() {
         try {
-            ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            ApplicationInfo ai = context.getPackageManager()
+                    .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
             appId = bundle.getString("com.onefeed.sdk.AppId");
         } catch (PackageManager.NameNotFoundException e) {

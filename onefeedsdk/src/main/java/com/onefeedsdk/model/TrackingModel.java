@@ -16,6 +16,9 @@ public class TrackingModel {
     @SerializedName("lng")
     private String language;
 
+    @SerializedName("cc")
+    private String countryCode;
+
     @SerializedName("pckg")
     private String packageId;
 
@@ -66,6 +69,10 @@ public class TrackingModel {
 
     @SerializedName("ftoken")
     private String token;
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
 
     public void setAction(String action) {
         this.action = action;

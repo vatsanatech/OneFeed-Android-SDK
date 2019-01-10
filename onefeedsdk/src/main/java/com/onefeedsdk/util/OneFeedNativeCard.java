@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,16 +16,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.gson.GsonBuilder;
 import com.onefeedsdk.app.Constant;
 import com.onefeedsdk.app.OneFeedSdk;
 import com.onefeedsdk.app.RuntimeStore;
+import com.onefeedsdk.event.Event;
 import com.onefeedsdk.job.GetRepeatingCardJob;
 import com.onefeedsdk.job.PostUserTrackingJob;
 import com.onefeedsdk.listener.CallBackListener;
 import com.onefeedsdk.model.FeedModel;
 import com.onefeedsdk.model.RepeatingCardModel;
 import com.onefeedsdk.ui.NotificationOpenActivity;
-
 
 /**
  * Created by Yogesh Soni.
@@ -38,13 +40,24 @@ public class OneFeedNativeCard {
     private static int OFFSET_CARD = 1;
     private static boolean HIT_API = true;
 
-    public static synchronized String showCard(final Context context, final int cardId, final View view, String reference, boolean isVerticalImage){
+    public static synchronized String showCard(final Context context, final int cardId, final View view, String reference, boolean isVerticalImage) {
 
         try {
+
             RepeatingCardModel feed = (RepeatingCardModel) RuntimeStore.getInstance().getValueFor(String.valueOf(cardId));
-            if(feed != null) {
+
+            // Local Storage
+            String cardFeedString = OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(String.valueOf(cardId), "");
+            if (!TextUtils.isEmpty(cardFeedString) && feed == null) {
+                RepeatingCardModel repeatingCardModel = new GsonBuilder().create().fromJson(cardFeedString, RepeatingCardModel.class);
+                RuntimeStore.getInstance().putKeyValues(String.valueOf(cardId), repeatingCardModel);
+            }
+
+            feed = (RepeatingCardModel) RuntimeStore.getInstance().getValueFor(String.valueOf(cardId));
+
+            if (feed != null) {
                 SHOW_CARD_ID++;
-                fetchNewCard(feed, cardId);
+                fetchNewCard(feed, cardId, context);
                 if (SHOW_CARD_ID > feed.getRepeatingCard().getCardList().size() - 1) {
                     SHOW_CARD_ID = 0;
                 }
@@ -65,7 +78,7 @@ public class OneFeedNativeCard {
                         intent.putExtra(Constant.ID, card.getStoryId());
                         context.startActivity(intent);
 
-                       // Util.showCustomTabBrowserByCard(context, toolbarColor[0], card.getStoryTitle(), card.getStoryUrl(), card.getStoryId());
+                        // Util.showCustomTabBrowserByCard(context, toolbarColor[0], card.getStoryTitle(), card.getStoryUrl(), card.getStoryId());
                     }
                 });
 
@@ -75,7 +88,7 @@ public class OneFeedNativeCard {
                 final ImageView imageView = view.getRootView().findViewWithTag("native_card_image");
                 imageView.setImageBitmap(null);
                 String url = card.getCoverImage();
-                if(isVerticalImage && !TextUtils.isEmpty(card.getSquareImage())){
+                if (isVerticalImage && !TextUtils.isEmpty(card.getSquareImage())) {
                     url = card.getSquareImage();
                 }
 
@@ -105,21 +118,20 @@ public class OneFeedNativeCard {
                         new PostUserTrackingJob(Constant.CARD_VIEWED, reference, card.getStoryId()));
 
                 return card.getSheildText();
-            }else{
-                fetchNewCard(feed, cardId);
+            } else {
+                fetchNewCard(feed, cardId, context);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
     }
 
-    private static void fetchNewCard( RepeatingCardModel feed, final int cardId) {
+    private static void fetchNewCard(RepeatingCardModel feed, final int cardId, final Context context) {
         try {
-            if(feed == null){
-                OneFeedSdk.getInstance().getJobManager().addJobInBackground(new GetRepeatingCardJob(0, cardId ));
-            } else
-            if (SHOW_CARD_ID > feed.getRepeatingCard().getCardList().size() - 3 && HIT_API) {
+            if (feed == null && Util.checkNetworkConnection(context)) {
+                OneFeedSdk.getInstance().getJobManager().addJobInBackground(new GetRepeatingCardJob(0, cardId));
+            } else if (SHOW_CARD_ID > feed.getRepeatingCard().getCardList().size() - 3 && HIT_API && Util.checkNetworkConnection(context)) {
                 HIT_API = false;
                 GetRepeatingCardJob job = new GetRepeatingCardJob(OFFSET_CARD, cardId);
                 job.setListener(new CallBackListener() {
@@ -136,8 +148,8 @@ public class OneFeedNativeCard {
                 OneFeedSdk.getInstance().getJobManager().addJobInBackground(job);
                 OFFSET_CARD++;
             }
-        }catch (Exception e){
-
+        } catch (Exception e) {
+            Log.e("Exception", e.getMessage());
         }
     }
 }

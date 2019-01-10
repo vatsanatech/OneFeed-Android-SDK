@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
+import com.google.gson.GsonBuilder;
 import com.onefeedsdk.app.Constant;
 import com.onefeedsdk.app.OneFeedSdk;
 import com.onefeedsdk.app.RuntimeStore;
@@ -60,12 +61,16 @@ public class GetRepeatingCardJob extends BaseJob {
                             , cardId, Util.getAndroidUniqueId(), OneFeedSdk.getInstance().VERSION);
             RepeatingCardModel newFeed = call.execute().body();
 
-            RepeatingCardModel feedRepeatingCard = (RepeatingCardModel) RuntimeStore.getInstance().getValueFor(Constant.NATIVE_CARD);
+            RepeatingCardModel feedRepeatingCard = (RepeatingCardModel) RuntimeStore.getInstance().getValueFor(String.valueOf(cardId));
             if(feedRepeatingCard != null){
                 feedRepeatingCard.getRepeatingCard().getCardList().addAll(newFeed.getRepeatingCard().getCardList());
                 RuntimeStore.getInstance().putKeyValues(String.valueOf(cardId), feedRepeatingCard);
             }else{
-                RuntimeStore.getInstance().putKeyValues(String.valueOf(cardId), newFeed);
+
+                if(offset == 0){
+                    String feedTemp = new GsonBuilder().create().toJson(newFeed);
+                    Util.setPrefValue(String.valueOf(cardId), feedTemp);
+                }
             }
             if(listener != null) {
                 listener.success();

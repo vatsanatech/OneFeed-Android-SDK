@@ -185,6 +185,7 @@ public class MainFeedFragment extends Fragment implements View.OnClickListener {
 
             feedModel = event.getFeed();
             feedDataList.addAll(event.getFeed().getFeedData().getBlocks());
+            feedAdapter.setLoaded();
             feedAdapter.notifyDataSetChanged();
         } else {
             if (feedDataList != null && !feedDataList.isEmpty()) {

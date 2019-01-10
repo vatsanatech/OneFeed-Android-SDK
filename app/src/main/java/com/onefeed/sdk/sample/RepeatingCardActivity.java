@@ -38,8 +38,9 @@ public class RepeatingCardActivity extends AppCompatActivity{
         recyclerCard = findViewById(R.id.recycler_card);
         recyclerCard.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         final AdapterDemoCars adapter = new AdapterDemoCars();
+        recyclerCard.setAdapter(adapter);
 
-        OneFeedSdk.getInstance().initNativeCard(103, new CallBackListener() {
+       /* OneFeedSdk.getInstance().initNativeCard(103, new CallBackListener() {
             @Override
             public void success() {
                 runOnUiThread(new Runnable() {
@@ -59,7 +60,7 @@ public class RepeatingCardActivity extends AppCompatActivity{
                     }
                 });
             }
-        });
+        });*/
     }
 
     private class AdapterDemoCars extends RecyclerView.Adapter{

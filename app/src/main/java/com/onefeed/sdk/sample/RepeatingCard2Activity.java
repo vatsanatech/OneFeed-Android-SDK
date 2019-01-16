@@ -38,9 +38,9 @@ public class RepeatingCard2Activity extends AppCompatActivity{
         recyclerCard = findViewById(R.id.recycler_card);
         recyclerCard.setLayoutManager(new LinearLayoutManager(this));
         final AdapterDemoCars adapter = new AdapterDemoCars();
-        recyclerCard.setAdapter(adapter);
+        //recyclerCard.setAdapter(adapter);
 
-       /* OneFeedSdk.getInstance().searchStoriesByKeyword("Love", new AddResponseListener() {
+        OneFeedSdk.getInstance().searchStoriesByKeyword("Love", new AddResponseListener() {
             @Override
             public void success() {
                 runOnUiThread(new Runnable() {
@@ -60,7 +60,7 @@ public class RepeatingCard2Activity extends AppCompatActivity{
                     }
                 });
             }
-        });*/
+        });
     }
 
     private class AdapterDemoCars extends RecyclerView.Adapter{

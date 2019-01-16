@@ -16,6 +16,6 @@ public class Root extends Application {
         super.onCreate();
         OneFeedSdk.getInstance().init(getApplicationContext());
         OneFeedSdk.getInstance().initNativeCard(103);
-        OneFeedSdk.getInstance().initNativeCard(134);
+        //OneFeedSdk.getInstance().initNativeCard(134);
     }
 }

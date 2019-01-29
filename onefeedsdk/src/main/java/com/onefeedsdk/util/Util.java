@@ -56,8 +56,12 @@ public class Util {
     }
 
     public static void changedBackgroundColorToRes(View view, int color) {
-        GradientDrawable bgShape = (GradientDrawable) view.getBackground();
-        bgShape.setColor(color);
+        try {
+            GradientDrawable bgShape = (GradientDrawable) view.getBackground();
+            bgShape.setColor(color);
+        }catch (Exception e){
+            Log.e("Exceptions", e.getMessage());
+        }
     }
 
     public static void showCustomTabBrowserByNotification(Context context, int color, String title, String url, String storyId) {
@@ -80,7 +84,7 @@ public class Util {
             //Tracking OneFeed View
             OneFeedSdk.getInstance().getJobManager().addJobInBackground(
                     new PostUserTrackingJob(Constant.STORY_OPENED, Constant.STORY_OPENED_BY_ONE_FEED, storyId));
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("Exceptions", e.getMessage());
         }
     }
@@ -89,7 +93,7 @@ public class Util {
                                                   String storyId, String resource, boolean isFeed) {
         openCustomTab(context, color, title, url, storyId);
 
-        if(!isFeed) {
+        if (!isFeed) {
             //Tracking OneFeed Card View
             OneFeedSdk.getInstance().getJobManager().addJobInBackground(
                     new PostUserTrackingJob(Constant.STORY_OPENED, resource, storyId));
@@ -97,29 +101,33 @@ public class Util {
     }
 
     private static void openCustomTab(Context context, int color, String title, String url, String storyId) {
-        if (isAppInstalled(context, "com.android.chrome")) {
-            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder()
-                    .addDefaultShareMenuItem()
-                    .setToolbarColor(color)
-                    .setShowTitle(true)
-                    // Setting a custom back button
-                    .setCloseButtonIcon(BitmapFactory.decodeResource(
-                            context.getResources(), R.drawable.arrow))
-                    .addMenuItem(title, null);
+        try {
+            if (isAppInstalled(context, "com.android.chrome")) {
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder()
+                        .addDefaultShareMenuItem()
+                        .setToolbarColor(color)
+                        .setShowTitle(true)
+                        // Setting a custom back button
+                        .setCloseButtonIcon(BitmapFactory.decodeResource(
+                                context.getResources(), R.drawable.arrow))
+                        .addMenuItem(title, null);
 
-            builder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left);
-            builder.setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right);
+                builder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left);
+                builder.setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right);
 
-            CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.intent.setPackage("com.android.chrome");
-            customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.getPackageName()));
-            customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            //customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            customTabsIntent.launchUrl(context, Uri.parse(url));
-        } else {
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
-            context.startActivity(i);
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.intent.setPackage("com.android.chrome");
+                customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.getPackageName()));
+                customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                customTabsIntent.launchUrl(context, Uri.parse(url));
+            } else {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                context.startActivity(i);
+            }
+        }catch (Exception e){
+            Log.e("Exceptions", e.getMessage());
         }
     }
 
@@ -137,11 +145,15 @@ public class Util {
     }
 
     public static void setPrefValue(String key, String value) {
-        SharedPreferences.Editor editor = OneFeedSdk.getInstance().getDefaultAppSharedPreferences()
-                .edit();
-        editor.putString(key, value);
-        editor.apply();
-        editor.commit();
+        try {
+            SharedPreferences.Editor editor = OneFeedSdk.getInstance().getDefaultAppSharedPreferences()
+                    .edit();
+            editor.putString(key, value);
+            editor.apply();
+            editor.commit();
+        } catch (Exception e) {
+            Log.e("Exceptions", e.getMessage());
+        }
     }
 
     public static boolean preventMultipleClick() {
@@ -166,16 +178,20 @@ public class Util {
     }
 
     public static boolean checkNetworkConnection(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null) {
-                for (int i = 0; i < info.length; i++) {
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
+        try {
+            ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+            if (connectivity != null) {
+                NetworkInfo[] info = connectivity.getAllNetworkInfo();
+                if (info != null) {
+                    for (int i = 0; i < info.length; i++) {
+                        if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                            return true;
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            Log.e("Exceptions", e.getMessage());
         }
         return false;
     }
@@ -251,28 +267,31 @@ public class Util {
         } catch (Exception e) {
             Log.e("Exception:", e.getMessage());
         }
+        try {
+            String oldSim = OneFeedSdk.getInstance().getDefaultAppSharedPreferences()
+                    .getString(Constant.OLD_SIM, "");
 
-        String oldSim = OneFeedSdk.getInstance().getDefaultAppSharedPreferences()
-                .getString(Constant.OLD_SIM, "");
+            if (!oldSim.equalsIgnoreCase(simInfo)) {
+                final String finalSimInfo = simInfo;
+                OneFeedSdk.getInstance().getJobManager().addJobInBackground(
+                        new PostUserTrackingJob(Constant.SIM_CHANGE, oldSim, simInfo, 1, new AddResponseListener() {
+                            @Override
+                            public void success() {
+                                SharedPreferences.Editor editor = OneFeedSdk.getInstance().getDefaultAppSharedPreferences()
+                                        .edit();
+                                editor.putString(Constant.OLD_SIM, finalSimInfo).apply();
+                                editor.commit();
+                            }
 
-        if (!oldSim.equalsIgnoreCase(simInfo)) {
-            final String finalSimInfo = simInfo;
-            OneFeedSdk.getInstance().getJobManager().addJobInBackground(
-                    new PostUserTrackingJob(Constant.SIM_CHANGE, oldSim, simInfo, 1, new AddResponseListener() {
-                        @Override
-                        public void success() {
-                            SharedPreferences.Editor editor = OneFeedSdk.getInstance().getDefaultAppSharedPreferences()
-                                    .edit();
-                            editor.putString(Constant.OLD_SIM, finalSimInfo).apply();
-                            editor.commit();
-                        }
+                            @Override
+                            public void error() {
 
-                        @Override
-                        public void error() {
-
-                        }
-                    })
-            );
+                            }
+                        })
+                );
+            }
+        } catch (Exception e) {
+            Log.e("Exceptions", e.getMessage());
         }
     }
 

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.onefeedsdk.app.Constant;
 import com.onefeedsdk.app.OneFeedSdk;
+import com.onefeedsdk.job.PostErrorTrackingJob;
 import com.onefeedsdk.job.PostUserTrackingJob;
 import com.onefeedsdk.model.NotificationModel;
 import com.onefeedsdk.util.Util;
@@ -62,7 +63,8 @@ public class NotificationOpenActivity extends AppCompatActivity {
                 Util.showCustomTabBrowserByCard(this, color, title, url, storyId, resc, isFeed);
             }
         } catch (Exception e) {
-
+            //Error Tracking
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new PostErrorTrackingJob("Notification Receive", e.getMessage()));
         }
     }
 

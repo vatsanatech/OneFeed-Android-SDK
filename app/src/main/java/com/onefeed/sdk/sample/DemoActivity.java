@@ -104,7 +104,7 @@ public class DemoActivity extends AppCompatActivity {
                 demoNotification.put("story_id", "60496");
                 // demoNotification.put("noid", "10001");
                 demoNotification.put("story_title", "20 DC Characters Who Could Easily Defeat Thanos");
-                demoNotification.put("cover_image", "https://cdn.geeksmate.io/71629/20-DC-Characters-Who-Could-Defeat-Thanos-41.jpeg");
+                demoNotification.put("cover_image", "https://dwybwpx76p5im.cloudfront.net/71629/20-DC-Characters-Who-Could-Defeat-Thanos-41.jpeg");
                 demoNotification.put("story_url", "https://www.geeksmate.io/dc-characters-defeat-thanos-seconds-71629?utm_source=SDK&utm_medium=noti&utm_campaign=38237-campaign&utm_hash=108_71629&noid=5385987&sdk_aid=108");
 
                 demoNotification.put("id", "400");

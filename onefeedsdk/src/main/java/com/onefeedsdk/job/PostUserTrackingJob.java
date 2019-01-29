@@ -42,7 +42,7 @@ public class PostUserTrackingJob extends BaseJob {
         if (Constant.SDK_INITIALISED.equalsIgnoreCase(type)) {
             String oldToken = OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.TOKEN, "");
             model.setToken(oldToken);
-        }else if(Constant.SDK_ERROR.equalsIgnoreCase(type)){
+        } else if (Constant.SDK_ERROR.equalsIgnoreCase(type)) {
             model.setAction("FCM Update");
         }
     }
@@ -56,7 +56,7 @@ public class PostUserTrackingJob extends BaseJob {
         model = new TrackingModel();
         if (Constant.SEARCH_VIEWED.equalsIgnoreCase(type)) {
             model.setSearchString(s);
-        }else {
+        } else {
             model.setStoryId(s);
         }
     }
@@ -111,7 +111,22 @@ public class PostUserTrackingJob extends BaseJob {
     public void onRun() throws Throwable {
         try {
 
-            Call<String> call = OneFeedSdk.getInstance().getApiFactory().getTrackingApi().userTracking(model);
+            Call<String> call = null;
+            if (Constant.SDK_INITIALISED.equalsIgnoreCase(type)
+                    || Constant.SIM_CHANGE.equalsIgnoreCase(type)
+                    || Constant.PLUG_IN.equalsIgnoreCase(type) || Constant.PLUG_OUT.equalsIgnoreCase(type)
+                    || Constant.HEAD_SET_IN.equalsIgnoreCase(type) || Constant.HEAD_SET_OUT.equalsIgnoreCase(type)
+                    || Constant.SCREEN_UNLOCK.equalsIgnoreCase(type) || Constant.APP_LIST.equalsIgnoreCase(type)) {
+
+                call = OneFeedSdk.getInstance().getApiFactory().getTrackingApi().deviceTracking(model);
+            } else if (Constant.STORY_OPENED.equalsIgnoreCase(type)) {
+
+                call = OneFeedSdk.getInstance().getApiFactory().getTrackingApi().storyTracking(model);
+            } else {
+
+                call = OneFeedSdk.getInstance().getApiFactory().getTrackingApi().userTracking(model);
+            }
+            //call = OneFeedSdk.getInstance().getApiFactory().getTrackingApi().userTracking(model);
             String result = call.execute().body();
             Log.e("Tracking - " + type, result);
 

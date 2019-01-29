@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -92,6 +93,12 @@ public class NotificationHelper {
                                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                         sendNotification(context, activity, model, resource, icon);
                                     }
+
+                                    @Override
+                                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                        super.onLoadFailed(errorDrawable);
+                                        sendNotification(context, activity, model, null, icon);
+                                    }
                                 });
                     }
                 }.execute();
@@ -100,51 +107,58 @@ public class NotificationHelper {
     }
 
     public static void sendNotification(Context context, Class activity, NotificationModel data, Bitmap myBitmap, int icon) {
-
-        Intent intent = new Intent(context, NotificationOpenActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(Constant.NOTIFICATION, true);
-        intent.putExtra(Constant.ACTIVITY, activity);
-        intent.putExtra(Constant.MODEL, data);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-
-        OneFeedSdk.getInstance().getJobManager().addJobInBackground(
-                new PostUserTrackingJob(Constant.NOTIFICATION_RECEIVED, Constant.NOTIFICATION, data.getStoryId(), data.getNoId()));
-
-        String channelId = "DEFAULT";
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(context, channelId)
-                        .setSmallIcon(icon)
-                        .setContentTitle(data.getTitle())
-                        .setContentText(data.getBody())
-                        .setLargeIcon(myBitmap)
-                        .setStyle(new NotificationCompat.BigPictureStyle()
-                                .bigPicture(myBitmap))
-                        .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_SOUND)
-                        .setContentIntent(pendingIntent);
-
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-        }
         try {
-            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            Ringtone r = RingtoneManager.getRingtone(context, notification);
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        int noId = 0;
-        try{
-            noId = Integer.parseInt(data.getNoId());
+            Intent intent = new Intent(context, NotificationOpenActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(Constant.NOTIFICATION, true);
+            intent.putExtra(Constant.ACTIVITY, activity);
+            intent.putExtra(Constant.MODEL, data);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, intent,
+                    PendingIntent.FLAG_ONE_SHOT);
+
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(
+                    new PostUserTrackingJob(Constant.NOTIFICATION_RECEIVED, Constant.NOTIFICATION, data.getStoryId(), data.getNoId()));
+
+            String channelId = "DEFAULT";
+            NotificationCompat.Builder notificationBuilder =
+                    new NotificationCompat.Builder(context, channelId)
+                            .setSmallIcon(icon)
+                            .setContentTitle(data.getTitle())
+                            .setContentText(data.getBody())
+                            .setAutoCancel(true)
+                            .setDefaults(Notification.DEFAULT_SOUND)
+                            .setContentIntent(pendingIntent);
+
+            if (myBitmap != null) {
+                notificationBuilder.setLargeIcon(myBitmap);
+                notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle()
+                        .bigPicture(myBitmap));
+            }
+
+
+            // Since android Oreo notification channel is needed.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(channelId,
+                        "Channel human readable title",
+                        NotificationManager.IMPORTANCE_DEFAULT);
+                notificationManager.createNotificationChannel(channel);
+            }
+            try {
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(context, notification);
+                r.play();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            int noId = 0;
+            try {
+                noId = Integer.parseInt(data.getNoId());
+            } catch (Exception e) {
+                noId = (int) SystemClock.currentThreadTimeMillis();
+            }
+            notificationManager.notify(noId/* ID of notification */, notificationBuilder.build());
         }catch (Exception e){
-            noId = (int) SystemClock.currentThreadTimeMillis();
+
         }
-        notificationManager.notify(noId/* ID of notification */, notificationBuilder.build());
     }
 }

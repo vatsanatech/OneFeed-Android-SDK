@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.birbit.android.jobqueue.JobManager;
@@ -45,7 +46,7 @@ import java.util.List;
 public class OneFeedSdk {
 
     private static final String PREF_DEFAULT = "share-app-pref";
-    public final String VERSION = "2.3.21";
+    public final String VERSION = "2.3.22";
     public static final String WATER_FALL = "Waterfall";
     public static final String H_List = "H-List";
     public static final String V_List = "V-List";
@@ -154,13 +155,17 @@ public class OneFeedSdk {
     }
 
     private void initJobManager() {
-        Configuration configuration = new Configuration.Builder(context)
-                .minConsumerCount(1)
-                .maxConsumerCount(3)
-                .loadFactor(3)
-                .consumerKeepAlive(120)
-                .build();
-        jobManager = new JobManager(configuration);
+        try {
+            Configuration configuration = new Configuration.Builder(context)
+                    .minConsumerCount(1)
+                    .maxConsumerCount(3)
+                    .loadFactor(3)
+                    .consumerKeepAlive(120)
+                    .build();
+            jobManager = new JobManager(configuration);
+        }catch (Exception e){
+
+        }
     }
 
     private void initRuntimeStore() {
@@ -251,7 +256,12 @@ public class OneFeedSdk {
     }
 
     public String getOldTopicSubscribe() {
-        return OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.TOPIC, "");
+        try {
+            return OneFeedSdk.getInstance().getDefaultAppSharedPreferences().getString(Constant.TOPIC, "");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "";
+        }
     }
 
     public String getCustomTopic() {
@@ -263,13 +273,16 @@ public class OneFeedSdk {
     }
 
     private void initializeSdk() {
+        try {
+            //Initialize feed
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(new GetHomeFeedJob(false, 0));
 
-        //Initialize feed
-        OneFeedSdk.getInstance().getJobManager().addJobInBackground(new GetHomeFeedJob(false, 0));
-
-        //Tracking
-        OneFeedSdk.getInstance().getJobManager().addJobInBackground(
-                new PostUserTrackingJob(Constant.SDK_INITIALISED, Constant.APP_INIT));
+            //Tracking
+            OneFeedSdk.getInstance().getJobManager().addJobInBackground(
+                    new PostUserTrackingJob(Constant.SDK_INITIALISED, Constant.APP_INIT));
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 
     private void startService() {
@@ -287,16 +300,24 @@ public class OneFeedSdk {
 
     //Search Api for user
     public void searchStoriesByKeyword(@NonNull String keyword, @NonNull AddResponseListener listener) {
-        OneFeedSdk.getInstance().jobManager
-                .addJobInBackground(new GetSearchFeedJob(keyword, listener));
+
+        try {
+            OneFeedSdk.getInstance().jobManager
+                    .addJobInBackground(new GetSearchFeedJob(keyword, listener));
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 
 
     //Call Api for taking User Interest
     public void setUserInterests(String category, String userAction, String token, @NonNull AddResponseListener listener) {
-
-        OneFeedSdk.getInstance().jobManager
-                .addJobInBackground(new PostUserInterestsJob(Constant.USER_INTERESTS, userAction, category, token, listener));
+        try {
+            OneFeedSdk.getInstance().jobManager
+                    .addJobInBackground(new PostUserInterestsJob(Constant.USER_INTERESTS, userAction, category, token, listener));
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 
     private void getInstallAppInfo() {

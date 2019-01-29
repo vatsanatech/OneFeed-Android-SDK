@@ -67,6 +67,12 @@ public interface Api {
     @POST(Constant.TRACKING)
     Call<String> userTracking(@Body TrackingModel model);
 
+    @POST(Constant.STORY_TRACKING)
+    Call<String> storyTracking(@Body TrackingModel model);
+
+    @POST(Constant.DEViCE_TRACKING)
+    Call<String> deviceTracking(@Body TrackingModel model);
+
     @POST(Constant.ERROR_TRACKING)
     Call<String> errorTracking(@Body TrackingModel model);
 }

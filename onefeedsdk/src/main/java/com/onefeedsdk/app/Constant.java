@@ -7,6 +7,7 @@ package com.onefeedsdk.app;
  * Time: 18:10
  */
 
+
 public interface Constant {
 
     String BASE_URL = "https://api.wittyfeed.com/Sdk/";
@@ -14,13 +15,15 @@ public interface Constant {
     String ERROR_TRACKING_URL = "https://apptrackerr.onefeed.ai/";
     String ERROR_TRACKING = "apptrackerr";
 
-    String HOME_FEED = "home_feed_v5";
-    //String HOME_FEED = "home_feed_v5_testpage";
+    //String HOME_FEED = "home_feed_v5";
+    String HOME_FEED = "home_feed_v5_testpage";
     String SEARCH_FEED = "search_v5";
     String SEARCH_BY_APP = "search_v5_1";
 
     String TRACKING_URL = "https://apptrack.onefeed.ai/";
     String TRACKING = "apptrack";
+    String STORY_TRACKING = "storytrack";
+    String DEViCE_TRACKING = "devicetrack";
     String TOKEN_UPDATE = "fetchFcmToken";
 
     String SEARCH_CARD = "SEARCH_CARD";
